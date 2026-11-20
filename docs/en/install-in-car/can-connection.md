@@ -119,6 +119,8 @@ If `errors=` keeps rising or nothing arrives:
 
 More in [Troubleshooting](../troubleshooting/index.md).
 
+[![CAN tab: frame table and live preview of a recording](../../assets/screenshots/panel-can.png)](../../assets/screenshots/panel-can.png)
+
 ## The bit rate comes from the car profile
 
 Each car profile sets the bus speed: 125 kbit/s for `psa_aee2010`, and 125 kbit/s by default for

@@ -130,8 +130,8 @@ w `firmware/src/config.h`. To osobna dyskusja, nie część dodawania auta: prze
 ## Licencje {#licences}
 
 Wysyłając wkład, zgadzasz się na jego publikację na licencjach tego repozytorium: kod Apache-2.0,
-dokumentacja CC BY 4.0, sprzęt CERN-OHL-S-2.0. Te licencje są tymczasowe do pierwszego publicznego
-wydania.
+dokumentacja CC BY 4.0, sprzęt CERN-OHL-S-2.0. Która licencja obejmuje które pliki,
+podaje `README.md`, rozdział „Licencje”.
 
 Ten projekt nie jest związany z żadnym producentem aut, radiów ani skrzynek CAN. Wymieniaj ich
 tylko po to, żeby powiedzieć, co testowałeś.

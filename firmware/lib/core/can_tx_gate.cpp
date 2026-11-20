@@ -105,6 +105,7 @@ TxRefuse CanTxGate::request(const CanFrame& f, const TxConditions& c, uint32_t n
     frame_ = f;
     arbTries_ = 0;
     haveOutcome_ = false;
+    handedOver_ = false;
     port_->transmitter(true);               // SLNT low: from now on the unit is visible on the bus
     open_ = true;
     tOpen_ = nowMs;
@@ -154,6 +155,7 @@ void CanTxGate::tick(const TxConditions& c, uint32_t nowMs) {
                 // at least 1 ms of real time (a single tick may mean a fraction of a ms).
                 if (port_->send(frame_)) {
                     stats_.sent++;
+                    handedOver_ = true;
                     state_ = TxState::SENDING;
                 } else {
                     finish(TxOutcome::FAILED, true, nowMs);
@@ -200,6 +202,13 @@ void CanTxGate::tick(const TxConditions& c, uint32_t nowMs) {
         default:
             break;                                           // DISARMED, IDLE, FAULT: nothing to do
     }
+}
+
+uint8_t CanTxGate::rateFree(uint32_t nowMs) const {
+    uint8_t n = 0;
+    for (uint8_t i = 0; i < RATE_MAX; i++)
+        if (!rateUsed_[i] || (uint32_t)(nowMs - rateMs_[i]) >= RATE_WINDOW_MS) n++;
+    return n;
 }
 
 bool CanTxGate::takeOutcome(TxOutcome& out) {

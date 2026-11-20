@@ -26,7 +26,8 @@ i angielski słownik `firmware/web/i18n/en.json`. Zapytania stojące za każdą 
 > [API panelu, rozdział 9](panel-api.md#9-requirements-for-the-mock-firmwaretoolsmock_devicepy).
 
 Zrzuty ekranu na tej stronie pochodzą z makiety urządzenia z nagraniem, nigdy z auta. Pokazują
-schemat ciemny i teksty angielskie.
+schemat ciemny; panel jest po polsku tam, gdzie zrobiono polski obrazek, w pozostałych po angielsku.
+Wszystkie ekrany w jednym miejscu: [Przegląd panelu](panel-tour.md).
 
 ## Otwieranie panelu {#open-the-panel}
 
@@ -40,7 +41,7 @@ schemat ciemny i teksty angielskie.
 4. Wpisz hasło i naciśnij **Zaloguj**. Na tym samym ekranie możesz wybrać język.
    Oczekiwane: karty Pulpitu się wypełniają.
 
-[![Ekran logowania panelu WWW](../../assets/screenshots/panel-login.png)](../../assets/screenshots/panel-login.png)
+[![Ekran logowania panelu WWW](../../assets/screenshots/pl/panel-login.png)](../../assets/screenshots/pl/panel-login.png)
 
 Hasło jest pamiętane tylko w bieżącej karcie: nowa karta albo ponowne uruchomienie przeglądarki
 pyta o nie znowu. Zaznacz **Zapamiętaj na tym urządzeniu** przed **Zaloguj**, żeby przeglądarka je
@@ -72,6 +73,12 @@ je tam tylko wtedy, gdy zmieniasz nazwę projektu.
 > poznać hasło, a to hasło chroni też aktualizacje programu. Z sieci domowej panel jest tylko do
 > odczytu, dopóki nie wpiszesz `wifi lan on` na USB. Zobacz [Model zabezpieczeń](../safety/security.md).
 
+[![Logowanie z zaznaczonym „Zapamiętaj na tym urządzeniu”](../../assets/screenshots/panel-login-remember.png)](../../assets/screenshots/panel-login-remember.png)
+
+[![Logowanie odrzucone: złe hasło](../../assets/screenshots/panel-login-wrong-password.png)](../../assets/screenshots/panel-login-wrong-password.png)
+
+[![Blokada logowania po pięciu złych hasłach z sieci domowej](../../assets/screenshots/panel-login-locked-out.png)](../../assets/screenshots/panel-login-locked-out.png)
+
 ## Górny pasek i zakładki {#the-top-bar-and-the-tabs}
 
 - **Kropka** obok nazwy: połączenie z urządzeniem. Gdy zniknie, baner mówi
@@ -89,11 +96,11 @@ je tam tylko wtedy, gdy zmieniasz nazwę projektu.
 - **Zakładki**: Pulpit, CAN, Radio, Konsola, System, na telefonie na dole, a na szerokim ekranie
   pod górnym paskiem. Zakładka przeglądarki w tle nie odpytuje urządzenia.
 
-[![Pulpit na telefonie](../../assets/screenshots/panel-phone-dashboard.png)](../../assets/screenshots/panel-phone-dashboard.png) [![Konsola na telefonie](../../assets/screenshots/panel-phone-console.png)](../../assets/screenshots/panel-phone-console.png)
+[![Pulpit na telefonie](../../assets/screenshots/pl/panel-phone-dashboard.png)](../../assets/screenshots/pl/panel-phone-dashboard.png) [![Konsola na telefonie](../../assets/screenshots/pl/panel-phone-console.png)](../../assets/screenshots/pl/panel-phone-console.png)
 
 ## Pulpit {#dashboard}
 
-[![Zakładka Pulpit](../../assets/screenshots/panel-dashboard.png)](../../assets/screenshots/panel-dashboard.png)
+[![Zakładka Pulpit](../../assets/screenshots/pl/panel-dashboard.png)](../../assets/screenshots/pl/panel-dashboard.png)
 
 ### Auto {#car}
 
@@ -121,10 +128,16 @@ przykład `260: A4 1C 8F BB C5 50 00 (212 ms ago) → 38: 02 90 A9 B8 40; radio 
 Gdy włączony jest bieg wsteczny albo czujniki są aktywne, urządzenie pomija zmiany głośności
 i próbę z panelu.
 
+[![Przeszkoda bardzo blisko: ton ciągły](../../assets/screenshots/panel-dashboard-park-continuous.png)](../../assets/screenshots/panel-dashboard-park-continuous.png)
+
+[![Głośność poniżej 15 %: tylko do restartu](../../assets/screenshots/panel-dashboard-volume-low.png)](../../assets/screenshots/panel-dashboard-volume-low.png)
+
 ### Radio {#dashboard-radio}
 
 Radio włączone albo wyłączone, głośność, źródło i czas, który podaje radio. Więcej jest w zakładce
 Radio.
+
+[![Program dekodera z radiem, które odpowiada: wypełniona karta Radio](../../assets/screenshots/panel-dashboard-radio-linked.png)](../../assets/screenshots/panel-dashboard-radio-linked.png)
 
 ### Magistrala CAN {#can-bus}
 
@@ -149,11 +162,11 @@ zbudowanym z `decoder_tx_wifi` karta pokazuje też ramkę z ostrzeżeniem i dwa 
 - Pod przyciskami: stan teraz, stan po restarcie, stan bramy (z przyczyną błędu, jeśli jest)
   i włączone pozycje maski ustawień.
 
-[![Pulpit programu z nadawaniem na CAN (decoder_tx_wifi), rozbrojony: karta Magistrala CAN ma ostrzeżenie i dwa przyciski](../../assets/screenshots/panel-dashboard-decoder-tx.png)](../../assets/screenshots/panel-dashboard-decoder-tx.png)
+[![Pulpit programu z nadawaniem na CAN (decoder_tx_wifi), rozbrojony: karta Magistrala CAN ma ostrzeżenie i dwa przyciski](../../assets/screenshots/pl/panel-dashboard-decoder-tx.png)](../../assets/screenshots/pl/panel-dashboard-decoder-tx.png)
 
 ## CAN {#can}
 
-[![Zakładka CAN: tabela ramek i podgląd na żywo, ramki z VIN zamaskowane](../../assets/screenshots/panel-can.png)](../../assets/screenshots/panel-can.png)
+[![Zakładka CAN: tabela ramek i podgląd nagrania na żywo](../../assets/screenshots/pl/panel-can.png)](../../assets/screenshots/pl/panel-can.png)
 
 - **Filtr ID** (na przykład `0E1`): pokazuje w podglądzie na żywo tylko jeden identyfikator.
   Możesz też dotknąć wiersza tabeli.
@@ -170,9 +183,13 @@ zbudowanym z `decoder_tx_wifi` karta pokazuje też ramkę z ostrzeżeniem i dwa 
   wiekiem i ostatnimi danymi. Uwaga pokazuje, ile ID nie zmieściło się w tabeli.
 - **Podgląd na żywo**: najnowsze ramki.
 
+[![Podgląd CAN wstrzymany; ramki z numerem VIN pokazują kropki](../../assets/screenshots/panel-can-paused.png)](../../assets/screenshots/panel-can-paused.png)
+
+[![Zakładka CAN z filtrem jednego identyfikatora](../../assets/screenshots/panel-can-filter.png)](../../assets/screenshots/panel-can-filter.png)
+
 ## Radio {#radio-tab}
 
-[![Zakładka Radio w trybie obok skrzynki](../../assets/screenshots/panel-radio.png)](../../assets/screenshots/panel-radio.png)
+[![Zakładka Radio w trybie obok skrzynki](../../assets/screenshots/pl/panel-radio.png)](../../assets/screenshots/pl/panel-radio.png)
 
 - **Od radia**: port UART, nadawanie do radia (wyłączone w trybie obok), czy radio się odezwało,
   ostatnia ramka, radio włączone, głośność, wyciszone, źródło, surowa ramka źródła (`C0`), czas.
@@ -191,9 +208,13 @@ Kod `16` to dwa przyciski auta naraz (oba przyciski głośności oraz wciśnięc
 Zamiana dla `A4` (księżyc) nie działa. Kody są w
 [API panelu, rozdział 10](panel-api.md#10-tables-for-the-panel).
 
+[![Edytor zamiany przycisków z nowym, niezapisanym wierszem](../../assets/screenshots/panel-radio-keymap-edit.png)](../../assets/screenshots/panel-radio-keymap-edit.png)
+
+[![Próba przycisku w programie dekodera: wysłano do radia](../../assets/screenshots/panel-radio-key-test-decoder.png)](../../assets/screenshots/panel-radio-key-test-decoder.png)
+
 ## Konsola {#console}
 
-[![Zakładka Konsola po poleceniach ver i stat](../../assets/screenshots/panel-console.png)](../../assets/screenshots/panel-console.png)
+[![Zakładka Konsola po poleceniach ver i stat](../../assets/screenshots/pl/panel-console.png)](../../assets/screenshots/pl/panel-console.png)
 
 Te same linie co w konsoli USB, z filtrem tekstu i przyciskiem **Wyczyść widok** (czyści tylko
 ekran). Wpisz polecenie i naciśnij **Wyślij** albo użyj szybkich przycisków `stat`, `radio`,
@@ -205,9 +226,13 @@ ekran). Wpisz polecenie i naciśnij **Wyślij** albo użyj szybkich przycisków 
 
 Wszystkie polecenia: [Konsola USB](console.md).
 
+[![Polecenie tylko z konsoli USB](../../assets/screenshots/panel-console-usb-only.png)](../../assets/screenshots/panel-console-usb-only.png)
+
+[![Z sieci domowej panel tylko czyta](../../assets/screenshots/panel-console-home-network-read-only.png)](../../assets/screenshots/panel-console-home-network-read-only.png)
+
 ## System {#system}
 
-[![Zakładka System](../../assets/screenshots/panel-system.png)](../../assets/screenshots/panel-system.png)
+[![Zakładka System](../../assets/screenshots/pl/panel-system.png)](../../assets/screenshots/pl/panel-system.png)
 
 - **Urządzenie**: wersja, czas kompilacji, skrót obrazu (`elf`), tryb pracy, czas pracy, przyczyna
   startu, stan programu, temperatura układu, głośność pikania.
@@ -229,7 +254,11 @@ Wszystkie polecenia: [Konsola USB](console.md).
 - **Program**: zobacz niżej.
 - **Język** i **Wyloguj** na dole.
 
-[![Karta Kopia ustawień](../../assets/screenshots/panel-system-settings-backup.png)](../../assets/screenshots/panel-system-settings-backup.png)
+[![Karta Kopia ustawień](../../assets/screenshots/pl/panel-system-settings-backup.png)](../../assets/screenshots/pl/panel-system-settings-backup.png)
+
+[![Formularze sieci domowej i hasła urządzenia](../../assets/screenshots/pl/panel-system-network-password.png)](../../assets/screenshots/pl/panel-system-network-password.png)
+
+[![Otwarte z sieci domowej po „wifi lan on”: zmiany dozwolone](../../assets/screenshots/panel-system-home-network-admin.png)](../../assets/screenshots/panel-system-home-network-admin.png)
 
 ### Aktualizacja programu {#firmware-update}
 
@@ -263,7 +292,7 @@ Wszystkie polecenia: [Konsola USB](console.md).
    program działa i jest potwierdzony. Jeśli nowy program się nie potwierdzi, urządzenie wraca do
    poprzedniego, a panel mówi „Nastąpiło COFNIĘCIE”. Po błędzie panel podpowiada, co zrobić.
 
-[![Karta Program: wybrano plik trybu dekodera dla urządzenia w trybie obok skrzynki, więc krok 2 pokazuje ostrzeżenie z polem do zaznaczenia](../../assets/screenshots/panel-system-firmware-wizard.png)](../../assets/screenshots/panel-system-firmware-wizard.png)
+[![Karta Program: wybrano plik trybu dekodera dla urządzenia w trybie obok skrzynki, więc krok 2 pokazuje ostrzeżenie z polem do zaznaczenia](../../assets/screenshots/pl/panel-system-firmware-wizard.png)](../../assets/screenshots/pl/panel-system-firmware-wizard.png)
 
 **Powrót do poprzedniego programu:** urządzenie ma dwa miejsca na program, a po aktualizacji
 program, który działał wcześniej, zostaje w drugim miejscu (wiersz „Drugie miejsce” w stanie
@@ -276,6 +305,10 @@ wyżej). **Wróć do poprzedniego** uruchamia go ponownie; urządzenie się rest
 > Obraz w trybie dekoder wysyła ramki do radia i załącza ACC, podświetlenie i wsteczny. Wgrywaj go
 > tylko przy wypiętej skrzynce CAN: dwa nadajniki na jednej linii i dwa źródła ACC to
 > zwarcie wyjść.
+
+[![Nowy program działa i czeka na potwierdzenie](../../assets/screenshots/panel-ota-pending.png)](../../assets/screenshots/panel-ota-pending.png)
+
+[![Aktualizacja zakończona i potwierdzona; dostępny powrót](../../assets/screenshots/panel-ota-done.png)](../../assets/screenshots/panel-ota-done.png)
 
 ## Języki {#languages}
 

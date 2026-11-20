@@ -9,7 +9,7 @@ change.
 
 | Number | Where | Now | Meaning |
 |---|---|---|---|
-| firmware version | `FW_VERSION` in `firmware/src/version.h` | `2.0.0-beta.1` | [Semantic Versioning](https://semver.org/spec/v2.0.0.html) `MAJOR.MINOR.PATCH`, with an optional pre-release part (`-beta.N`); at most 15 characters, only digits, letters, `.` and `-` |
+| firmware version | `FW_VERSION` in `firmware/src/version.h` | `2.0.0` | [Semantic Versioning](https://semver.org/spec/v2.0.0.html) `MAJOR.MINOR.PATCH`, with an optional pre-release part (`-beta.N`, `-rc.N`); at most 15 characters, only digits, letters, `.` and `-` |
 | panel API version | `FW_API_VERSION` in `firmware/src/version.h`, field `api` of `GET /api/hello` | `1` | a single integer; raised only on a change that breaks clients |
 | build string | `__DATE__ " " __TIME__` of `firmware/src/version.cpp` | e.g. `Nov 18 2026 01:33:28` | tells builds apart; CAN transmit arming is tied to it |
 | image hash | field `elf` of `/api/status` and `/api/ota/status` | 16 hex digits | the first 8 bytes of the SHA-256 of the ELF file; different for every built image |
@@ -22,19 +22,19 @@ rebuilds everything, a change of `version.h` only `src/`.
 image hash, not the build string, to tell two images of the same version apart.
 
 > [!NOTE]
-> **The first release is a beta**
+> **The first public release is 2.0.0**
 >
 > The firmware versions up to `1.0.0` are the author's own history on the reference car (the
-> prototype, before the project had its name). The first public release is `2.0.0-beta.1`: a new
-> MAJOR, because this tree changed contracts of the prototype (see `CHANGELOG.md`, format:
-> [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)). A final `2.0.0` follows only after the
-> full check on the bench and in the car.
+> prototype, before the project had its name). The first public release is `2.0.0`: a new MAJOR,
+> because this tree changed contracts of the prototype (see `CHANGELOG.md`, format:
+> [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)). It was prepared as the release
+> candidate `2.0.0-rc.1`.
 
-The pre-release part is shown everywhere the version is: the console line
-`[ver] <product> 2.0.0-beta.1 listen, built ...`, the version badge and the System tab of the panel,
+A pre-release part (for example `2.0.0-rc.1`) is shown everywhere the version is: the console line
+`[ver] <product> 2.0.0-rc.1 listen, built ...`, the version badge and the System tab of the panel,
 the startup comment `# version: ...`, and the names of the release files
-(`<environment>-2.0.0-beta.1.bin`, made by `.github/workflows/release.yml`, which also requires the
-tag `v2.0.0-beta.1`). Nothing in the firmware, the panel or the mock compares two versions, so the
+(`<environment>-2.0.0-rc.1.bin`, made by `.github/workflows/release.yml`, which also requires the
+tag `v2.0.0-rc.1`). Nothing in the firmware, the panel or the mock compares two versions, so the
 pre-release part needs no special handling.
 
 ## The contracts

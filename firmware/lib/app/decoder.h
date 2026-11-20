@@ -49,6 +49,7 @@
 #include "can_tx_gate.h"
 #include "car_profile.h"
 #include "car_state.h"
+#include "park_diag.h"
 #include "parking_beeper.h"
 #include "power_policy.h"
 #include "profile_generic.h"
@@ -144,6 +145,9 @@ public:
         otaBusy_ = otaBusy;
         nvsPending_ = nvsPending;
     }
+    // Overnight record of the parking sensors state (lib/car_psa_aee2010/park_diag.h) in RTC memory (src/main.cpp).
+    // Without the call: an own record in RAM (host tests). wokeFromSleep = this start is a wake-up from deep sleep.
+    void attachParkDiag(psa::ParkDiagRecord* rec, bool wokeFromSleep) { parkDiag_.begin(rec, wokeFromSleep); }
     // Console command "set NN VV": the same path as radio command 80 NN VV (the same refusals).
     void requestSetting(uint8_t id, uint8_t value, uint32_t nowMs);
 
@@ -202,6 +206,8 @@ public:
     const TxStats& canTxStats() const { return gate_.stats(); }
     // Line "[stat] can-tx=none|disarmed|ready|FAIL sent=N ..." for the stat command, with '\n'.
     void formatCanTx(char* buf, size_t n) const;
+    // Line "[diag] wakes=N park-flips-asleep=N 1A9 press=N release=N" for the stat command, with '\n'.
+    void formatParkDiag(char* buf, size_t n) const;
     // Mask of enabled settings items (bit = item number), default vset::ENABLED_DEFAULT.
     // Only the program with transmission changes it (command "vset on|off NN", stored in NVS).
     void setSettingsMask(uint32_t mask) { changer_.setEnabledMask(mask); }
@@ -272,6 +278,7 @@ private:
     bool otaBusy_ = false;             // setTxBlock: program update session
     bool nvsPending_ = false;          // setTxBlock: a settings write is pending
     TxFault lastFault_ = TxFault::NONE;   // for the "[cantx] FAULT" line on a new latch
+    psa::ParkDiag parkDiag_;           // overnight parking sensors record (own RAM record until attachParkDiag)
     RawFrame start260_;                // first complete frame 260 since startup (reference state for "vset")
     PowerOutputs powerOut_;
     bool logKeys_ = true;

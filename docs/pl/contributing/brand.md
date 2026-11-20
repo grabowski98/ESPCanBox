@@ -90,18 +90,26 @@ Wszystko jest w `docs/assets/brand/`, poza plikami sitodruku w `hardware/brand/`
 | `icon.svg`, `icon-dark.svg`, `icon-mono.svg`, `icon-2x8.svg`, `icon-2x8-dark.svg` | ikona |
 | `icon-32.png` ... `icon-512.png`, `icon-dark-32.png` ... `icon-dark-512.png`, `favicon.ico` | ikona w PNG i favicon (16, 32 i 48 px) |
 | `panel-header-icon.svg` | ikona 24 px do nagłówka panelu WWW urządzenia |
-| `readme-banner-light.png`, `readme-banner-dark.png` | baner rastrowy 1600 × 400 z wypełnionym tłem, do miejsc, które nie pokazują SVG; pliki README używają `logo-transparent.svg` |
+| `readme-banner-light.png`, `readme-banner-dark.png` | baner rastrowy 1600 × 400 z wypełnionym tłem, do miejsc, które nie pokazują SVG; pliki README pokazują `logo-animated.svg`, a `logo-transparent.svg` jako zapas |
 | `github-social-preview.png`, `github-avatar.png` | podgląd repozytorium 1280 × 640 i awatar 500 × 500 |
 | `espcanbox-intro.gif` | animacja 1280 × 360, 2,85 s: nazwa wpisywana litera po literze, na końcu zapala się blok „Can” |
+| `logo-animated.svg`, `logo-animated.gif`, `logo-animated-dark.gif` | nagłówek README: nazwa wpisywana na wyświetlaczu, potem statyczne logo; pętla 10 s, przy „ograniczeniu ruchu” logo stoi. GIF-y (1054 px, na `#ffffff` i `#0d1117`) dla przeglądarek, które nie animują SVG. Pliki generowane, nie edytować ręcznie |
 | `site.css` | kolory strony dokumentacji, wzięte z tabeli powyżej |
 | `hardware/brand/pcb-*.svg`, `hardware/brand/pcb-*.png` | sitodruk, jeden kolor; pliki PNG mają 1 bit i 1200 dpi |
 
 Pliki SVG są wzorcami: same ścieżki, bez fontów i filtrów. Skryptu, który je rysuje, nie ma
 jeszcze w repozytorium.
 
+Wyjątkiem jest animowane logo: `tools/make_logo_animation.py` buduje je z kropek
+`logo-transparent.svg`, więc najpierw przerysuj statyczne logo, potem uruchom
+`python tools/make_logo_animation.py --gif`. `python -I tools/make_logo_animation.py --check` mówi,
+czy animowany SVG nadal pasuje do statycznego logo i `project.json`.
+
 Nazwa projektu jest częścią rysunków: kropki logo, banery, podgląd, animacja, `<title>` w plikach
 SVG i nazwa pliku `espcanbox-intro.gif`. `tools/set_project_name.py` ich nie przepisuje, a jego
-`--check` ich nie sprawdza. Po zmianie nazwy projektu wymień te pliki ręcznie.
+`--check` ich nie sprawdza. Po zmianie nazwy projektu wymień te pliki ręcznie (animowane logo: uruchom skrypt opisany wyżej).
+
+Zrzuty ekranu panelu WWW nie są plikami marki: robi je skrypt, zobacz [Zrzuty ekranu](../../en/contributing/screenshots.md) (po angielsku).
 
 ## Licencja {#licence}
 

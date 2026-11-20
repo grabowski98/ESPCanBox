@@ -3,31 +3,71 @@ Copyright 2026 grabowski98
 
 This product includes software developed by grabowski98 and contributors, licensed under the
 Apache License, Version 2.0 (see LICENSE). Documentation: CC BY 4.0 (see LICENSE-docs).
-Hardware design files: CERN-OHL-S-2.0 (see LICENSE-hardware). All three licences are provisional
-until the first public release.
+Hardware design files: CERN-OHL-S-2.0 (see LICENSE-hardware).
+
+Licensing of files
+------------------
+
+Files do not carry their own licence header. A file without its own header is covered by the
+rule for its directory and type:
+
+  - CC BY 4.0 (LICENSE-docs): everything in docs/, every Markdown file (*.md), the logo files
+    (docs/assets/brand/, hardware/brand/) and the photos, screenshots, renders and drawings in
+    docs/, vehicles/, radios/, hardware/ and extras/;
+  - CERN-OHL-S-2.0 (LICENSE-hardware): the KiCad files, the PDF and print files, bom.csv and the
+    enclosure models (STL) in hardware/prototype-v1/;
+  - Apache-2.0 (LICENSE): everything else, that is the firmware (firmware/, including the web
+    panel, the test data and the recordings in firmware/test_data/), the tools (tools/,
+    firmware/tools/), extras/sniffer code, the frame database (vehicles/*/508.dbc),
+    hardware/prototype-v1/enclosure/gen_enclosure.py, the build and CI files.
+
+A file that states its own licence (for example the SVG logo files) follows that statement.
+The licence texts in LICENSES/ (LGPL-2.1.txt and everything in LICENSES/third-party/) are
+verbatim copies of texts by other parties and are not covered by the rules above.
+The same table is in README.md, section "Licences".
 
 To the author's knowledge, the source tree contains no code copied from other projects.
-The items below are not part of this repository; they are listed because a compiled firmware image contains them, or because
-this project refers to them.
+The items below are not part of this repository, except their licence texts in LICENSES/; they
+are listed because a compiled firmware image contains them, or because this project refers to them.
+The licence texts and copyright notices of the third-party parts inside the firmware images are
+in LICENSES/third-party/, indexed with versions and sources in LICENSES/THIRD-PARTY.md.
 
 -------------------------------------------------------------------------------
 1. Linked into every firmware image (downloaded by PlatformIO at build time)
 -------------------------------------------------------------------------------
 
 PlatformIO platform "espressif32", version 8.0.0 (pinned in firmware/platformio.ini)
+  https://github.com/platformio/platform-espressif32 (repository named in its platform.json)
   Licence stated in the platform's own platform.json: Apache-2.0.
 
 Arduino core for ESP32 (arduino-esp32), https://github.com/espressif/arduino-esp32
   PlatformIO package "framework-arduinoespressif32", version 4.30312.261024 (arduino-esp32
   3.3.12, from the package's platform.txt).
   Licence stated in the package metadata (package.json) and in the headers of the core files:
-  LGPL-2.1-or-later.
+  LGPL-2.1-or-later. Licence text: LICENSES/LGPL-2.1.txt.
 
 ESP-IDF, https://github.com/espressif/esp-idf
   Pre-built ESP-IDF libraries for the ESP32-S3 in the PlatformIO package
   "framework-arduinoespressif32-esp32s3-libs", version 3.3.12, built from ESP-IDF v5.5.5
   (from the package's versions.txt). The package metadata states LGPL-2.1-or-later for the
-  package as a whole.
+  package as a whole. ESP-IDF's own code is under Apache-2.0; the third-party parts and their
+  licences are listed on https://docs.espressif.com/projects/esp-idf/en/v5.5.5/esp32s3/COPYRIGHT.html
+  In a local build of version 2.0.0 (the five release environments) the linker maps show these
+  third-party parts with code or data in the images: FreeRTOS (MIT), newlib (BSD-style
+  licences), Mbed TLS (Apache-2.0), the TLSF allocator (BSD-3-Clause), the UBSAN runtime
+  (BSD-2-Clause), the Xtensa HAL (MIT); with Wi-Fi also lwIP (BSD-3-Clause), wpa_supplicant
+  (BSD-3-Clause), cJSON (MIT), http_parser (MIT, NGINX and Joyent terms), mDNS and
+  network_provisioning (Apache-2.0). Versions, copyright lines and licence texts:
+  LICENSES/THIRD-PARTY.md and LICENSES/third-party/.
+
+GCC toolchain for Xtensa (toolchain-xtensa-esp-elf 14.2.0+20260121), https://github.com/espressif/crosstool-NG
+  The compiler itself is not part of an image. Its runtime libraries libgcc and libstdc++ are
+  linked into every image; they are under GPL-3.0 with the GCC Runtime Library Exception 3.1
+  (share/licenses/gcc/COPYING.RUNTIME in the package), which allows distributing the compiled
+  program under any terms. The C library is newlib (CONFIG_LIBC_NEWLIB=y in the ESP-IDF
+  configuration of the package), see above.
+
+firmware/platformio.ini has no lib_deps: no other library is downloaded.
 
 -------------------------------------------------------------------------------
 1a. Ready-made firmware images (.bin files)
@@ -37,21 +77,27 @@ This section applies to anybody who passes on a compiled firmware image of this 
 (for example a .bin file attached to a release). It is not legal advice; it only repeats what
 the sources named here say. Check the licence texts themselves before you publish an image.
 
-- The image contains the Arduino core for ESP32 (LGPL-2.1-or-later). LGPL-2.1 asks a
-  distributor of a binary to pass on the licence text and to make it possible for the
-  recipient to rebuild or relink the program with a changed version of the library. This
-  project publishes its complete source code, the pinned versions of the platform and packages
-  (firmware/platformio.ini) and the build instructions (docs/en/quick-start/flash.md), so any
-  image can be rebuilt from the same sources. A release with images should also include, or
-  point to, the LGPL-2.1 text and the source of the exact arduino-esp32 version used
-  (https://github.com/espressif/arduino-esp32, release 3.3.12).
+- The image contains the Arduino core for ESP32 (LGPL-2.1-or-later). LGPL-2.1, section 6, asks a
+  distributor of a binary that contains the library to give notice that the library is used,
+  to supply a copy of the licence, and to make it possible for the recipient to change the
+  library and relink the program (for example by giving access to the complete source from
+  the same place, section 6(d)). This project publishes its complete source code, the pinned
+  versions of the platform and packages (firmware/platformio.ini) and the build instructions
+  (docs/en/quick-start/flash.md), so any image can be rebuilt from the same sources. The
+  release workflow (.github/workflows/release.yml) puts LICENSE, LICENSE-docs,
+  LICENSE-hardware, NOTICE, LICENSES/LGPL-2.1.txt, LICENSES/THIRD-PARTY.md (with the commit
+  the images were built from) and LICENSES/third-party/ into the licenses/ folder of every
+  release archive, and puts the source archive of the exact arduino-esp32 version used
+  (source-arduino-esp32-3.3.12.tar.gz, from
+  https://github.com/espressif/arduino-esp32/releases/tag/3.3.12) next to the images.
 - The image contains parts of ESP-IDF. ESP-IDF's own source code is under Apache-2.0; ESP-IDF
   also includes third-party components under other licences (for example BSD, MIT and
   Apache-2.0 components), each with its own notices. The list for the ESP-IDF version used
   here is on Espressif's page "Copyrights and Licenses":
   https://docs.espressif.com/projects/esp-idf/en/v5.5.5/esp32s3/COPYRIGHT.html
-  Which of these components end up in an image depends on the build; a release with images
-  should carry the notices that page asks for.
+  The components found in the images of this project, with their copyright notices and
+  licence texts, are in LICENSES/THIRD-PARTY.md and LICENSES/third-party/; whoever passes on
+  an image passes these files on with it.
 - When the pinned platform or package versions change, update the versions in this section.
 
 -------------------------------------------------------------------------------
@@ -59,13 +105,23 @@ the sources named here say. Check the licence texts themselves before you publis
 -------------------------------------------------------------------------------
 
 PlatformIO Core, uv / uvx, Zig (C++ compiler for the host tests, through the "ziglang" Python
-package), MkDocs, Material for MkDocs, mkdocs-static-i18n, Python. Each under its own licence.
+package), MkDocs, Material for MkDocs, mkdocs-static-i18n, actionlint, ShellCheck, Python,
+KiCad. Each under its own licence. A documentation site built with Material for MkDocs contains
+the theme's own files (MIT licence, https://github.com/squidfunk/mkdocs-material); the built site
+is not part of this repository.
+
+KiCad libraries, https://www.kicad.org/libraries/license/
+  The hardware files contain symbols and footprints from the official KiCad libraries and refer
+  to their 3D models by path (the models are not in this repository). The KiCad libraries are
+  under CC-BY-SA 4.0 with an exception: designs that use the library data, and files generated
+  from them, do not have to be under CC-BY-SA 4.0. This project does not redistribute the
+  libraries as a collection.
 
 -------------------------------------------------------------------------------
 3. Data sources
 -------------------------------------------------------------------------------
 
-PSA-RE, https://github.com/prototux/PSA-RE (Apache-2.0), commit 67f7581e
+PSA-RE, https://github.com/prototux/PSA-RE (Apache-2.0, file LICENCE), commit 67f7581e
   Community descriptions of PSA CAN frames. This project uses them only as "unverified"
   descriptions, with a link and the path inside PSA-RE (for example
   buses/AEE2010.full/LS.INFO-DIV/364.yml), next to its own measurements, which are marked
@@ -88,6 +144,9 @@ them (Stop and Start) is not in the firmware.
 4. Names
 -------------------------------------------------------------------------------
 
-Peugeot, Stellantis, Simple Soft, Raise, Junsun and FYT are names of their owners. They are used
-only to say what this project was tested with. This project is not affiliated with, endorsed by
-or connected to any of them.
+Peugeot, Citroen, Stellantis, PSA, Simple Soft, Raise, Junsun, FYT, Espressif, Waveshare and
+the other product and company names in this repository belong to their owners. They are used
+only to describe compatibility and what this project was tested with. This project is not
+affiliated with, endorsed by or connected to any of them. ESP32 is a trademark of Espressif
+Systems; other names are trademarks of their respective owners and are used here only to
+describe compatibility.

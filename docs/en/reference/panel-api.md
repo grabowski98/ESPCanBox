@@ -263,7 +263,7 @@ Errors: `401`, `429`, `503 not_ready`, `503 busy`.
 
 ```json
 {
- "sys": {"version":"2.0.0-beta.1","build":"Nov 18 2026 01:33:28","elf":"0F3A6C21D49B7E58","mode":"listen","canTx":false,
+ "sys": {"version":"2.0.0","build":"Nov 18 2026 01:33:28","elf":"0F3A6C21D49B7E58","mode":"listen","canTx":false,
          "boot":2893471123,"uptimeMs":734512,"resetReason":"deepsleep",
          "heapFree":182344,"heapMin":151208,"heapLargest":110580,
          "loopBusyPct":7,"cpu0Pct":12,"loopMaxUs":1840,"loopsPerSec":992,
@@ -524,7 +524,7 @@ fixed file name `<slug>_can.log` (`slug` from `project.json`; set in `firmware/s
 `Cache-Control: no-store`. The body is sent in chunks, lines end with `\n` only:
 
 ```text
-# <fw_product> 2.0.0-beta.1 listen; time in seconds since the device started
+# <fw_product> 2.0.0 listen; time in seconds since the device started
 (734.501) can0 0E1#B0F000FCFC1EC200
 # masked
 (734.503) can0 21F#000000
@@ -802,7 +802,7 @@ bytes it has sent (upload progress events); the device has no progress request.
 Answer after the file is accepted:
 
 ```json
-{"ok":true,"bytes":1048576,"version":"2.0.0-beta.1","build":"Nov 18 2026 10:02:11","mode":"listen","canTx":false,"net":true,
+{"ok":true,"bytes":1048576,"version":"2.0.0","build":"Nov 18 2026 10:02:11","mode":"listen","canTx":false,"net":true,
  "elf":"7B1E90C4A2D35F68","restartInMs":1500}
 ```
 
@@ -860,7 +860,7 @@ every upload) can take up to about 2 s: the device then scans the second program
 ```json
 {"state":"valid","slotSize":3342336,"confirmInMs":0,"busy":false,"carBusy":false,
  "restartPending":false,"restartReason":"none","canRollback":true,
- "running":{"slot":"app1","version":"2.0.0-beta.1","build":"Nov 18 2026 01:33:28","mode":"listen","canTx":false,
+ "running":{"slot":"app1","version":"2.0.0","build":"Nov 18 2026 01:33:28","mode":"listen","canTx":false,
             "net":true,"elf":"0F3A6C21D49B7E58"},
  "other":{"slot":"app0","image":true,"scanned":true,"known":true,"bootable":true,
           "version":"0.9.0","build":"Nov 18 2026 00:12:03","mode":"listen","canTx":false,
@@ -1000,7 +1000,7 @@ work on the panel without a board. It must keep:
   `lib/car_psa_aee2010/psa_frames.*` (`0E1`, `0F6`, reverse, ignition, lights `036`),
   `lib/car_psa_aee2010/psa_signals.cpp` (doors `1A1`), `lib/core/power_policy.cpp` (ACC, freshness limits),
   `psa_signals.cpp` with `lib/radio_xp/xp_signals.cpp` (`car.settings.raw260`, `ageMs`, `state38`; the mock
-  has no radio, so `last` = `null` and the counters are 0). These may be constant: `sys.*` except
+  has no radio unless `--demo-radio` is given, so `last` = `null` and the counters are 0). These may be constant: `sys.*` except
   `uptimeMs` and `boot`, `radio.*`, `audio.*`, `wifi.*`;
 - **VIN:** when it loads a recording the mock overwrites the data of frames `336`, `3B6`, `2B6` (for
   example with zeros) and never shows their real content. Recordings added to the repository as
@@ -1015,7 +1015,9 @@ work on the panel without a board. It must keep:
   device network); `lang` = the language stored through `POST /api/lang`, the console `lang` or an
   import;
 - **settings:** `POST /api/lang`, `GET` / `POST /api/settings` with the same checks and error
-  details as the firmware (the parser is a simplified Python copy).
+  details as the firmware (the parser is a simplified Python copy);
+- `--demo-radio`: a radio that answers, with the example values of `GET /api/status` above; for screenshots only;
+- `--screenshot`, `--supply-v V`, `--password-stdin`: fixed build string and hash, a device-like network name, a 12 V reading and the password on standard input; used by `tools/make_screenshots.py`.
 
 It does not have to reproduce lockout timing, flash writes or `car_busy` refusals.
 

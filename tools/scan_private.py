@@ -9,7 +9,10 @@ Rules (all are errors unless noted):
   vin            a VIN of the PSA group (VF3 + 14 characters)
   vin-frame      a CAN frame 336#, 3B6# or 2B6# with non-zero data (these frames carry the VIN
                  on PSA AEE2010 cars; tools/sanitize_capture.py overwrites them with zeros)
-  email          an e-mail address (except example.com / example.org / users.noreply.github.com)
+  email          an e-mail address (except example.com / example.org / users.noreply.github.com, and
+                 except in the verbatim third-party licence texts under LICENSES/third-party/ or
+                 licenses/third-party/ of a release archive: their copyright lines name the upstream
+                 authors and must not be changed; every other rule still applies there)
   user-path      a Windows profile path (drive letter, colon, slash, "Users")
   mac            a MAC address written with ':' or '-'
   ssid-suffix    the device access point name with the real 4-hex-digit suffix of a unit
@@ -40,6 +43,8 @@ VIN_RE = re.compile(r"VF3[0-9A-Z]{14}")
 VIN_FRAME_RE = re.compile(r"(?<![0-9A-Fa-f])(336|3B6|2B6)#([0-9A-Fa-f]+)")
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\.)+[A-Za-z]{2,}")
 EMAIL_OK = ("example.com", "example.org", "users.noreply.github.com")
+# Verbatim upstream licence texts (repository: LICENSES/third-party/, release archive: licenses/third-party/).
+THIRD_PARTY_RE = re.compile(r"(^|/)licenses/third-party/", re.IGNORECASE)
 USER_PATH_RE = re.compile(r"[A-Za-z]:(\\\\|\\|/)+Users", re.IGNORECASE)
 MAC_RE = re.compile(r"(?<![0-9A-Fa-f:-])([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}(?![0-9A-Fa-f:-])")
 def _ssid_prefixes():
@@ -141,8 +146,10 @@ class Scanner:
         for m in VIN_FRAME_RE.finditer(text):
             if m.group(2).strip("0"):
                 self.report(path, where, "vin-frame", m.group(0))
+        rel = os.path.relpath(path, self.root).replace(os.sep, "/")
+        upstream_text = THIRD_PARTY_RE.search(rel) is not None
         for m in EMAIL_RE.finditer(text):
-            if not m.group(0).lower().endswith(EMAIL_OK):
+            if not m.group(0).lower().endswith(EMAIL_OK) and not upstream_text:
                 self.report(path, where, "email", m.group(0))
         for m in USER_PATH_RE.finditer(text):
             self.report(path, where, "user-path", m.group(0))

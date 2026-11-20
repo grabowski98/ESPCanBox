@@ -136,8 +136,8 @@ ein Issue.
 ## Lizenzen {#licences}
 
 Mit einem Beitrag stimmen Sie zu, dass er unter den Lizenzen dieses Repositorys veröffentlicht
-wird: Code Apache-2.0, Dokumentation CC BY 4.0, Hardware CERN-OHL-S-2.0. Diese Lizenzen sind bis
-zur ersten öffentlichen Version vorläufig.
+wird: Code Apache-2.0, Dokumentation CC BY 4.0, Hardware CERN-OHL-S-2.0. Welche Lizenz für welche
+Dateien gilt, steht in `README.md`, Abschnitt „Licences“.
 
 Dieses Projekt ist mit keinem Auto-, Radio- oder CAN-Box-Hersteller verbunden. Nennen Sie sie nur,
 um zu sagen, was Sie getestet haben.

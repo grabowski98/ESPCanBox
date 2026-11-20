@@ -1,6 +1,6 @@
 # Presentación
 
-![Logotipo del proyecto: una pantalla de matriz de puntos](../assets/brand/logo-transparent.svg)
+![Logotipo del proyecto: una pantalla de matriz de puntos](../assets/brand/logo-animated.svg)
 
 > [!NOTE]
 > **Traducción automática, pendiente de revisión**
@@ -58,9 +58,7 @@ errores). Sus tensiones parecen de CAN de baja velocidad tolerante a fallos (low
 fault-tolerant); hace falta un osciloscopio para confirmarlo. Detalles:
 [Peugeot 508 SW](../en/reference/vehicles/peugeot-508.md).
 
-El árbol de firmware de este repositorio se reorganizó a partir de la versión que funciona en el
-coche de referencia. Compila y pasa las pruebas en el ordenador, pero **todavía no se ha probado en
-banco** en un dispositivo.
+Estado: la versión 2.0.0 compila, pasa las pruebas en el ordenador, se probó en banco en una placa ESP32-S3-WROOM-1-N16R8 y se probó en un solo coche el 20-11-2026, incluido el sueño profundo y el despertar desde el bus.
 
 ## Por dónde empezar {#where-to-start}
 
@@ -80,5 +78,6 @@ grabación del coche; consulta [Primer arranque](quick-start/first-boot.md).
 
 ## Licencias {#licences}
 
-Provisionales hasta la primera versión pública: código Apache-2.0, documentación CC BY 4.0,
-hardware CERN-OHL-S-2.0. Autor: grabowski98.
+Código Apache-2.0, documentación CC BY 4.0, hardware CERN-OHL-S-2.0. Qué licencia cubre qué
+archivos y qué partes de otros proyectos hay en las imágenes de firmware: `README.md` y `NOTICE`
+en el repositorio. Autor: grabowski98.

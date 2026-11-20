@@ -6,19 +6,26 @@ uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html). What counts as 
 (console line format, panel API, firmware marker) is described in
 [docs/en/reference/versioning.md](docs/en/reference/versioning.md).
 
-## [2.0.0-beta.1] - not released yet
+## [2.0.0] - 2026-11-20
 
-First public release, a **beta**: `FW_VERSION` in `firmware/src/version.h` is `2.0.0-beta.1`, shown
-as such by the console (`ver`), the panel and the names of the release files. It is a new MAJOR
-against the private prototype firmware 1.0.0 that runs in the reference car, because the contracts
-listed below changed. A final `2.0.0` follows after the full check.
+First public release: `FW_VERSION` in `firmware/src/version.h` is `2.0.0`, shown as such by the
+console (`ver`), the panel and the names of the release files. It was prepared as the release
+candidate `2.0.0-rc.1`; every entry of that candidate is in this section. It is a new MAJOR against
+the private prototype firmware 1.0.0 that ran in the reference car before it, because the contracts
+listed below changed.
 
-**Status: not yet bench-tested.** This tree compiles in every environment and passes the host
-tests (the radio and output patterns are identical byte for byte with firmware 1.0.0), but it has
-not been flashed to a device. Changes in `firmware/src/` (CAN driver, transmit port, radio UART,
-main loop) have no host test. The bench test protocol
-([docs/en/testing/bench-test-protocol.md](docs/en/testing/bench-test-protocol.md)) must pass
-before a release.
+**Status: bench-tested and tried in one car.** This tree compiles in every environment and passes
+the host tests (the radio and output patterns are identical byte for byte with firmware 1.0.0). It
+was bench-tested on an ESP32-S3-WROOM-1-N16R8 board
+([bench test protocol](docs/en/testing/bench-test-protocol.md)). In-car trial on 2026-11-20 in
+one car (Peugeot 508 SW 2015 with one Android head unit using the XP protocol): bus reception
+complete with no lost frames and no bus errors, radio link, ACC timing, steering-wheel and panel
+keys, doors, climate display, reverse and parking-sensor beeps, vehicle settings through frame
+`15B` (six rows, both directions), deep sleep and wake-up from the bus. The experimental `1A9`
+button frames (parking sensors, blind spot) and the optional frame after a press were exercised
+only in an experimental build that is not part of the release images. **Not exercised in the
+car:** the transmit guards (3.5 s after ignition-on, cranking, reverse); they are covered by host
+tests only.
 
 ### Breaking changes against the prototype firmware 1.0.0
 
@@ -50,6 +57,12 @@ before a release.
 
 ### Added
 
+- Panel tour with screenshots (`docs/en/reference/panel-tour.md`, Polish copy): 111 pictures of the
+  web panel from the mock device (English and Polish, desktop, phone and tablet), also used on the
+  quick start, install, safety and reference pages; a one-command generator
+  (`tools/make_screenshots.py` with `tools/screenshots.json`, new mock options `--demo-radio`,
+  `--screenshot`, `--supply-v`, `--password-stdin`); an animated README logo
+  (`docs/assets/brand/logo-animated.svg` with GIF fallbacks, built by `tools/make_logo_animation.py`).
 - Two recordings of the session of 2026-11-19 in `firmware/test_data/captures/`
   (`centralka_konsola_20261119_150048.txt`: the radio frames the device received, with owner markers
   before each action; `centralka_can_20261119_150048.log`: the CAN frames of the same session). They are
@@ -134,8 +147,34 @@ before a release.
   recording (English, dark scheme, desktop and phone width): in the READMEs, the overview, First
   boot and the Web panel guide. On the site every screenshot is a link to the full-size file.
 
+- Build flag `-DCAN_TX_1A9_RELEASE=1` (default `0`, only together with `-DCAN_TX_EXPERIMENTAL=1`):
+  after a `1A9` button press acknowledged on the bus, one release frame `1A9 20 7F FF 00 FF 00 50 00`
+  through the same gate (all interlocks apply), when the gate pause after the press ends (about
+  500 ms). The content is the aftermarket box's periodic `1A9` with ignition on (every ~204 ms in
+  `can_20261110_190421.log`); the box sent no separate release, a press replaced one periodic frame
+  and the next periodic frame followed it. Whether a press without such a following frame causes a
+  later toggle is a hypothesis. `00 7F FF 00 FF 00 10 00` (seen only with ignition `80` and once at
+  box start-up) is refused with either value of the flag. A busy gate is retried for at most 1 s; a press
+  without an acknowledgement gets no release; the press report is not delayed. Console lines
+  `[vset] 1A9 ... release sent (acked after N ms, M ms after the press)` and
+  `[vset] 1A9 ... release not sent (<reason>)`. With the flag `0` the allow list refuses this content.
+  Host test `button_release` (both values), `profile_tables` (third variant).
+- Overnight record in RTC memory (survives deep sleep, lost on power loss): last stable parking
+  sensors state from `126`, wake-ups, "state changed while asleep", `1A9` presses and releases. New
+  `stat` line `[diag] wakes=N park-flips-asleep=N 1A9 press=N release=N` and, once after a wake-up
+  with a different state, `[park] sensors state changed while asleep: was ON, now OFF`. Host test
+  `park_diag`.
+
 ### Changed
 
+- Vehicle setting `80 05` (parking sensors) reads the car state from `126` byte 1 (`18` = off, `00` =
+  on) instead of the `227` LED bit, for the "already in this state" and the "accepted" decisions. Both
+  button items (`05`, `0C`) are refused (no state, nothing sent) during the first 3.5 s after the
+  ignition comes on (the `227` lamp test lasts 3 s; for about 95 ms after ignition on `227` shows the
+  value from before). What the radio is told is unchanged (still `227`).
+- A waiting vehicle setting command pushed out of its slot by a command for another item now ends
+  with a report and the line `[vset] radio: 80 NN VV ...: REFUSED (previous send in progress)`
+  (before: dropped without a trace). A newer command for the same item still replaces it silently.
 - The device network accepts 4 devices at once instead of 2 (`NET_AP_MAX_STATIONS`): in the car the radio
   could not join while two other devices were connected.
 - Code review of 19.11.2026 (fixes; the radio stream and the outputs of the reference pair are
@@ -194,6 +233,38 @@ before a release.
   Measured with `python -I tools/embed_web.py --report`.
 - Comment lines of a recording saved by the panel are in English, the same as `/api/trace.log`
   (`# masked`, `# lost N frames`, `# device restart`).
+- Licences are final: Apache-2.0 for the code, CC BY 4.0 for the documentation, CERN-OHL-S-2.0 for
+  the hardware files (which file falls under which: `NOTICE`, README section "Licences"). Release
+  archives carry the licence texts, the third-party notices and licence texts of the parts linked
+  into the images (`LICENSES/THIRD-PARTY.md`, `LICENSES/third-party/`) and the source archive of
+  the LGPL-2.1 library, the Arduino core for ESP32 3.3.12 (`source-arduino-esp32-3.3.12.tar.gz`).
+
+### Fixed
+
+- After a CAN driver start error the device samples the CAN RX pin on every main loop pass instead of
+  relying on received frames (a LOW sample = a dominant bit = bus activity): it stays awake in the
+  safe state while the car bus is active and deep-sleeps after the usual 30 s of silence, with the
+  usual wake-up on that pin. Before, it either repeated the start in a sleep/wake loop while the bus
+  was active, or (earlier today) never slept and drained the battery while parked
+  (`sleepBusActivity`, host test `loop_policy`).
+- The confirmation write of an update (otadata) is no longer done while the CAN transmitter window is
+  open, the same as the rest of the network handling.
+- The radio screen latch key (moon) is cleared when ACC comes on: a press while ACC was off no longer
+  makes the first press after the ignition do nothing. It is also cleared when the radio reports it
+  has started (`81 01`): a rebooted radio comes back with the screen on (host test `custom_keys_doors`).
+- The USB console reads at most 256 bytes and 2 complete lines per main loop pass (like the radio
+  UART budget); a pasted or streamed capture no longer holds the loop (CAN receive, radio UART,
+  watchdog) until the whole burst is read.
+- Blind spot (`80 0C`): no state while reverse is engaged and for 500 ms after it is released. Bit
+  `227` 3.0 clears about 40 ms after reverse is engaged and returns about 40 ms after it is released
+  (`can_20261111_151209.log`, all 20 reverse cycles), so in reverse the radio command could toggle the
+  setting the wrong way or be taken as ACCEPTED. Now refused with NO_STATE, nothing sent; the data for
+  the radio (frame `38`) are unchanged (host test `settings_change`).
+- The `[diag]` 1A9 press and release counters count only frames handed to the CAN controller, not a
+  send the gate ended as failed before the controller took the frame (`CanTxGate::handedOver`, host
+  test `button_release`).
+- The installation guide no longer expects `bad checksum=0` from the radio link: some head units
+  send a malformed `C5` frame that counts as one bad checksum and three garbage bytes.
 
 ### Known limitations
 
@@ -202,4 +273,7 @@ before a release.
   items on the reference car; the visible effect in the car was not checked.
 - Climate control from the radio with frame `364` does not work, so the firmware has no climate
   transmit path; the radio shows the climate state only.
-- Deep sleep is not tested on the hardware.
+- Deep sleep and wake-up from the bus were tried in one car only (2026-11-20).
+- The transmit rate limit of 10 frames per minute can refuse quick repeated changes from the
+  radio's settings screen.
+- The `refused` transmit counter also counts internal retries.

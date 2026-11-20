@@ -72,6 +72,8 @@ The rest of this page shows how the gate works inside. Every number is copied fr
 `lib/core/can_tx_gate.*`, `lib/core/can_tx_arm.*`, `src/can_tx/*`,
 `lib/car_psa_aee2010/tx_allowlist.cpp` and `src/config.h` (paths relative to `firmware/`).
 
+[![Transmit build opened from the home network](../../assets/screenshots/panel-dashboard-cantx-home-network.png)](../../assets/screenshots/panel-dashboard-cantx-home-network.png)
+
 ## Locks when you build
 
 `decoder_tx_wifi` sets `-DCAN_TX_MODE=CAN_TX_SETTINGS` and `-DCAN_TX_EXPERIMENTAL=0`. The build
@@ -83,7 +85,8 @@ stops with an error when:
 - the car profile is `EXAMPLE` (this is never allowed, with or without transmit);
 - the allow list of the profile is empty (`static_assert` in `src/config.h`);
 - `src/can_tx/` is compiled without `CAN_TX_MODE = CAN_TX_SETTINGS`;
-- `CAN_TX_EXPERIMENTAL` is anything other than 0 or 1.
+- `CAN_TX_EXPERIMENTAL` is anything other than 0 or 1;
+- `CAN_TX_1A9_RELEASE` is anything other than 0 or 1, or it is 1 without `CAN_TX_EXPERIMENTAL=1`.
 
 `tools/check_tx_profile_lock.sh` builds `decoder_tx_wifi` with `GENERIC` and with `EXAMPLE` in a
 temporary directory and passes only if both builds fail with the expected message.
@@ -99,7 +102,7 @@ flash. Nothing can add a row while the device runs.
 | Frame | Build | Length | Content check |
 |---|---|---|---|
 | `15B` personalisation request | default (`CAN_TX_EXPERIMENTAL=0`) and experimental | 8 | **none: identifier and length only.** The bytes are computed from the current `260` frame (`vset::build15B`). A content check is a separate, open decision |
-| `1A9` screen button | only with `-DCAN_TX_EXPERIMENTAL=1` | 8 | exactly one of two contents, both recorded from the aftermarket box with a reaction of the car: `00 7F FF 04 FF 00 10 00` (parking sensors), `00 7F FF 20 FF 00 10 00` (blind spot) |
+| `1A9` screen button | only with `-DCAN_TX_EXPERIMENTAL=1` | 8 | exactly one of two contents, both recorded from the aftermarket box with a reaction of the car: `00 7F FF 04 FF 00 10 00` (parking sensors), `00 7F FF 20 FF 00 10 00` (blind spot); with `-DCAN_TX_1A9_RELEASE=1` also the release `20 7F FF 00 FF 00 50 00` (the box's periodic frame with ignition on) after an acknowledged press |
 
 The gate checks a frame in this order: identifier on the list (first matching row), then length
 (`BAD_LEN`), then the content check. The hardware port checks every frame **a second time**
@@ -112,10 +115,15 @@ against the same list before it hands it to the controller.
 > deliberately. In the reference car `1A9` was accepted only in part (see
 > [below](#what-was-tried-in-the-car)). No build has a climate frame (`364`) or the Stop and Start
 > content of `1A9`: both were removed on 2026-11-19, because they were never measured with an effect.
-> This build is not part of CI: the host tests build its logic, and it was compiled with PlatformIO
-> once by hand (2026-11-19, no warnings); it was never flashed from this source tree.
+> This build is not part of CI: the host tests build its logic, and it is compiled with PlatformIO
+> by hand. Built from this source tree, it was flashed and exercised in the reference car on
+> 2026-11-20 (frames `15B` and `1A9`, plus the optional frame after a press behind
+> `CAN_TX_1A9_RELEASE`): 22 frames sent, all acknowledged on the bus. The release images never
+> contain CAN transmit.
 
 The profile `generic` has no allow list: its gate refuses every frame.
+
+[![Vehicle setting item that the firmware refuses for good](../../assets/screenshots/panel-console-vset-refused.png)](../../assets/screenshots/panel-console-vset-refused.png)
 
 ## Arming
 
@@ -142,6 +150,12 @@ flashed program starts disarmed, also when you flash the old one back.
 
 From the panel through your home network these commands are refused. `cantx on` and `vset on|off`
 are also refused while the car needs the device (reverse gear or active parking sensors).
+
+[![Arming CAN transmission: the dialog with its warnings](../../assets/screenshots/panel-dashboard-cantx-arm-dialog.png)](../../assets/screenshots/panel-dashboard-cantx-arm-dialog.png)
+
+[![Arming stored: it takes effect after a restart](../../assets/screenshots/panel-dashboard-cantx-arm-stored.png)](../../assets/screenshots/panel-dashboard-cantx-arm-stored.png)
+
+[![Armed after the restart](../../assets/screenshots/panel-dashboard-cantx-armed.png)](../../assets/screenshots/panel-dashboard-cantx-armed.png)
 
 ## Two states of the controller
 
@@ -258,14 +272,17 @@ The radio command `80 nn vv` (or `set NN VV` on USB) goes through the settings c
 `15B` is never repeated. A second command that arrives during the first one waits in one slot (the
 last one wins).
 
-The button items `05`, `0C` and `0D` use `1A9` instead (experimental build only). They need a fresh
-state frame from the bus (`227` or `3E1`), send nothing when the car is already in the wanted
-state, and wait up to **2500 ms** for the state to change.
+The button items `05` and `0C` use `1A9` instead (experimental build only). They need a fresh
+state frame from the bus (`126` for `05`, `227` for `0C`), send nothing when the car is already in
+the wanted state, and wait up to **2500 ms** for the state to change. Both are refused during the
+first 3.5 s after the ignition comes on; `0C` also while reverse is engaged and for 500 ms after it
+is released. Item `0D` (Stop and Start) has no known frame and is always refused.
 
 ## What was tried in the car
 
 All results below come from the console of an earlier transmit build of this firmware in the
-reference car (log not published). Details: [Peugeot 508 SW](../reference/vehicles/peugeot-508.md).
+reference car (log not published). The experimental build of this source tree repeated `15B` and
+`1A9` in the same car on 2026-11-20 (22 frames, all acknowledged on the bus). Details: [Peugeot 508 SW](../reference/vehicles/peugeot-508.md).
 
 | Frame | Result | Status |
 |---|---|---|

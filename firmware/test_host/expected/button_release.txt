@@ -1,0 +1,63 @@
+### button_release CAN_TX_1A9_RELEASE=0
+CAN_TX_EXPERIMENTAL = 1, CAN_TX_1A9_RELEASE = 0
+--- press acknowledged ---
+OK    80 05 01: press 00 7F FF 04 FF 00 10 00, report ACCEPTED after 23 ms (not delayed by the release)
+OK    CAN_TX_1A9_RELEASE=0: no release queued, one frame only
+--- press not acknowledged ---
+OK    press without an ack: TX_FAILED, no release
+--- release refused by the gate ---
+OK    CAN_TX_1A9_RELEASE=0: nothing more
+OK    CAN_TX_1A9_RELEASE=0: nothing more
+--- next command while the release is due ---
+OK    order: press 05, press 0C; no release
+--- per-minute limit ---
+OK    9 frames in the last minute: the press is the 10th frame (no release needed)
+--- gate allow list ---
+OK    release content NOT on the list (byte 4 = 00 refused)
+OK    00 7F FF 00 FF 00 10 00 NOT on the list
+OK    vset::releaseFrame = 20 7F FF 00 FF 00 50 00
+--- Decoder: console lines ---
+      [vset] 1A9 00 7F FF 04 FF 00 10 00 sent (acked after 5 ms)
+      [vset] radar switch = 1: ACCEPTED by BSI after 6 ms
+      [diag] wakes=0 park-flips-asleep=0 1A9 press=1 release=0
+OK    press line, ACCEPTED, no release line; [diag] press=1 release=0
+--- Decoder: press not handed to the controller ---
+      [vset] 1A9 00 7F FF 04 FF 00 10 00 NOT ACKED (after 3 ms)
+      [vset] radar switch = 1: frame 1A9 not acked on the bus, car state unchanged
+      [diag] wakes=0 park-flips-asleep=0 1A9 press=0 release=0
+OK    send() refused by the controller: NOT ACKED line, [diag] press=0 release=0
+button_release: 12 checks, 0 errors
+### code=0
+### button_release CAN_TX_1A9_RELEASE=1
+CAN_TX_EXPERIMENTAL = 1, CAN_TX_1A9_RELEASE = 1
+--- press acknowledged ---
+OK    80 05 01: press 00 7F FF 04 FF 00 10 00, report ACCEPTED after 23 ms (not delayed by the release)
+OK    one release 20 7F FF 00 FF 00 50 00, 505 ms after the press (gate pause 500 ms)
+OK    release event: sent, acked, after the ACCEPTED report; state unchanged by the release; no latch
+--- press not acknowledged ---
+OK    press without an ack: TX_FAILED, no release
+--- release refused by the gate ---
+OK    disarmed after the press: release not sent (transmit disarmed), at once at its due time
+OK    controller not ready: release retried, given up 1200 ms after the press (limit 200 + 1000)
+--- next command while the release is due ---
+OK    order: press 05, release, press 0C, release (the second command waits until the first release is finished)
+OK    two releases, both acked
+--- per-minute limit ---
+OK    9 frames in the last minute: the press is refused (no room for press + release), nothing sent
+--- gate allow list ---
+OK    release content on the list
+OK    00 7F FF 00 FF 00 10 00 NOT on the list
+OK    vset::releaseFrame = 20 7F FF 00 FF 00 50 00
+--- Decoder: console lines ---
+      [vset] 1A9 00 7F FF 04 FF 00 10 00 sent (acked after 5 ms)
+      [vset] radar switch = 1: ACCEPTED by BSI after 6 ms
+      [vset] 1A9 20 7F FF 00 FF 00 50 00 release sent (acked after 5 ms, 505 ms after the press)
+      [diag] wakes=0 park-flips-asleep=0 1A9 press=1 release=1
+OK    press line, ACCEPTED, release line; [diag] press=1 release=1
+--- Decoder: press not handed to the controller ---
+      [vset] 1A9 00 7F FF 04 FF 00 10 00 NOT ACKED (after 3 ms)
+      [vset] radar switch = 1: frame 1A9 not acked on the bus, car state unchanged
+      [diag] wakes=0 park-flips-asleep=0 1A9 press=0 release=0
+OK    send() refused by the controller: NOT ACKED line, [diag] press=0 release=0
+button_release: 14 checks, 0 errors
+### code=0

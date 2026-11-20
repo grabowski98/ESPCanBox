@@ -194,15 +194,41 @@ bool isButton(uint8_t id) {
     return d && d->kind == Kind::KNOWN_BLOCKED;
 }
 
+bool ignitionJustOn(const CarState& car, uint32_t nowMs) {
+    return car.ignitionOnSeen && (uint32_t)(nowMs - car.msIgnitionOn) < IGNITION_SETTLE_MS;
+}
+
+bool reverseMasksBlindSpot(const CarState& car, uint32_t nowMs) {
+    // Reversing now. Deliberately stricter than "fresh 0F6 from the bus": the last 0F6 showing reverse masks the
+    // item even when stale or pasted (a missing state only refuses; a wrong state would toggle the setting).
+    if (car.f0F6.seen && car.body.reverseGear) return true;
+    return car.reverseOffSeen && (uint32_t)(nowMs - car.msReverseOff) < REVERSE_SETTLE_MS;
+}
+
+bool parkingInhibited(uint8_t byte1, uint8_t& value) {
+    const uint8_t inh = byte1 & 0x18;   // 1.4 sound inhibition, 1.3 visual inhibition
+    if (inh == 0x18) {
+        value = 1;                      // sensors off (same polarity as the LED bit 227 1.6)
+        return true;
+    }
+    if (inh == 0x00) {
+        value = 0;
+        return true;
+    }
+    return false;                       // only one of the two bits: never seen in a recording
+}
+
 bool buttonState(const CarState& car, uint32_t nowMs, uint8_t id, uint8_t& value) {
     const RawFrame& l = car.f227;   // button LEDs (BSI, every 500 ms)
+    const RawFrame& p = car.f126;   // parking aid command (BSI, every 500 ms)
+    if (ignitionJustOn(car, nowMs)) return false;   // 227 lamp test and the LED value from before ignition on
     switch (id) {
-        case 0x05:   // as psa::decodeSettings: bit "radar" = 227 byte 1 bit 6
-            if (!l.seen || l.pasted || l.len < 3 || !fresh(l, nowMs, FRESH_227_MS)) return false;
-            value = (l.d[0] & 0x40) ? 1 : 0;
-            return true;
+        case 0x05:   // 126 byte 1 bits 4-3 (the radio data still use 227 byte 1 bit 6, psa::decodeSettings)
+            if (!p.seen || p.pasted || p.len < 1 || !fresh(p, nowMs, FRESH_126_MS)) return false;
+            return parkingInhibited(p.d[0], value);
         case 0x0C:   // as psa::decodeSettings: bit "blind spot" = 227 byte 3 bit 0
             if (!l.seen || l.pasted || l.len < 3 || !fresh(l, nowMs, FRESH_227_MS)) return false;
+            if (reverseMasksBlindSpot(car, nowMs)) return false;   // the LED bit is cleared while reversing
             value = (l.d[2] & 0x01) ? 1 : 0;
             return true;
         default: return false;
@@ -235,6 +261,11 @@ Refuse buildButton(const CarState& car, uint32_t nowMs, uint8_t id, uint8_t valu
     out[6] = 0x10;
     out[7] = 0x00;
     return Refuse::OK;
+}
+
+void releaseFrame(uint8_t out[8]) {
+    static const uint8_t R[8] = {0x20, 0x7F, 0xFF, 0x00, 0xFF, 0x00, 0x50, 0x00};   // box periodic 1A9, ignition on
+    for (int i = 0; i < 8; i++) out[i] = R[i];
 }
 
 }  // namespace vset

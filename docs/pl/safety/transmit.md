@@ -79,6 +79,8 @@ Reszta strony pokazuje, jak brama działa w środku. Każda liczba jest przepisa
 `lib/core/can_tx_gate.*`, `lib/core/can_tx_arm.*`, `src/can_tx/*`,
 `lib/car_psa_aee2010/tx_allowlist.cpp` i `src/config.h` (ścieżki względem `firmware/`).
 
+[![Program z nadawaniem otwarty z sieci domowej](../../assets/screenshots/panel-dashboard-cantx-home-network.png)](../../assets/screenshots/panel-dashboard-cantx-home-network.png)
+
 ## Blokady przy kompilacji {#locks-when-you-build}
 
 `decoder_tx_wifi` ustawia `-DCAN_TX_MODE=CAN_TX_SETTINGS` i `-DCAN_TX_EXPERIMENTAL=0`. Kompilacja
@@ -90,7 +92,8 @@ zatrzymuje się z błędem, gdy:
 - profil auta to `EXAMPLE` (to nigdy nie jest dozwolone, z nadawaniem ani bez);
 - lista dozwolonych profilu jest pusta (`static_assert` w `src/config.h`);
 - `src/can_tx/` jest kompilowany bez `CAN_TX_MODE = CAN_TX_SETTINGS`;
-- `CAN_TX_EXPERIMENTAL` ma wartość inną niż 0 albo 1.
+- `CAN_TX_EXPERIMENTAL` ma wartość inną niż 0 albo 1;
+- `CAN_TX_1A9_RELEASE` ma wartość inną niż 0 albo 1 albo jest 1 bez `CAN_TX_EXPERIMENTAL=1`.
 
 `tools/check_tx_profile_lock.sh` kompiluje `decoder_tx_wifi` z `GENERIC` i z `EXAMPLE`
 w katalogu tymczasowym i przechodzi tylko wtedy, gdy obie kompilacje kończą się oczekiwanym
@@ -107,7 +110,7 @@ flash. Nic nie może dodać wiersza, gdy urządzenie pracuje.
 | Ramka | Kompilacja | Długość | Sprawdzanie treści |
 |---|---|---|---|
 | `15B` żądanie personalizacji | domyślna (`CAN_TX_EXPERIMENTAL=0`) i eksperymentalna | 8 | **brak: tylko identyfikator i długość.** Bajty są liczone z bieżącej ramki `260` (`vset::build15B`). Sprawdzanie treści to osobna, otwarta decyzja |
-| `1A9` przycisk ekranu | tylko z `-DCAN_TX_EXPERIMENTAL=1` | 8 | dokładnie jedna z dwóch treści, obie nagrane ze skrzynki z rynku wtórnego razem z reakcją auta: `00 7F FF 04 FF 00 10 00` (czujniki parkowania), `00 7F FF 20 FF 00 10 00` (martwe pole) |
+| `1A9` przycisk ekranu | tylko z `-DCAN_TX_EXPERIMENTAL=1` | 8 | dokładnie jedna z dwóch treści, obie nagrane ze skrzynki z rynku wtórnego razem z reakcją auta: `00 7F FF 04 FF 00 10 00` (czujniki parkowania), `00 7F FF 20 FF 00 10 00` (martwe pole); z `-DCAN_TX_1A9_RELEASE=1` także puszczenie `20 7F FF 00 FF 00 50 00` (okresowa ramka skrzynki przy włączonym zapłonie) po potwierdzonym naciśnięciu |
 
 Brama sprawdza ramkę w tej kolejności: identyfikator na liście (pierwszy pasujący wiersz), potem
 długość (`BAD_LEN`), potem treść. Warstwa sprzętowa sprawdza każdą ramkę **drugi raz** według tej
@@ -120,10 +123,14 @@ samej listy, zanim przekaże ją kontrolerowi.
 > świadomie. W aucie wzorcowym `1A9` została przyjęta tylko częściowo (zobacz
 > [niżej](#what-was-tried-in-the-car)). Żadna wersja nie ma ramki klimatyzacji (`364`) ani treści
 > `1A9` dla Stop and Start: obie usunięto 19.11.2026, bo nigdy nie zmierzono ich skutku.
-> Tej kompilacji nie ma w CI: jej logikę budują testy na komputerze, a w PlatformIO skompilowano ją
-> raz ręcznie (19.11.2026, bez ostrzeżeń); z tego drzewa źródeł nigdy jej nie wgrywano.
+> Tej kompilacji nie ma w CI: jej logikę budują testy na komputerze, a w PlatformIO kompiluje się ją
+> ręcznie. Zbudowaną z tego drzewa źródeł wgrano i wypróbowano w aucie wzorcowym 20.11.2026 (ramki
+> `15B` i `1A9` oraz opcjonalna ramka po naciśnięciu za `CAN_TX_1A9_RELEASE`): 22 wysłane ramki,
+> wszystkie potwierdzone na magistrali. Obrazy wydań nigdy nie zawierają nadawania CAN.
 
 Profil `generic` nie ma listy dozwolonych: jego brama odrzuca każdą ramkę.
+
+[![Pozycja ustawień pojazdu odrzucana na stałe przez program](../../assets/screenshots/panel-console-vset-refused.png)](../../assets/screenshots/panel-console-vset-refused.png)
 
 ## Uzbrajanie {#arming}
 
@@ -150,6 +157,12 @@ kasowana. Dlatego każdy nowo wgrany program startuje rozbrojony, także gdy wgr
 
 Z panelu przez sieć domową te polecenia są odrzucane. `cantx on` i `vset on|off` są też odrzucane,
 gdy auto potrzebuje urządzenia (bieg wsteczny albo aktywne czujniki parkowania).
+
+[![Uzbrajanie nadawania: okno z ostrzeżeniami](../../assets/screenshots/pl/panel-dashboard-cantx-arm-dialog.png)](../../assets/screenshots/pl/panel-dashboard-cantx-arm-dialog.png)
+
+[![Uzbrojenie zapisane: działa po restarcie](../../assets/screenshots/panel-dashboard-cantx-arm-stored.png)](../../assets/screenshots/panel-dashboard-cantx-arm-stored.png)
+
+[![Uzbrojone po restarcie](../../assets/screenshots/panel-dashboard-cantx-armed.png)](../../assets/screenshots/panel-dashboard-cantx-armed.png)
 
 ## Dwa stany kontrolera {#two-states-of-the-controller}
 
@@ -270,14 +283,18 @@ Polecenie radia `80 nn vv` (albo `set NN VV` przez USB) przechodzi przez moduł 
 `15B` nigdy nie jest powtarzana. Drugie polecenie, które przyjdzie w trakcie pierwszego, czeka
 w jednym miejscu (wygrywa ostatnie).
 
-Pozycje przycisków `05`, `0C` i `0D` używają zamiast tego `1A9` (tylko kompilacja
-eksperymentalna). Potrzebują świeżej ramki stanu z magistrali (`227` albo `3E1`), nic nie wysyłają,
-gdy auto już jest w żądanym stanie, i czekają do **2500 ms** na zmianę stanu.
+Pozycje przycisków `05` i `0C` używają zamiast tego `1A9` (tylko kompilacja
+eksperymentalna). Potrzebują świeżej ramki stanu z magistrali (`126` dla `05`, `227` dla `0C`), nic
+nie wysyłają, gdy auto już jest w żądanym stanie, i czekają do **2500 ms** na zmianę stanu. Obie są
+odrzucane przez pierwsze 3,5 s po włączeniu zapłonu; `0C` także przy włączonym wstecznym i przez
+500 ms po jego wyłączeniu. Pozycja `0D` (Start/Stop) nie ma znanej ramki i jest zawsze odrzucana.
 
 ## Co wypróbowano w aucie {#what-was-tried-in-the-car}
 
 Wszystkie wyniki poniżej pochodzą z konsoli wcześniejszej wersji tego programu z nadawaniem,
-uruchomionej w aucie wzorcowym (log nieopublikowany). Szczegóły: [Peugeot 508 SW](../reference/vehicles/peugeot-508.md).
+uruchomionej w aucie wzorcowym (log nieopublikowany). Kompilacja eksperymentalna z tego drzewa
+źródeł powtórzyła `15B` i `1A9` w tym samym aucie 20.11.2026 (22 ramki, wszystkie potwierdzone na
+magistrali). Szczegóły: [Peugeot 508 SW](../reference/vehicles/peugeot-508.md).
 
 | Ramka | Wynik | Stan |
 |---|---|---|

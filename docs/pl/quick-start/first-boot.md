@@ -17,7 +17,8 @@ Nie masz jeszcze płytki? Przejdź do [Wypróbuj panel bez płytki](#try-the-pan
 
 ## 1. Wgraj kompilację z siecią {#1-flash-a-build-with-network}
 
-Jeśli wgrałeś `listen_wifi` jak na stronie [Wgraj program](flash.md), przejdź do kroku 2.
+Jeśli wgrałeś `listen_wifi` jak na stronie [Wgraj program](flash.md) (gotowy obraz albo własną
+kompilację), przejdź do kroku 2.
 W przeciwnym razie w terminalu otwartym w folderze `firmware` (jak na tamtej stronie) uruchom:
 
 ```text
@@ -94,7 +95,9 @@ wpisz adres z `http://` na początku.
 Oczekiwany wynik: panel pokazuje pięć zakładek: **Pulpit**, **CAN**, **Radio**, **Konsola**
 i **System**.
 
-[![Pulpit panelu WWW (makieta urządzenia, schemat ciemny)](../../assets/screenshots/panel-dashboard.png)](../../assets/screenshots/panel-dashboard.png)
+[![Pulpit panelu WWW (makieta urządzenia, schemat ciemny)](../../assets/screenshots/pl/panel-dashboard.png)](../../assets/screenshots/pl/panel-dashboard.png)
+
+[![Ekran logowania z wyborem języka](../../assets/screenshots/pl/panel-login.png)](../../assets/screenshots/pl/panel-login.png)
 
 ## 5. Wybierz język {#5-choose-the-language}
 
@@ -125,6 +128,8 @@ Wi-Fi jest włączone:
 - przez pierwsze 60 s po starcie przy cichej magistrali, żebyś zdążył się połączyć.
 
 `wifi off` wyłącza sieć i trzyma ją wyłączoną także po restarcie; `wifi on` włącza ją z powrotem.
+
+[![Brak połączenia z urządzeniem](../../assets/screenshots/pl/panel-offline.png)](../../assets/screenshots/pl/panel-offline.png)
 
 ## Opcjonalnie: twoja sieć domowa {#optional-your-home-network}
 

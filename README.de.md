@@ -1,6 +1,10 @@
-<!-- Project name: "project_name" in project.json. tools/set_project_name.py --apply rewrites the title line ("# ...") under the logo. The logo is a drawing: no tool rewrites it (docs/en/contributing/brand.md). -->
+<!-- Project name: "project_name" in project.json. tools/set_project_name.py --apply rewrites the title line ("# ...") under the logo. The logo is a drawing: no tool rewrites it; the animated header logo is generated from it by tools/make_logo_animation.py (docs/en/contributing/brand.md). -->
 <p align="center">
-  <img src="docs/assets/brand/logo-transparent.svg" alt="Projektlogo: eine Punktmatrix-Anzeige mit dem Projektnamen" width="527">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/logo-animated.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/logo-animated.svg">
+    <img src="docs/assets/brand/logo-transparent.svg" alt="Projektlogo: eine Punktmatrix-Anzeige mit dem Projektnamen" width="527">
+  </picture>
 </p>
 
 # ESPCanBox
@@ -14,8 +18,6 @@ Android-Radio und kann die nachgerüstete CAN-Box ersetzen, die mit dem Radio ve
 > **Maschinelle Übersetzung, Prüfung ausstehend.** Diese Datei ist eine Übersetzung von
 > [README.md](README.md). Verbindlich ist der englische Text. Fehler in der Übersetzung melden:
 > [Übersetzungen](docs/en/contributing/translations.md#send-your-work).
-
-![Übersicht des Web-Panels (Geräte-Mock, dunkles Schema)](docs/assets/screenshots/panel-dashboard.png)
 
 > [!WARNING]
 > **Hobbyprojekt, WIE ES IST, ohne jede Gewähr.** Die Nutzung erfolgt auf eigenes Risiko, am
@@ -31,6 +33,21 @@ Android-Radio und kann die nachgerüstete CAN-Box ersetzen, die mit dem Radio ve
 > - Dieses Projekt ist nicht mit Peugeot, Stellantis, Simple Soft, Raise, Junsun oder FYT
 >   verbunden und wird von ihnen weder unterstützt noch empfohlen. Ihre Namen stehen hier nur, um
 >   zu sagen, was getestet wurde.
+
+## Bildschirmfotos
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-dashboard.png"><img src="docs/assets/screenshots/panel-dashboard.png" alt="Übersicht, Motor läuft, vordere Sensoren piepen" width="250"></a><br><sub>Übersicht: Autozustand und Parksensoren</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-can.png"><img src="docs/assets/screenshots/panel-can.png" alt="CAN-Reiter: Frame-Tabelle und Live-Vorschau einer Aufnahme" width="250"></a><br><sub>CAN-Reiter: Frames live</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-radio-keymap.png"><img src="docs/assets/screenshots/panel-radio-keymap.png" alt="Editor der Tastenbelegung mit den Standard-Tauschungen und der zuletzt gedrückten Taste" width="250"></a><br><sub>Radio-Reiter: Tastenbelegung</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-system-firmware-wizard.png"><img src="docs/assets/screenshots/panel-system-firmware-wizard.png" alt="Update-Assistent: eine Decoder-Datei für ein reines Mithör-Gerät braucht ein ausdrückliches Häkchen" width="250"></a><br><sub>Firmware-Update im Browser</sub></td>
+  </tr>
+</table>
+
+Alle Ansichten mit Erklärung: [Rundgang durch das Panel](docs/en/reference/panel-tour.md) (Englisch). Die Bilder stammen vom Geräte-Mock, nicht aus einem Auto.
 
 ## Für wen es ist
 
@@ -71,14 +88,11 @@ ab:
   Hardware (siehe [Host-Tests](docs/en/testing/host-tests.md)).
 - **Optionaler Sende-Build** (`decoder_tx_wifi`): Standardmäßig kann er nur einen Frame senden,
   die Anfrage für Fahrzeugeinstellungen `15B` (nur nach ID und Länge geprüft), und das erst, wenn
-  Sie ihn scharf schalten. Zwei weitere Versuchs-Frames gibt es nur in einem experimentellen
-  Build. Die Klimaanlage über das Radio zu steuern, hat auf diesem Weg **nicht** funktioniert.
+  Sie ihn scharf schalten. Den Versuchs-Frame `1A9` gibt es nur in einem Build mit
+  `-DCAN_TX_EXPERIMENTAL=1`. Die Klimaanlage über das Radio zu steuern, hat auf diesem Weg **nicht** funktioniert.
   Details: [Senden auf dem CAN-Bus](docs/en/safety/transmit.md).
 
-Nicht fertig oder nicht bekannt: Der Tiefschlaf bei stillem Bus ist geschrieben, aber auf der
-Hardware nicht getestet. Die Firmware in diesem Repository wurde aus der Version umgebaut, die im
-Referenzauto läuft; sie kompiliert und besteht die Host-Tests, aber dieser Baum wurde **noch
-nicht auf dem Prüftisch** an einem Gerät getestet.
+Stand: Version 2.0.0 kompiliert, besteht die Host-Tests, wurde auf dem Prüftisch auf einer Platine ESP32-S3-WROOM-1-N16R8 getestet und am 20.11.2026 in einem einzigen Auto ausprobiert, einschließlich Tiefschlaf und Aufwachen durch den Bus. Details: [CHANGELOG.md](CHANGELOG.md).
 
 ## Unterstützte Autos
 
@@ -180,10 +194,30 @@ Versprechen auf eine Antwort oder eine Korrektur innerhalb einer bestimmten Zeit
 
 ## Lizenzen
 
-Vorläufig bis zur ersten öffentlichen Version:
-
 - Code: Apache-2.0 ([LICENSE](LICENSE), [NOTICE](NOTICE));
 - Dokumentation und Bilder: CC BY 4.0 ([LICENSE-docs](LICENSE-docs));
 - Hardware (KiCad-Dateien, Gehäuse): CERN-OHL-S-2.0 ([LICENSE-hardware](LICENSE-hardware)).
+
+Welche Lizenz für welche Dateien gilt:
+
+| Lizenz | Dateien |
+|---|---|
+| Apache-2.0 | `firmware/` (mit Web-Panel, Testdaten und Aufzeichnungen), `tools/`, der Code in `extras/`, `vehicles/*/*.dbc`, `hardware/prototype-v1/enclosure/gen_enclosure.py`, Build- und CI-Dateien sowie jede Datei, die in den zwei Zeilen darunter nicht genannt ist |
+| CC BY 4.0 | `docs/`, jede Markdown-Datei (`*.md`), die Logos (`docs/assets/brand/`, `hardware/brand/`), Fotos, Bildschirmfotos, Renderings und Zeichnungen |
+| CERN-OHL-S-2.0 | in `hardware/prototype-v1/`: die KiCad-Dateien, die PDF- und Druckdateien, `bom.csv`, die Gehäusemodelle (STL) |
+
+**Lizenz der einzelnen Dateien.** Die Dateien haben keinen eigenen Lizenzkopf. Für eine Datei
+ohne eigenen Kopf gilt die Tabelle oben; eine Datei, die ihre eigene Lizenz nennt, steht unter
+dieser Lizenz. Die Teile anderer Projekte, die ein Firmware-Image enthält (Arduino-Core für ESP32
+unter LGPL-2.1-or-later, ESP-IDF und seine Komponenten, die Laufzeitbibliotheken des Compilers),
+stehen mit Lizenz und Link in [NOTICE](NOTICE). Jedes Release-Archiv enthält die Lizenztexte,
+NOTICE und einen Hinweis, wo der Quellcode genau dieser Version liegt
+([LICENSES/](LICENSES/THIRD-PARTY.md)).
+
+Peugeot, Stellantis, Simple Soft, Raise, Junsun, FYT und die anderen Produkt- und Firmennamen
+gehören ihren Inhabern. Sie stehen hier nur, um die Kompatibilität zu beschreiben. Dieses Projekt
+ist mit keinem von ihnen verbunden und wird von keinem unterstützt. ESP32 ist eine Marke von
+Espressif Systems; andere Namen sind Marken ihrer jeweiligen Inhaber und stehen hier nur, um die
+Kompatibilität zu beschreiben.
 
 Autor: grabowski98.

@@ -36,5 +36,8 @@ OK    I2S (audio) failed: outputs off, amplifier asleep, LED red
 OK    UART (radio) failed: outputs off, amplifier asleep, LED red
 OK    drivers up, CAN controller not running: red
 OK    drivers up: yellow = sound, green = frames, off = silence (as before)
-loop_policy: 34 checks, 0 errors
+OK    CAN driver up: bus activity = frames received; the RX pin sample is ignored
+OK    CAN driver failed: a LOW sample of the CAN RX pin (dominant bit) counts as bus activity
+OK    CAN driver failed: awake while the bus runs, asleep 30000 ms after the last LOW sample
+loop_policy: 37 checks, 0 errors
 ### code=0

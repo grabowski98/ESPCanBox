@@ -4,23 +4,32 @@ Ideas and planned work, roughly in order. Nothing here has a date: this is a hob
 item moves to [CHANGELOG.md](CHANGELOG.md) when it is done. If you want to work on one, open an
 issue first so the work is not done twice.
 
-## Before the first public release (2.0.0-beta.1)
+## Done for 2.0.0
 
-- **Bench test protocol** on a real board for this tree: flashing over USB, `ver`, `stat`,
-  frames received, UART to the radio, 12 V outputs off in listen mode, `cantx` without arming,
-  panel in two languages, update over Wi-Fi.
-- **Continuous integration**: the workflow files exist (`.github/workflows/ci.yml`,
-  `release.yml`, see [Continuous integration](docs/en/testing/ci.md)) but have not run on GitHub
-  yet; the first run, including the host tests with `g++`, comes with the first push.
-- **New board** (see [Future boards](docs/en/hardware/future-boards.md)); the first public
-  release waits for it.
-- **Documentation translations**: Polish in full; German, Spanish, Russian and Ukrainian for the
-  start pages, quick start, safety and "make it yours", reviewed by native speakers.
+- **Bench test** on an ESP32-S3-WROOM-1-N16R8 board
+  ([bench test protocol](docs/en/testing/bench-test-protocol.md)) and a trial in one car on
+  2026-11-20; what was and was not exercised is in [CHANGELOG.md](CHANGELOG.md), section 2.0.0.
+- **Documentation translations**: Polish for every page; German, Spanish, Russian and Ukrainian
+  for the start pages, quick start, safety and "make it yours" (all machine translated, marked
+  "needs review").
+
+## Next
+
+- **Bug-fix release** (2.0.x) with what the in-car trial of 2.0.0 showed.
+- **Constants not yet measured by the author**: the rows and bits listed as unverified or not
+  exercised in [radios/xp-simple-soft/provenance.md](radios/xp-simple-soft/provenance.md) stay in
+  the code, clearly labelled, until the author's own recordings confirm or drop them.
+- **New board** (see [Future boards](docs/en/hardware/future-boards.md)). It is planned for later;
+  2.0.0 does not depend on it.
+- **Continuous integration**: check the first run of the workflows on GitHub
+  (`.github/workflows/ci.yml`, `release.yml`, see [Continuous integration](docs/en/testing/ci.md)),
+  including the host tests with `g++`.
+- **Native review** of the five documentation translations.
 - Content check for frame `15B` (the check covers only ID and length), with a test of the
   transmit path.
 - **Licences of the binary images**: the LGPL-2.1 parts of the Arduino core and the ESP-IDF
-  components in the build are checked one by one, and what a distributor of a binary image owes
-  is written down, before any image is published ([NOTICE](NOTICE), section 1).
+  components in the build are listed in [NOTICE](NOTICE), section 1; what a distributor of a binary
+  image owes is checked before any image is published.
 
 ## Car and radio support
 
@@ -55,12 +64,12 @@ issue first so the work is not done twice.
 - **Other radio protocols** (for example Raise / RZC, HiWorld), written only from your own UART
   recordings, never from other people's code with an incompatible licence.
 - Other PSA AEE2010 cars: recordings and profiles from owners.
-- **The remaining unverified bits** of the frames to the radio (door positions in XP frame `38`, the
-  bits of `21`, `38` and `3C` that never changed in a recording, listed in
+- **The remaining unverified bits** of the frames to the radio (the bits of `21`, `38` and `3C`
+  that never changed in a recording, listed in
   [radios/xp-simple-soft/provenance.md](radios/xp-simple-soft/provenance.md#logic-that-is-not-a-single-constant)):
-  record them with photos of the radio screen, or drop them. On the CAN side: the fan level of `350`
-  with a panel press, and the radio sound row `84 01` ("amplifier switch" on the screen, not
-  clicked yet).
+  record them with photos of the radio screen, or drop them. On the CAN side: which direction of
+  the fan level of `350` is "+" and which is "-", and the radio sound row `84 01` ("amplifier
+  switch" on the screen, not clicked yet).
 
 ## Tools
 

@@ -168,7 +168,7 @@ trzeba odczytać stan z magistrali i nic nie wysyłać, gdy auto ma już żądan
 
 | Polecenie radia | Pozycja | Treść `1A9` | Skąd czytany stan | Nagrane ze skrzynki z rynku wtórnego | Wysłane przez to urządzenie (pojedyncza ramka) |
 |---|---|---|---|---|---|
-| `80 05 v` | czujniki parkowania wł. / wył. | `00 7F FF 04 FF 00 10 00` | `227` 1.6 (dioda „czujniki wyłączone”) | zmierzone: 4 naciśnięcia, 4 reakcje (`can_20261110_190421.log`) | zmierzone: **przyjęte w obie strony**; `227` zmieniła się po 286 ms i 236 ms, stan w `0E1` przeszedł 6 -> 2 -> 6 |
+| `80 05 v` | czujniki parkowania wł. / wył. | `00 7F FF 04 FF 00 10 00` | `126` 1.4-1.3 (`18` = wyłączone, `00` = włączone); do 2.0.0-beta.1 `227` 1.6 (dioda „czujniki wyłączone”) | zmierzone: 4 naciśnięcia, 4 reakcje (`can_20261110_190421.log`) | zmierzone: **przyjęte w obie strony**; `227` zmieniła się po 286 ms i 236 ms, stan w `0E1` przeszedł 6 -> 2 -> 6 |
 | `80 0C v` | monitorowanie martwego pola | `00 7F FF 20 FF 00 10 00` | `227` 3.0 | zmierzone: 4 naciśnięcia, 4 reakcje (`can_20261110_190421.log`) | zmierzone: wyłączenie **przyjęte** (76 ms); włączenie 1,2 s później **nieprzyjęte** (brak zmiany w `227` przez 2,5 s). Jedna próba, przyczyna nieznana |
 
 Stop and Start (`80 0D`) nie jest pozycją przycisku: pojedyncza `1A9` `00 7F FF 00 FF 00 90 00`
@@ -176,11 +176,25 @@ Stop and Start (`80 0D`) nie jest pozycją przycisku: pojedyncza `1A9` `00 7F FF
 `3E1` bez zmian), a program nie ma już tej treści: odrzuca `80 0D` (brak znanej ramki).
 
 Skrzynka z rynku wtórnego wysyłała w tle `1A9` co 204 ms. Urządzenie wysyła tylko pojedynczą ramkę
-naciśnięcia. Wyniki urządzenia pochodzą z konsoli wcześniejszej kompilacji tego programu z
+naciśnięcia; kompilacja z `-DCAN_TX_1A9_RELEASE=1` dodaje po potwierdzonym naciśnięciu jedną ramkę
+puszczenia `20 7F FF 00 FF 00 50 00`. To okresowa `1A9` skrzynki przy włączonym zapłonie (4189 ramek
+w `can_20261110_190421.log`): skrzynka nie wysyłała osobnego puszczenia, naciśnięcie zastępowało
+jedną ramkę okresową (np. 1207,859 s), a po nim szła następna ramka okresowa (1208,066 s).
+`00 7F FF 00 FF 00 10 00` wystąpiła tylko przy zapłonie `80` i raz przy starcie skrzynki; nie jest
+nigdy wysyłana. Że naciśnięcie bez następnej ramki z bajtem 4 = `00` powoduje późniejsze
+przełączenie, to hipoteza, niezmierzona.
+
+Stan czujników parkowania pochodzi z `126` bajt 1 (wyciszenie dźwięku i obrazu): został `18` przez
+wyłączenie i włączenie zapłonu, a `227` 1.6 przez ok. 95 ms po włączeniu zapłonu pokazywał wartość
+sprzed zapłonu, a test lampek w `227` trwa 3,0 s (`centralka_can_20261119_150048.log` 487,68 s).
+Program odrzuca obie pozycje przycisków przez pierwsze 3,5 s po włączeniu zapłonu. Wyniki urządzenia pochodzą z konsoli wcześniejszej kompilacji tego programu z
 nadawaniem, w aucie (zapis nieopublikowany).
 
 Bit `227` 3.0 przełącza się przyciskiem martwego pola, a zeruje się też na wstecznym i po
-wyłączeniu silnika; jego dokładne znaczenie w tym aucie nie jest ustalone.
+wyłączeniu silnika; jego dokładne znaczenie w tym aucie nie jest ustalone. Na wstecznym zeruje się
+ok. 40 ms po wrzuceniu biegu i wraca ok. 40 ms po jego wyrzuceniu (`can_20261111_151209.log`,
+wszystkie 20 cykli wstecznego), dlatego program traktuje stan martwego pola jako nieznany (`80 0C`
+odrzucone, nic nie wysłane) przy włączonym wstecznym i przez 500 ms po jego wyłączeniu.
 
 > [!CAUTION]
 > **Nie ma tego w domyślnej kompilacji z nadawaniem**

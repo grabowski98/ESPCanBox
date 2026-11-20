@@ -25,6 +25,9 @@ OK    screen marked as on
 OK    ignition off with the screen on: nothing
 OK    ignition off with the screen blanked: released
 OK    after ignition off the first press blanks again
+OK    radio frame 81 01 = RADIO_ON
+OK    after 81 01 the screen is marked as on
+OK    after 81 01 the first press sends pressed again
 OK    PSA defaults: text 9F=9B;21=1F
 OK    PSA defaults: 2 entries
 OK    defaultEntry(0) = 9F->9B, out of range used=false

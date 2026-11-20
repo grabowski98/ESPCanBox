@@ -149,6 +149,37 @@ static void testDriverInit() {
     check(statusLedState(ok, true, true, true) == 2 && statusLedState(ok, true, false, true) == 1 &&
               statusLedState(ok, true, false, false) == 0,
           "drivers up: yellow = sound, green = frames, off = silence (as before)");
+    DriverInit noCan = ok;
+    noCan.can = false;
+    DriverInit noAudio = ok;
+    noAudio.audio = false;
+    check(sleepBusActivity(ok, true, false) && !sleepBusActivity(ok, false, true) && !sleepBusActivity(noAudio, false, true),
+          "CAN driver up: bus activity = frames received; the RX pin sample is ignored");
+    check(sleepBusActivity(noCan, false, true) && !sleepBusActivity(noCan, false, false),
+          "CAN driver failed: a LOW sample of the CAN RX pin (dominant bit) counts as bus activity");
+
+    // CAN driver failed, simulated main loop: one pass per ms, one RX pin sample per pass, sleep after 30 s
+    // without activity (SLEEP_AFTER_MS in src/config.h, the same logic as sleepPoll). 120 s of car bus: about one
+    // sample in ten LOW (pseudo-random); then silence (pin HIGH).
+    const uint32_t SLEEP_AFTER = 30000;
+    uint32_t lastActive = 0, sleptAt = 0, seed = 12345;
+    bool slept = false;
+    for (uint32_t now = 1; now <= 200000 && !slept; now++) {
+        bool low = false;
+        if (now <= 120000) {
+            seed = seed * 1103515245u + 12345u;
+            low = ((seed >> 16) % 10) == 0;
+        }
+        if (sleepBusActivity(noCan, false, low)) lastActive = now;
+        else if (now - lastActive >= SLEEP_AFTER) {
+            slept = true;
+            sleptAt = now;
+        }
+    }
+    char what[96];
+    std::snprintf(what, sizeof(what), "CAN driver failed: awake while the bus runs, asleep %lu ms after the last LOW sample",
+                  (unsigned long)(sleptAt - lastActive));
+    check(slept && lastActive > 119000 && lastActive <= 120000 && sleptAt - lastActive == SLEEP_AFTER, what);
 }
 
 int main() {

@@ -327,9 +327,30 @@ static void testQueueAndTiming() {
         s.step(700);
         s.f260(0x34, 0x97, 0x3A, 0xD5);
         s.step(5);
+        // The dropped 80 02 01 gets its report at once, when 80 06 00 takes its place (before the first one ends).
         check(s.port.sent.size() == 2 && is15B(s.port.sent[1].f, {0x00, 0x34, 0x97, 0x3A, 0xD5, 0x40, 0x00, 0x00}) &&
-                  s.reps.size() == 2 && s.reps[1].id == 0x06 && s.last(vset::ChangeResult::ACCEPTED),
-              "three commands: one waiting place, the last one wins (80 02 01 skipped without a report)");
+                  s.reps.size() == 3 && s.reps[0].id == 0x02 && s.reps[0].value == 1 &&
+                  s.reps[0].result == vset::ChangeResult::REFUSED && s.reps[0].txRefuse == TxRefuse::BUSY &&
+                  !s.reps[0].haveFrame && s.reps[1].id == 0x01 && s.reps[2].id == 0x06 && s.last(vset::ChangeResult::ACCEPTED),
+              "three commands: one waiting place, the last one wins (80 02 01 dropped with a report: REFUSED, busy)");
+    }
+    {
+        Sim s(true, true, vset::ENABLED_DEFAULT | (1UL << 0x02));
+        s.f260(0x34, 0x97, 0xBA, 0x55);
+        s.cmd(0x01, 1);
+        s.step(10);
+        s.cmd(0x02, 1);
+        s.step(10);
+        s.cmd(0x02, 0);                                        // same item: replaces the waiting one without a report
+        bool silent = s.reps.empty();
+        s.step(225);
+        s.f260(0x34, 0x97, 0xBA, 0xD5);
+        s.step(700);
+        s.f260(0x34, 0x97, 0xBA, 0xD5);
+        s.step(5);
+        check(silent && s.port.sent.size() == 1 && s.reps.size() == 2 && s.reps[0].id == 0x01 && s.reps[1].id == 0x02 &&
+                  s.reps[1].value == 0 && s.last(vset::ChangeResult::ALREADY),
+              "80 02 01, then 80 02 00 while waiting: the same item is replaced without a report (80 02 00 = ALREADY)");
     }
     {
         Sim s;
@@ -601,23 +622,48 @@ static bool is1A9(const CanFrame& f, std::initializer_list<uint8_t> want) {
 // Button-type items: one 1A9 frame toggles the state; sent only for a known, fresh and different state.
 static void testButtons() {
     {
+        // Item 05 reads its state from 126 byte 1 (18 = sensors off, 00 = on), not from the 227 LED.
         Sim s(true, true, 0xFFFFFFFFUL);
-        s.can(frame(0x227, {0x00, 0x00, 0x11, 0x00, 0x00}));
+        s.can(frame(0x126, {0x00, 0xB0, 0x00}));
+        s.can(frame(0x227, {0x40, 0x00, 0x11, 0x00, 0x00}));  // LED says "off": ignored for item 05
         s.cmd(0x05, 1);
         s.step(10);
         bool sent = s.port.sent.size() == 1 && is1A9(s.port.sent[0].f, {0x00, 0x7F, 0xFF, 0x04, 0xFF, 0x00, 0x10, 0x00});
-        s.can(frame(0x227, {0x40, 0x00, 0x11, 0x00, 0x00}));
+        s.can(frame(0x126, {0x18, 0xB0, 0x00}));
         s.step(5);
         check(sent && s.reps.size() == 1 && s.reps[0].result == vset::ChangeResult::ACCEPTED && s.reps[0].canId == 0x1A9 &&
                   s.port.sent.size() == 1,
-              "80 05 01 with 227 = 00..: one 1A9 = 00 7F FF 04 FF 00 10 00; after 227 = 40..: ACCEPTED");
-        s.can(frame(0x227, {0x40, 0x00, 0x11, 0x00, 0x00}));
+              "80 05 01 with 126 = 00.. (227 = 40.. ignored): one 1A9 = 00 7F FF 04 FF 00 10 00; after 126 = 18..: ACCEPTED");
+        s.can(frame(0x126, {0x18, 0xB0, 0x00}));
         s.step(700);
-        s.can(frame(0x227, {0x40, 0x00, 0x11, 0x00, 0x00}));
+        s.can(frame(0x126, {0x18, 0xB0, 0x00}));
+        s.can(frame(0x227, {0x00, 0x00, 0x11, 0x00, 0x00}));
         s.cmd(0x05, 1);
         s.step(5);
         check(s.reps.size() == 2 && s.reps[1].result == vset::ChangeResult::ALREADY && s.port.sent.size() == 1,
-              "80 05 01 with 227 = 40..: the car already has this state, nothing sent");
+              "80 05 01 with 126 = 18.. (227 = 00.. ignored): the car already has this state, nothing sent");
+    }
+    {
+        Sim s(true, true, 0xFFFFFFFFUL);
+        s.can(frame(0x126, {0x18, 0xB0, 0x00}));
+        s.cmd(0x05, 0);
+        s.step(10);
+        bool sent = s.port.sent.size() == 1 && is1A9(s.port.sent[0].f, {0x00, 0x7F, 0xFF, 0x04, 0xFF, 0x00, 0x10, 0x00});
+        s.can(frame(0x126, {0x00, 0xB0, 0x00}));
+        s.step(5);
+        check(sent && s.reps.size() == 1 && s.reps[0].result == vset::ChangeResult::ACCEPTED,
+              "126 = 18.. and 80 05 00: one press; after 126 = 00..: ACCEPTED");
+        Sim t(true, true, 0xFFFFFFFFUL);
+        t.can(frame(0x126, {0x00, 0xB0, 0x00}));
+        t.cmd(0x05, 0);
+        t.step(10);
+        check(t.reps.size() == 1 && t.reps[0].result == vset::ChangeResult::ALREADY && t.port.sent.empty(),
+              "126 = 00.. and 80 05 00: ALREADY, nothing sent");
+        Sim u(true, true, 0xFFFFFFFFUL);
+        u.can(frame(0x126, {0x08, 0xB0, 0x00}));                // only one of the two inhibition bits: never recorded
+        u.cmd(0x05, 0);
+        check(u.reps.size() == 1 && u.reps[0].refuse == vset::Refuse::NO_STATE && u.port.sent.empty(),
+              "126 byte 1 = 08 (one inhibition bit only): no state, refused, nothing sent");
     }
     {
         Sim s(true, true, 0xFFFFFFFFUL);
@@ -655,12 +701,133 @@ static void testButtons() {
         check(s.reps.size() == 2 && s.reps[0].refuse == vset::Refuse::NO_STATE && s.reps[1].refuse == vset::Refuse::NO_STATE &&
                   s.port.sent.empty(),
               "a stale 227 or a 227 pasted from the panel: refused (no fresh state frame), nothing sent");
+        Sim t(true, true, 0xFFFFFFFFUL);
+        t.can(frame(0x126, {0x00, 0xB0, 0x00}));
+        t.step(2000);
+        t.cmd(0x05, 1);
+        t.car.onCanFrame(frame(0x126, {0x00, 0xB0, 0x00}), t.now, false);   // pasted from the panel
+        t.cmd(0x05, 1);
+        check(t.reps.size() == 2 && t.reps[0].refuse == vset::Refuse::NO_STATE && t.reps[1].refuse == vset::Refuse::NO_STATE &&
+                  t.port.sent.empty(),
+              "a stale 126 or a 126 pasted from the panel: refused (no fresh state frame), nothing sent");
+    }
+    {
+        // Ignition on with the sensors OFF (126 = 18): the BSI first sends the 227 LED value from before
+        // (10 00 10, "on"), 95 ms later 50 00 10 (centralka_can_20261119_150048.log 487.68 s). No state for
+        // 3.5 s after ignition on: nothing is sent, also not for the blind spot.
+        Sim s(true, true, 0xFFFFFFFFUL);
+        s.can(frame(0x0F6, {0x80, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));
+        s.can(frame(0x126, {0x18, 0xB0, 0x00}));
+        s.step(500);
+        s.can(frame(0x0F6, {0x88, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));   // ignition on
+        s.can(frame(0x227, {0x10, 0x00, 0x10, 0x00, 0x00}));
+        s.can(frame(0x126, {0x18, 0xB0, 0x00}));
+        s.step(20);
+        s.cmd(0x05, 1);                                        // 227 alone would say "on": a wrong toggle
+        s.cmd(0x0C, 1);
+        s.step(75);
+        s.can(frame(0x227, {0x50, 0x00, 0x10, 0x00, 0x00}));
+        s.step(5);
+        s.cmd(0x05, 0);
+        s.step(100);
+        bool refused = s.reps.size() == 3 && s.reps[0].refuse == vset::Refuse::NO_STATE &&
+                       s.reps[1].refuse == vset::Refuse::NO_STATE && s.reps[2].refuse == vset::Refuse::NO_STATE &&
+                       s.port.sent.empty();
+        // 3.5 s after ignition on (frames every 500 ms): the state is known again.
+        for (int i = 0; i < 7; i++) {
+            s.step(500);
+            s.can(frame(0x0F6, {0x88, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));
+            s.can(frame(0x126, {0x18, 0xB0, 0x00}));
+            s.can(frame(0x227, {0x40, 0x00, 0x10, 0x00, 0x00}));
+        }
+        s.cmd(0x05, 1);
+        s.step(10);
+        check(refused && s.reps.size() == 4 && s.reps[3].result == vset::ChangeResult::ALREADY && s.port.sent.empty(),
+              "ignition on, 227 = 10 00 10 then 50 00 10: 80 05 01, 80 0C 01, 80 05 00 refused (no state), nothing sent; "
+              "after 3.5 s 80 05 01 = ALREADY");
+    }
+    {
+        // Engine start is not a new "ignition on": byte 1 of 0F6 goes 88 -> 90 -> 91 -> 92 -> 8A -> 8E
+        // (centralka_can_20261119_150048.log 749.7..751.4 s). The state must stay known right after 8E.
+        Sim s(true, true, 0xFFFFFFFFUL);
+        s.can(frame(0x0F6, {0x80, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));
+        for (int i = 0; i < 8; i++) {
+            s.step(500);
+            s.can(frame(0x0F6, {0x88, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));
+            s.can(frame(0x126, {0x18, 0xB0, 0x00}));
+        }
+        const uint8_t crank[] = {0x90, 0x91, 0x92, 0x8A, 0x8E};
+        for (uint8_t b : crank) {
+            s.step(300);
+            s.can(frame(0x0F6, {b, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));
+            s.can(frame(0x126, {0x18, 0xB0, 0x00}));
+        }
+        s.step(50);
+        s.cmd(0x05, 1);
+        s.step(10);
+        check(s.reps.size() == 1 && s.reps[0].result == vset::ChangeResult::ALREADY && s.port.sent.empty(),
+              "engine start 88 -> 90 -> 91 -> 92 -> 8A -> 8E: no new settle time, 80 05 01 right after 8E = ALREADY");
+    }
+    {
+        // Reverse clears the blind spot LED (227 byte 3 bit 0) about 40 ms after it is engaged and the bit returns
+        // about 40 ms after it is released (can_20261111_151209.log, all 20 reverse cycles, e.g. 504.224 -> 504.265 s,
+        // 508.174 -> 508.215 s). Item 0C has no state in reverse and for 500 ms after it.
+        Sim s(true, true, 0xFFFFFFFFUL);
+        s.can(frame(0x0F6, {0x88, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));   // ignition on, no reverse
+        for (int i = 0; i < 8; i++) {                         // past the 3.5 s settle time
+            s.step(500);
+            s.can(frame(0x0F6, {0x88, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));
+            s.can(frame(0x227, {0x00, 0x00, 0x11, 0x00, 0x00}));   // blind spot on
+        }
+        s.can(frame(0x0F6, {0x88, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0xA4}));   // reverse engaged (byte 8 bit 7)
+        s.step(40);
+        s.can(frame(0x227, {0x00, 0x00, 0x10, 0x00, 0x00}));       // LED cleared by the reverse gear
+        s.step(10);
+        s.cmd(0x0C, 1);
+        s.step(10);
+        const bool refused = s.reps.size() == 1 && s.reps[0].refuse == vset::Refuse::NO_STATE && s.port.sent.empty();
+        s.step(400);
+        s.can(frame(0x0F6, {0x88, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));   // reverse released
+        s.step(40);
+        s.can(frame(0x227, {0x00, 0x00, 0x11, 0x00, 0x00}));       // LED back
+        s.step(20);
+        s.cmd(0x0C, 0);                                       // 60 ms after release: still no state
+        s.step(10);
+        const bool refused2 = s.reps.size() == 2 && s.reps[1].refuse == vset::Refuse::NO_STATE && s.port.sent.empty();
+        s.step(430);
+        s.can(frame(0x227, {0x00, 0x00, 0x11, 0x00, 0x00}));
+        s.step(10);                                           // 510 ms after release
+        s.cmd(0x0C, 1);
+        s.step(10);
+        check(refused && refused2 && s.reps.size() == 3 && s.reps[2].result == vset::ChangeResult::ALREADY &&
+                  s.port.sent.empty(),
+              "blind spot on, reverse engaged, 227 byte 3 = 10: 80 0C 01 refused (no state), nothing sent; reverse "
+              "released, 227 byte 3 = 11: refused for 500 ms, then 80 0C 01 = ALREADY");
+    }
+    {
+        // ACCEPTED decision: a press for "off" must not be taken as accepted when reverse clears the LED.
+        Sim s(true, true, 0xFFFFFFFFUL);
+        s.can(frame(0x0F6, {0x88, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));
+        for (int i = 0; i < 8; i++) {
+            s.step(500);
+            s.can(frame(0x0F6, {0x88, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0x24}));
+            s.can(frame(0x227, {0x00, 0x00, 0x11, 0x00, 0x00}));
+        }
+        s.cmd(0x0C, 0);
+        s.step(10);
+        const bool sent = s.port.sent.size() == 1;
+        s.can(frame(0x0F6, {0x88, 0x59, 0x1E, 0x23, 0x23, 0x5C, 0x5C, 0xA4}));   // reverse engaged
+        s.step(40);
+        s.can(frame(0x227, {0x00, 0x00, 0x10, 0x00, 0x00}));
+        s.step(3000);
+        check(sent && s.reps.size() == 1 && s.reps[0].result == vset::ChangeResult::NOT_ACCEPTED,
+              "80 0C 00 sent, then reverse clears 227 byte 3 bit 0: not taken as ACCEPTED (NOT_ACCEPTED)");
     }
     {
         Sim s(true, true, 0xFFFFFFFFUL);
         TxRefuse a = s.gate.request(frame(0x1A9, {0x02, 0x7F, 0xFF, 0x00, 0xFF, 0x00, 0x10, 0x00}), s.c, s.now);   // trip reset
         TxRefuse b = s.gate.request(frame(0x1A9, {0x00, 0x7F, 0xFF, 0x24, 0xFF, 0x00, 0x10, 0x00}), s.c, s.now);   // two bits at once
-        TxRefuse d = s.gate.request(frame(0x1A9, {0x20, 0x7F, 0xFF, 0x00, 0xFF, 0x00, 0x50, 0x00}), s.c, s.now);   // idle frame
+        TxRefuse d = s.gate.request(frame(0x1A9, {0x20, 0x7F, 0xFF, 0x00, 0xFF, 0x00, 0x50, 0x00}), s.c, s.now);   // periodic frame of the box (release; built here with CAN_TX_1A9_RELEASE=0)
         TxRefuse ss = s.gate.request(frame(0x1A9, {0x00, 0x7F, 0xFF, 0x00, 0xFF, 0x00, 0x90, 0x00}), s.c, s.now);   // Stop and Start (never recorded)
         TxRefuse e = s.gate.request(frame(0x364, {0x80, 0x00, 0x1E, 0x00}), s.c, s.now);                          // climate (removed)
         TxRefuse e2 = s.gate.request(frame(0x364, {0x00, 0x00, 0x1E, 0x78, 0xE0, 0x00}), s.c, s.now);

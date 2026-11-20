@@ -126,6 +126,12 @@ public:
     TxRefuse request(const CanFrame& f, const TxConditions& c, uint32_t nowMs);
     void tick(const TxConditions& c, uint32_t nowMs);   // once per loop pass
     bool takeOutcome(TxOutcome& out);               // result of the last accepted send (one-shot)
+    // The frame of the last accepted request was handed to the controller (port send() returned true at least
+    // once). false when the send ended FAILED before that (flash busy, send() refused, forceClose while opening).
+    bool handedOver() const { return handedOver_; }
+    // How many more requests the per-minute limit would accept now (0..RATE_MAX). Read only: changes no
+    // limit. Used to refuse a button press when its release frame would not fit in the limit.
+    uint8_t rateFree(uint32_t nowMs) const;
     void forceClose();                              // before sleep, restart, update: transmitter disabled
     void latchFault(TxFault reason);                // also from outside (SettingsChanger)
     void clearFault();                              // FAULT -> IDLE
@@ -145,6 +151,7 @@ private:
     uint8_t arbTries_ = 0;         // retries after arbitration in this window
     uint8_t failedInRow_ = 0;
     bool haveOutcome_ = false;
+    bool handedOver_ = false;      // see handedOver(); reset by request()
     TxOutcome outcome_ = TxOutcome::NONE;
     uint32_t rateMs_[RATE_MAX] = {0};   // times of accepted requests within the last minute
     bool rateUsed_[RATE_MAX] = {false};

@@ -20,7 +20,7 @@ English dictionary `firmware/web/i18n/en.json`. The requests behind each card ar
 > [Panel API, chapter 9](panel-api.md#9-requirements-for-the-mock-firmwaretoolsmock_devicepy).
 
 The screenshots on this page come from the mock device with a recording, never from a car. They
-show the dark scheme and the English texts.
+show the dark scheme and the English texts. All screens in one place: [Panel tour](panel-tour.md).
 
 ## Open the panel
 
@@ -63,6 +63,12 @@ The name of the network and the `.local` name come from `ap_ssid_prefix` and `md
 > The panel uses plain HTTP. On a home network any device that listens to the traffic can learn
 > the password, and that password also protects firmware updates. From the home network the panel
 > is read only until you type `wifi lan on` on USB. See [Security model](../safety/security.md).
+
+[![Login with 'Remember on this device' ticked](../../assets/screenshots/panel-login-remember.png)](../../assets/screenshots/panel-login-remember.png)
+
+[![Login refused: wrong password](../../assets/screenshots/panel-login-wrong-password.png)](../../assets/screenshots/panel-login-wrong-password.png)
+
+[![Login lockout after five wrong passwords from the home network](../../assets/screenshots/panel-login-locked-out.png)](../../assets/screenshots/panel-login-locked-out.png)
 
 ## The top bar and the tabs
 
@@ -115,9 +121,15 @@ example `260: A4 1C 8F BB C5 50 00 (212 ms ago) → 38: 02 90 A9 B8 40; radio co
 While reverse gear is engaged or the sensors are active, the device skips volume changes and the
 test from the panel.
 
+[![Obstacle very close: continuous tone](../../assets/screenshots/panel-dashboard-park-continuous.png)](../../assets/screenshots/panel-dashboard-park-continuous.png)
+
+[![Beep volume below 15 %: kept only until restart](../../assets/screenshots/panel-dashboard-volume-low.png)](../../assets/screenshots/panel-dashboard-volume-low.png)
+
 ### Radio {#dashboard-radio}
 
 Radio on or off, volume, source and the time the radio reports. The Radio tab has more.
+
+[![Decoder build with a radio that answers: radio card filled](../../assets/screenshots/panel-dashboard-radio-linked.png)](../../assets/screenshots/panel-dashboard-radio-linked.png)
 
 ### CAN bus
 
@@ -147,7 +159,7 @@ warning and two buttons:
 
 ## CAN
 
-[![CAN tab: frame table and live preview, VIN frames masked](../../assets/screenshots/panel-can.png)](../../assets/screenshots/panel-can.png)
+[![CAN tab: frame table and live preview of a recording](../../assets/screenshots/panel-can.png)](../../assets/screenshots/panel-can.png)
 
 - **ID filter** (for example `0E1`): shows only one identifier in the live preview. You can also
   tap a row of the table.
@@ -162,6 +174,10 @@ warning and two buttons:
 - **Frame table**: one row per identifier with ID, name (from the car profile), period, count, age
   and the last data. A note shows how many IDs did not fit in the table.
 - **Live preview**: the newest frames.
+
+[![CAN preview paused; frames that carry the VIN show dots](../../assets/screenshots/panel-can-paused.png)](../../assets/screenshots/panel-can-paused.png)
+
+[![CAN tab filtered to one identifier](../../assets/screenshots/panel-can-filter.png)](../../assets/screenshots/panel-can-filter.png)
 
 ## Radio {#radio-tab}
 
@@ -183,6 +199,10 @@ Code `16` is two car buttons at once (both volume buttons, and the panel knob pr
 `A4` (moon) has no effect. The codes are listed in
 [Panel API, chapter 10](panel-api.md#10-tables-for-the-panel).
 
+[![Key remap editor with a new, unsaved row](../../assets/screenshots/panel-radio-keymap-edit.png)](../../assets/screenshots/panel-radio-keymap-edit.png)
+
+[![Key test in the decoder build: sent to the radio](../../assets/screenshots/panel-radio-key-test-decoder.png)](../../assets/screenshots/panel-radio-key-test-decoder.png)
+
 ## Console
 
 [![Console tab after the commands ver and stat](../../assets/screenshots/panel-console.png)](../../assets/screenshots/panel-console.png)
@@ -196,6 +216,10 @@ screen). Type a command and press **Send**, or use the quick buttons `stat`, `ra
 - `cantx reset` and `set NN VV` work only on USB.
 
 All commands: [USB console](console.md).
+
+[![A command that only the USB console accepts](../../assets/screenshots/panel-console-usb-only.png)](../../assets/screenshots/panel-console-usb-only.png)
+
+[![From the home network the panel is read-only](../../assets/screenshots/panel-console-home-network-read-only.png)](../../assets/screenshots/panel-console-home-network-read-only.png)
 
 ## System
 
@@ -222,6 +246,10 @@ All commands: [USB console](console.md).
 - **Language** and **Log out** at the bottom.
 
 [![Settings backup card](../../assets/screenshots/panel-system-settings-backup.png)](../../assets/screenshots/panel-system-settings-backup.png)
+
+[![Home network and device password forms](../../assets/screenshots/panel-system-network-password.png)](../../assets/screenshots/panel-system-network-password.png)
+
+[![Opened from the home network after 'wifi lan on': changes allowed](../../assets/screenshots/panel-system-home-network-admin.png)](../../assets/screenshots/panel-system-home-network-admin.png)
 
 ### Firmware update
 
@@ -269,6 +297,10 @@ firmware that ran before stays in the other slot (row "Other slot" of the state 
 > An image in decoder mode sends frames to the radio and switches ACC, illumination and reverse.
 > Flash it only with the CAN box unplugged: two transmitters on one line and two ACC sources
 > short the outputs.
+
+[![New firmware running, waiting to be confirmed](../../assets/screenshots/panel-ota-pending.png)](../../assets/screenshots/panel-ota-pending.png)
+
+[![Update finished and confirmed; rollback offered](../../assets/screenshots/panel-ota-done.png)](../../assets/screenshots/panel-ota-done.png)
 
 ## Languages
 

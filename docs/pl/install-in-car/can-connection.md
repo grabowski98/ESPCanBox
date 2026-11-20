@@ -124,6 +124,8 @@ Jeśli `errors=` ciągle rośnie albo nic nie przychodzi:
 
 Więcej na stronie [Rozwiązywanie problemów](../troubleshooting/index.md).
 
+[![Zakładka CAN: tabela ramek i podgląd nagrania na żywo](../../assets/screenshots/pl/panel-can.png)](../../assets/screenshots/pl/panel-can.png)
+
 ## Prędkość pochodzi z profilu auta {#the-bit-rate-comes-from-the-car-profile}
 
 Każdy profil auta ustala prędkość magistrali: 125 kbit/s dla `psa_aee2010` i domyślnie 125 kbit/s

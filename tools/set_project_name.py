@@ -11,6 +11,9 @@ derived copies, so they need no change. HISTORY files (CHANGELOG.md) keep the ol
 NOT covered: the logo and the other graphics (docs/assets/brand/, hardware/brand/) show the name
 as a drawing, in the SVG <title> and in one file name; replace them by hand
 (docs/en/contributing/brand.md). --check does not look at them.
+The animated header logo (docs/assets/brand/logo-animated*) is generated from the static logo by
+tools/make_logo_animation.py; run it after redrawing the logo. The panel screenshots
+(docs/assets/screenshots/) show the name too: make them again with tools/make_screenshots.py.
 
 Usage (from the repository root, Python standard library only):
     python -I tools/set_project_name.py --check              derived copies match project.json (exit 0/1)

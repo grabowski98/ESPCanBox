@@ -136,8 +136,8 @@ coche: lee [Transmitir en el bus CAN](../../en/safety/transmit.md) y abre antes 
 ## Licencias {#licences}
 
 Al enviar una contribución aceptas que se publique bajo las licencias de este repositorio: código
-Apache-2.0, documentación CC BY 4.0, hardware CERN-OHL-S-2.0. Estas licencias son provisionales
-hasta la primera versión pública.
+Apache-2.0, documentación CC BY 4.0, hardware CERN-OHL-S-2.0. Qué licencia cubre qué archivos
+está en `README.md`, sección «Licences».
 
 Este proyecto no está vinculado con ningún fabricante de coches, de radios ni de cajas CAN. Nómbralos
 solo para decir qué probaste.

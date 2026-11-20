@@ -15,7 +15,7 @@ wstecz.
 
 | Numer | Gdzie | Teraz | Znaczenie |
 |---|---|---|---|
-| wersja programu | `FW_VERSION` w `firmware/src/version.h` | `2.0.0-beta.1` | [Semantic Versioning](https://semver.org/spec/v2.0.0.html) `MAJOR.MINOR.PATCH`, z opcjonalną częścią przedwydania (`-beta.N`); najwyżej 15 znaków, tylko cyfry, litery, `.` i `-` |
+| wersja programu | `FW_VERSION` w `firmware/src/version.h` | `2.0.0` | [Semantic Versioning](https://semver.org/spec/v2.0.0.html) `MAJOR.MINOR.PATCH`, z opcjonalną częścią przedwydania (`-beta.N`, `-rc.N`); najwyżej 15 znaków, tylko cyfry, litery, `.` i `-` |
 | wersja API panelu | `FW_API_VERSION` w `firmware/src/version.h`, pole `api` odpowiedzi `GET /api/hello` | `1` | jedna liczba całkowita; podnoszona tylko przy zmianie, która psuje klientów |
 | napis kompilacji | `__DATE__ " " __TIME__` z `firmware/src/version.cpp` | np. `Nov 18 2026 01:33:28` | odróżnia kompilacje; jest z nim związane uzbrojenie nadawania na CAN |
 | skrót obrazu | pole `elf` w `/api/status` i `/api/ota/status` | 16 cyfr szesnastkowych | pierwsze 8 bajtów SHA-256 pliku ELF; inny dla każdego zbudowanego obrazu |
@@ -29,18 +29,18 @@ wszystko, zmiana `version.h` tylko `src/`.
 kompilacji.
 
 > [!NOTE]
-> **Pierwsze wydanie to beta**
+> **Pierwsze publiczne wydanie to 2.0.0**
 >
 > Wersje programu do `1.0.0` to własna historia autora w aucie wzorcowym (prototyp, zanim projekt
-> dostał nazwę). Pierwsze publiczne wydanie to `2.0.0-beta.1`: nowy MAJOR, bo to drzewo zmieniło
-> umowy prototypu (zobacz `CHANGELOG.md`, format:
-> [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)). Ostateczne `2.0.0` będzie dopiero po
-> pełnym sprawdzeniu na stole i w aucie.
+> dostał nazwę). Pierwsze publiczne wydanie to `2.0.0`: nowy MAJOR, bo to drzewo zmieniło umowy
+> prototypu (zobacz `CHANGELOG.md`, format:
+> [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)). Przygotowano je jako kandydata do
+> wydania `2.0.0-rc.1`.
 
-Część przedwydania widać wszędzie, gdzie jest wersja: linia konsoli
-`[ver] <product> 2.0.0-beta.1 listen, built ...`, znaczek wersji i karta System w panelu, komentarz
-startowy `# version: ...` i nazwy plików wydania (`<environment>-2.0.0-beta.1.bin`, tworzone przez
-`.github/workflows/release.yml`, który wymaga też znacznika `v2.0.0-beta.1`). Nic w programie, panelu
+Część przedwydania (na przykład `2.0.0-rc.1`) widać wszędzie, gdzie jest wersja: linia konsoli
+`[ver] <product> 2.0.0-rc.1 listen, built ...`, znaczek wersji i karta System w panelu, komentarz
+startowy `# version: ...` i nazwy plików wydania (`<environment>-2.0.0-rc.1.bin`, tworzone przez
+`.github/workflows/release.yml`, który wymaga też znacznika `v2.0.0-rc.1`). Nic w programie, panelu
 ani makiecie nie porównuje dwóch wersji, więc część przedwydania nie wymaga osobnej obsługi.
 
 ## Umowy {#the-contracts}

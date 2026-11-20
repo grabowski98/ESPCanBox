@@ -48,6 +48,14 @@ public:
     // "released" for it, so that after the next start the radio does not have a key remembered as pressed.
     // One key per call: call again until it returns false.
     bool onIgnitionOff(KeyEvent& out);
+    // ACC on: forget any latch state. A latch key pressed while ACC was off toggled the state, but the radio
+    // never got that frame (the radio session drops key frames without ACC), so the first press after ignition
+    // would have sent "released" and done nothing. Sends nothing.
+    void onAccOn() { latched_ = 0; }
+    // The radio reports it has started (radio command kind RADIO_ON; XP: 81 01): forget any latch state. A
+    // rebooted radio comes back with the screen on, so a remembered latch would make the next press send
+    // "released" and do nothing. Sends nothing.
+    void onRadioOn() { latched_ = 0; }
 
     bool screenOff() const { return latched_ != 0; }    // any latch key latched
 

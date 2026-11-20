@@ -123,8 +123,8 @@ separate discussion, not part of adding a car: read
 ## Licences
 
 By sending a contribution you agree that it is published under the licences of this repository:
-code Apache-2.0, documentation CC BY 4.0, hardware CERN-OHL-S-2.0. These licences are provisional
-until the first public release.
+code Apache-2.0, documentation CC BY 4.0, hardware CERN-OHL-S-2.0. Which licence covers which files
+is in `README.md`, section "Licences".
 
 This project is not affiliated with any car maker, radio maker or CAN box maker. Name them only to
 say what you tested.

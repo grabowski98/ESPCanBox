@@ -1,6 +1,10 @@
-<!-- Nazwa projektu: "project_name" w project.json. tools/set_project_name.py --apply przepisuje wiersz tytułu ("# ...") pod logo. Logo jest rysunkiem: żadne narzędzie go nie przepisuje (docs/pl/contributing/brand.md). -->
+<!-- Nazwa projektu: "project_name" w project.json. tools/set_project_name.py --apply przepisuje wiersz tytułu ("# ...") pod logo. Logo jest rysunkiem: żadne narzędzie go nie przepisuje; animowane logo w nagłówku powstaje z niego przez tools/make_logo_animation.py (docs/pl/contributing/brand.md). -->
 <p align="center">
-  <img src="docs/assets/brand/logo-transparent.svg" alt="Logo projektu: wyświetlacz z kropek z nazwą projektu" width="527">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/logo-animated.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/logo-animated.svg">
+    <img src="docs/assets/brand/logo-transparent.svg" alt="Logo projektu: wyświetlacz z kropek z nazwą projektu" width="527">
+  </picture>
 </p>
 
 # ESPCanBox
@@ -15,8 +19,6 @@ zastąpić skrzynkę CAN sprzedawaną razem z radiem.
 > Wiążący jest tekst angielski. Jak zgłosić poprawkę:
 > [Tłumaczenia](docs/pl/contributing/translations.md#send-your-work).
 
-![Pulpit panelu WWW (makieta urządzenia, schemat ciemny)](docs/assets/screenshots/panel-dashboard.png)
-
 > [!WARNING]
 > **Projekt hobbystyczny, udostępniony w obecnym stanie (AS IS), bez żadnej gwarancji.**
 > Używasz go na własne ryzyko, we własnym aucie.
@@ -30,6 +32,21 @@ zastąpić skrzynkę CAN sprzedawaną razem z radiem.
 >   innym aucie go nie sprawdzano.
 > - Projekt nie jest związany z firmami Peugeot, Stellantis, Simple Soft, Raise, Junsun ani FYT
 >   ani przez nie wspierany. Ich nazwy służą tylko do opisu tego, na czym go sprawdzono.
+
+## Zrzuty ekranu
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/pl/panel-dashboard.png"><img src="docs/assets/screenshots/pl/panel-dashboard.png" alt="Pulpit, silnik pracuje, przednie czujniki pikają" width="250"></a><br><sub>Pulpit: stan auta i czujniki parkowania</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/pl/panel-can.png"><img src="docs/assets/screenshots/pl/panel-can.png" alt="Karta CAN: tabela ramek i podgląd nagrania na żywo" width="250"></a><br><sub>Karta CAN: ramki na żywo</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-radio-keymap.png"><img src="docs/assets/screenshots/panel-radio-keymap.png" alt="Edytor zamiany przycisków z domyślnymi zamianami i ostatnio naciśniętym przyciskiem" width="250"></a><br><sub>Karta Radio: zamiana przycisków</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/pl/panel-system-firmware-wizard.png"><img src="docs/assets/screenshots/pl/panel-system-firmware-wizard.png" alt="Kreator aktualizacji: plik dekodera dla urządzenia tylko do nasłuchu wymaga zaznaczenia" width="250"></a><br><sub>Aktualizacja programu z przeglądarki</sub></td>
+  </tr>
+</table>
+
+Wszystkie ekrany z opisem: [Przegląd panelu](docs/pl/reference/panel-tour.md). Obrazki pochodzą z makiety urządzenia, nie z auta.
 
 ## Dla kogo
 
@@ -73,10 +90,11 @@ w PlatformIO (opisy podają każde polecenie). Co dostajesz, zależy od auta i r
   uzbrojeniu. Ramka `1A9` jest tylko w kompilacji z `-DCAN_TX_EXPERIMENTAL=1`. Sterowanie
   klimatyzacją ramką `364` **nie zadziałało**, więc program jej nie ma.
 
-Czego jeszcze brakuje: uśpienie przy cichej magistrali jest w kodzie, ale nie sprawdzono go na
-sprzęcie. Program w tym repozytorium to przeorganizowana wersja tego, który pracuje w aucie
-wzorcowym; kompiluje się i przechodzi testy na komputerze, ale to drzewo **nie było jeszcze
-sprawdzone na stole** na urządzeniu.
+Stan wydania 2.0.0: program w tym repozytorium to przeorganizowana wersja tego, który wcześniej pracował w
+aucie wzorcowym; kompiluje się, przechodzi testy na komputerze i był sprawdzony na stole na płytce
+ESP32-S3-WROOM-1-N16R8. 20.11.2026 przeszedł próbę w jednym aucie, razem z uśpieniem i
+wybudzeniem z magistrali; zabezpieczenia nadawania (po włączeniu zapłonu, rozruch, wsteczny)
+sprawdzają tylko testy na komputerze. Szczegóły: [CHANGELOG.md](CHANGELOG.md).
 
 ## Obsługiwane auta
 
@@ -179,10 +197,28 @@ ani poprawki w żadnym terminie.
 
 ## Licencje
 
-Wstępne, do potwierdzenia przed pierwszym publicznym wydaniem:
-
 - kod: Apache-2.0 ([LICENSE](LICENSE), [NOTICE](NOTICE));
 - dokumentacja i obrazy: CC BY 4.0 ([LICENSE-docs](LICENSE-docs));
 - sprzęt (pliki KiCad, obudowa): CERN-OHL-S-2.0 ([LICENSE-hardware](LICENSE-hardware)).
+
+Która licencja obejmuje które pliki:
+
+| Licencja | Pliki |
+|---|---|
+| Apache-2.0 | `firmware/` (z panelem WWW, danymi testowymi i nagraniami), `tools/`, kod w `extras/`, `vehicles/*/*.dbc`, `hardware/prototype-v1/enclosure/gen_enclosure.py`, pliki budowania i CI oraz każdy plik niewymieniony w dwóch wierszach niżej |
+| CC BY 4.0 | `docs/`, każdy plik Markdown (`*.md`), logo (`docs/assets/brand/`, `hardware/brand/`), zdjęcia, zrzuty ekranu, rendery i rysunki |
+| CERN-OHL-S-2.0 | w `hardware/prototype-v1/`: pliki KiCad, pliki PDF i do druku, `bom.csv`, modele obudowy (STL) |
+
+**Licencje plików.** Pliki nie mają własnych nagłówków licencyjnych. Plik bez własnego nagłówka
+obejmuje tabela wyżej; plik, który podaje własną licencję, jest na tej licencji. Części innych
+projektów zawarte w obrazie programu (rdzeń Arduino dla ESP32 na licencji LGPL-2.1-or-later,
+ESP-IDF z komponentami, biblioteki uruchomieniowe kompilatora) są wymienione z licencjami
+i odnośnikami w [NOTICE](NOTICE). Każde archiwum wydania zawiera teksty licencji, NOTICE i notkę,
+skąd wziąć źródła dokładnie tej wersji ([LICENSES/](LICENSES/THIRD-PARTY.md)).
+
+Peugeot, Stellantis, Simple Soft, Raise, Junsun, FYT i inne nazwy produktów i firm należą do
+ich właścicieli. Służą tylko do opisu zgodności. Projekt nie jest z nimi związany ani przez nie
+wspierany. ESP32 jest znakiem towarowym firmy Espressif Systems; pozostałe nazwy są znakami
+towarowymi ich właścicieli i służą tylko do opisu zgodności.
 
 Autor: grabowski98.

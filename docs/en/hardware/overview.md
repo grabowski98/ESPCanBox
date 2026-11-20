@@ -101,7 +101,7 @@ How to describe your own board: [Configuration and pins](../reference/config-and
 
 ## Licence
 
-Hardware files (KiCad, STL) are under CERN-OHL-S-2.0. This licence is provisional until the first
-public release.
+Hardware files (KiCad, PDF, STL, `bom.csv`) are under CERN-OHL-S-2.0 (`LICENSE-hardware` in the
+repository).
 
 Next: [Bill of materials](bom.md).

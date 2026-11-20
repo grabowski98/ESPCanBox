@@ -107,7 +107,7 @@ Jak opisać własną płytkę: [Konfiguracja i piny](../reference/config-and-pin
 
 ## Licencja {#licence}
 
-Pliki sprzętu (KiCad, STL) są na licencji CERN-OHL-S-2.0. Ta licencja jest tymczasowa, do
-pierwszego publicznego wydania.
+Pliki sprzętu (KiCad, PDF, STL, `bom.csv`) są na licencji CERN-OHL-S-2.0 (`LICENSE-hardware`
+w repozytorium).
 
 Dalej: [Lista elementów](bom.md).

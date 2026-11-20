@@ -18,7 +18,8 @@ Noch keine Platine? Springen Sie zu [Panel ohne Platine ausprobieren](#try-the-p
 
 ## 1. Build mit Netzwerk flashen {#1-flash-a-build-with-network}
 
-Wenn Sie `listen_wifi` wie auf der Seite [Firmware flashen](flash.md) geflasht haben, gehen Sie
+Wenn Sie `listen_wifi` wie auf der Seite [Firmware flashen](flash.md) geflasht haben (ein
+fertiges Image oder einen eigenen Build), gehen Sie
 zu Schritt 2. Sonst führen Sie im Terminal, das im Ordner `firmware` geöffnet ist (wie auf jener
 Seite), aus:
 

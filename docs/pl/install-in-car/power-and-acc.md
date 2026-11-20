@@ -51,7 +51,7 @@ Pełna mapa wiązki: [Peugeot 508 SW](../reference/vehicles/peugeot-508.md).
 > [!WARNING]
 > **Prąd uśpienia niezmierzony**
 >
-> Głęboki sen jest w kodzie, ale nie był sprawdzony na sprzęcie. Prądu, który urządzenie pobiera
+> Głęboki sen i wybudzenie z magistrali wypróbowano w jednym aucie 20.11.2026. Prądu, który urządzenie pobiera
 > z akumulatora, gdy auto stoi, **nie zmierzono**. Zmierz go sam, zanim zostawisz urządzenie
 > w aucie na wiele dni (krok 3).
 
@@ -155,3 +155,5 @@ diode)`: wartość jest **za diodą wejściową**, około 0,8 V (0,7-0,9 V) poni
 
 Dalej: [Połączenie z CAN](can-connection.md). Jak podłączyć wyjścia ACC, ILL i REV:
 [Połączenie z radiem](radio-connection.md).
+
+[![Zapłon wyłączony: ACC zgasło, auto dalej nadaje na magistrali](../../assets/screenshots/panel-dashboard-ignition-off.png)](../../assets/screenshots/panel-dashboard-ignition-off.png)

@@ -198,7 +198,7 @@ test_one replay_log "candump.cpp parking_beeper.cpp psa_frames.cpp" \
 test_one beeper_scale "parking_beeper.cpp psa_frames.cpp"
 test_one power_loss "power_policy.cpp psa_frames.cpp candump.cpp xp_car.cpp psa_signals.cpp xp_signals.cpp vehicle_settings.cpp xp_protocol.cpp" \
     can_20261111_191045.log
-test_one custom_keys_doors "xp_keys_custom.cpp xp_car.cpp psa_signals.cpp xp_signals.cpp vehicle_settings.cpp candump.cpp xp_protocol.cpp" \
+test_one custom_keys_doors "xp_keys_custom.cpp radio_commands.cpp xp_car.cpp psa_signals.cpp xp_signals.cpp vehicle_settings.cpp candump.cpp xp_protocol.cpp" \
     can_20261110_190421.log
 test_one net_policy "net_policy.cpp"
 test_one net_rings "line_log.cpp frame_trace.cpp"
@@ -221,7 +221,7 @@ test_one xp_codec "xp_protocol.cpp"
 
 # Frame 38 DATA[1..5] and frame 3C from CAN: vectors and the Decoder class (without
 # arguments), then three CAN + UART captures from 11.11.2026 in ONE run (total: 38 of 38 and 9 of 9).
-S38_LIBS="vehicle_settings.cpp radio_commands.cpp can_tx_gate.cpp settings_changer.cpp car_state.cpp decoder.cpp candump.cpp psa_frames.cpp xp_protocol.cpp xp_keys.cpp xp_keys_custom.cpp xp_parking.cpp xp_car.cpp psa_signals.cpp xp_signals.cpp radio_session.cpp power_policy.cpp parking_beeper.cpp xp_settings.cpp profile_psa_aee2010.cpp tx_allowlist.cpp protocol_xp.cpp profile_generic.cpp"
+S38_LIBS="vehicle_settings.cpp radio_commands.cpp can_tx_gate.cpp settings_changer.cpp car_state.cpp decoder.cpp candump.cpp psa_frames.cpp xp_protocol.cpp xp_keys.cpp xp_keys_custom.cpp xp_parking.cpp xp_car.cpp psa_signals.cpp xp_signals.cpp radio_session.cpp power_policy.cpp parking_beeper.cpp xp_settings.cpp profile_psa_aee2010.cpp tx_allowlist.cpp protocol_xp.cpp profile_generic.cpp park_diag.cpp"
 S38_LOGS="can_20261111_190551.log can_20261111_190817.log can_20261111_191045.log"
 # shellcheck disable=SC2086
 build settings_38 $S38_LIBS
@@ -304,7 +304,30 @@ for v in 0 1; do
     echo "### code=$rc" >> "$OUT/profile_tables.actual.txt"
     if [ "$rc" -ne 0 ]; then BAD_RC="$BAD_RC profile_tables"; fi
 done
+# Third variant: the release frame after a 1A9 press (-DCAN_TX_1A9_RELEASE=1, only together with EXPERIMENTAL=1).
+# shellcheck disable=SC2086
+DEFS="-DCAN_TX_EXPERIMENTAL=1 -DCAN_TX_1A9_RELEASE=1" SRC=profile_tables build profile_tables_rel $PT_LIBS
+echo "### profile_tables CAN_TX_EXPERIMENTAL=1 CAN_TX_1A9_RELEASE=1" >> "$OUT/profile_tables.actual.txt"
+"$OUT/profile_tables_rel.exe" < /dev/null 2>&1 | tr -d '\r' >> "$OUT/profile_tables.actual.txt"
+rc=${PIPESTATUS[0]}
+echo "### code=$rc" >> "$OUT/profile_tables.actual.txt"
+if [ "$rc" -ne 0 ]; then BAD_RC="$BAD_RC profile_tables"; fi
 finish profile_tables
+# 1A9 release after a press (settings_changer.cpp), built with CAN_TX_1A9_RELEASE=0 and =1 (both with the trial
+# frame 1A9); one reference with both outputs. With 0 no release is ever queued and the gate refuses its content.
+rm -f "$OUT/button_release.actual.txt"
+for v in 0 1; do
+    # shellcheck disable=SC2086
+    DEFS="$EXP1 -DCAN_TX_1A9_RELEASE=$v" SRC=button_release build button_release_$v $S38_LIBS
+    echo "### button_release CAN_TX_1A9_RELEASE=$v" >> "$OUT/button_release.actual.txt"
+    "$OUT/button_release_$v.exe" < /dev/null 2>&1 | tr -d '\r' >> "$OUT/button_release.actual.txt"
+    rc=${PIPESTATUS[0]}
+    echo "### code=$rc" >> "$OUT/button_release.actual.txt"
+    if [ "$rc" -ne 0 ]; then BAD_RC="$BAD_RC button_release"; fi
+done
+finish button_release
+# Overnight parking sensors record (park_diag.h): stability, comparison after a wake-up, counters.
+test_one park_diag "park_diag.cpp car_state.cpp vehicle_settings.cpp psa_frames.cpp"
 # shellcheck disable=SC2086
 build example_car $S38_LIBS profile_example.cpp
 rm -f "$OUT/example_car.actual.txt"
@@ -415,7 +438,7 @@ same_dir() {
 
 build golden_stream candump.cpp psa_frames.cpp xp_protocol.cpp xp_keys.cpp xp_keys_custom.cpp xp_parking.cpp \
     xp_car.cpp psa_signals.cpp xp_signals.cpp radio_session.cpp power_policy.cpp parking_beeper.cpp car_state.cpp vehicle_settings.cpp radio_commands.cpp \
-    can_tx_gate.cpp settings_changer.cpp decoder.cpp xp_settings.cpp profile_psa_aee2010.cpp tx_allowlist.cpp protocol_xp.cpp \
+    can_tx_gate.cpp settings_changer.cpp park_diag.cpp decoder.cpp xp_settings.cpp profile_psa_aee2010.cpp tx_allowlist.cpp protocol_xp.cpp \
     profile_generic.cpp
 if [ ! -d "$GOLD060" ]; then
     echo "FAIL   golden_stream: no reference directory $GOLD060 (references from the 0.6.0 code, stage E1)"

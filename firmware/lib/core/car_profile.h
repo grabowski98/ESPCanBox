@@ -64,6 +64,23 @@ struct KnobEntry {
 #error "CAN_TX_EXPERIMENTAL must be 0 or 1"
 #endif
 
+// Release frame after a trial button press. 0 (default) = a button press is one frame and nothing follows;
+// 1 = about 200 ms after a press acknowledged on the bus, one "release" frame with no button bit (for PSA
+// AEE2010: 1A9 20 7F FF 00 FF 00 50 00, the periodic 1A9 the aftermarket box sent every ~204 ms with ignition
+// on; a press of the box replaced one periodic frame and the next one followed it; that a press without such a
+// following frame causes a later toggle is a hypothesis). Meaningful only together with
+// CAN_TX_EXPERIMENTAL=1 (the trial frames themselves); 1 without it does not build. Set only with -DCAN_TX_1A9_RELEASE=1 in a build environment, like
+// CAN_TX_EXPERIMENTAL, never by a change here. The same value must reach every file (a global build flag).
+#ifndef CAN_TX_1A9_RELEASE
+#define CAN_TX_1A9_RELEASE 0
+#endif
+#if CAN_TX_1A9_RELEASE != 0 && CAN_TX_1A9_RELEASE != 1
+#error "CAN_TX_1A9_RELEASE must be 0 or 1"
+#endif
+#if CAN_TX_1A9_RELEASE && !CAN_TX_EXPERIMENTAL
+#error "CAN_TX_1A9_RELEASE=1 needs CAN_TX_EXPERIMENTAL=1"
+#endif
+
 // One frame the profile allows the CAN transmit gate to send (lib/core/can_tx_gate.h): identifier, length
 // and a content validator. The validator is C++ code in the profile and decides about the content;
 // nullptr = the frame is refused. len = exact length, or 0 = the validator also checks the length (a frame

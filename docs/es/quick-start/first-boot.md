@@ -17,7 +17,8 @@ Trata de las compilaciones con red (`listen_wifi`, `decoder_wifi`, `decoder_tx_w
 
 ## 1. Flashea una compilación con red {#1-flash-a-build-with-network}
 
-Si flasheaste `listen_wifi` como en la página [Flashear el firmware](flash.md), pasa al paso 2.
+Si flasheaste `listen_wifi` como en la página [Flashear el firmware](flash.md) (una imagen lista
+o tu propia compilación), pasa al paso 2.
 Si no, en el terminal abierto en la carpeta `firmware` (como en esa página), ejecuta:
 
 ```text

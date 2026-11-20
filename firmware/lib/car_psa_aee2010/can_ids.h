@@ -18,6 +18,7 @@ const uint32_t ID_WHEEL_KNOB = 0x0A2;     // 6 B: SRC button on the steering whe
 const uint32_t ID_PARKING_AID = 0x0E1;    // 8 B: parking sensors
 const uint32_t ID_BODY_STATE = 0x0F6;     // 8 B: ignition state, reverse gear, outside temperature
 const uint32_t ID_STEERING = 0x10B;       // 7 B: steering angle
+const uint32_t ID_PARKING_COMMAND = 0x126;// 3 B: parking aid inhibition (byte 1: 18 = sensors off, 00 = on), BSI, 500 ms
 const uint32_t ID_PANEL_KEYS = 0x122;     // 8 B: buttons of the panel above the climate control
 const uint32_t ID_INDICATORS = 0x128;     // 8 B: warning lamps (door-open lamp)
 const uint32_t ID_CAR_MESSAGE = 0x1A1;    // 8 B: car messages (which door)

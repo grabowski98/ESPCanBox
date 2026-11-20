@@ -1,6 +1,6 @@
 # Przegląd
 
-![Logo projektu: wyświetlacz z kropek](../assets/brand/logo-transparent.svg)
+![Logo projektu: wyświetlacz z kropek](../assets/brand/logo-animated.svg)
 
 > [!NOTE]
 > **Tłumaczenie maszynowe, wymaga sprawdzenia**
@@ -57,9 +57,9 @@ W aucie wzorcowym magistrala przy radiu pracuje z prędkością 125 kbit/s (zmie
 błędów). Jej napięcia wyglądają na CAN low-speed fault-tolerant; potwierdzić to może dopiero
 oscyloskop. Szczegóły: [Peugeot 508 SW](reference/vehicles/peugeot-508.md).
 
-Drzewo programu w tym repozytorium zostało przeorganizowane z wersji, która pracuje w aucie
-wzorcowym. Kompiluje się i przechodzi testy na komputerze, ale **nie zostało jeszcze sprawdzone
-na stole** na urządzeniu.
+Drzewo programu w tym repozytorium zostało przeorganizowane z wersji, która wcześniej pracowała w aucie
+wzorcowym. Wydanie 2.0.0 kompiluje się, przechodzi testy na komputerze, było sprawdzone na stole
+na płytce ESP32-S3-WROOM-1-N16R8 i 20.11.2026 przeszło próbę w jednym aucie.
 
 ## Od czego zacząć {#where-to-start}
 
@@ -80,5 +80,6 @@ zobacz [Pierwsze uruchomienie](quick-start/first-boot.md).
 
 ## Licencje {#licences}
 
-Tymczasowe do pierwszego publicznego wydania: kod Apache-2.0, dokumentacja CC BY 4.0, sprzęt
-CERN-OHL-S-2.0. Autor: grabowski98.
+Kod Apache-2.0, dokumentacja CC BY 4.0, sprzęt CERN-OHL-S-2.0. Która licencja obejmuje które
+pliki i jakie części innych projektów są w obrazach programu: `README.md` i `NOTICE`
+w repozytorium. Autor: grabowski98.

@@ -70,6 +70,20 @@ inline bool outputsAllowed(bool decoderMode, const DriverInit& d, bool profileAl
     return decoderMode && d.allOk() && profileAllows;
 }
 
+// Bus activity for the deep sleep decision (src/sleep_ctrl.cpp). Deep sleep wakes up on the CAN RX pin (ext0).
+// That pin is driven by the transceiver, not by the CAN driver. With a working driver, activity = frames received
+// (busAlive). With a failed CAN driver no frame is ever received: going by busAlive alone, the device would fall
+// asleep and wake up again on the first dominant bit, every ~30 s for the whole drive (review 19.11.2026), and
+// never sleeping at all drains the battery while parked (permanent +12 V). So without the driver the caller samples
+// the RX pin once per pass (rxPinLow = the sample was LOW = a dominant bit at that moment) and a LOW sample counts
+// as activity. With the car bus running, part of the bits is dominant, so LOW samples keep coming; a silent bus
+// keeps the pin HIGH (recessive, plus the pull-up). Result: awake in the safe state while the bus is active,
+// asleep while it is silent, one wake-up per period of bus activity (as with a working driver).
+// rxPinLow is ignored with a working driver (its frames are the better source).
+inline bool sleepBusActivity(const DriverInit& d, bool busAlive, bool rxPinLow) {
+    return busAlive || (!d.can && rxPinLow);
+}
+
 // Amplifier (pin SD): may be woken only when every driver is up.
 inline bool ampAllowed(const DriverInit& d) { return d.allOk(); }
 

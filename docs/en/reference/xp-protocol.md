@@ -77,7 +77,7 @@ radio command to the CAN frame.
 | `3B` | stored speeds (limiter, cruise control) | `FC 28 3B 4F 63 82 01` = 40, 59, 79, 99, 130 km/h; the same values are in CAN `1E8` |
 | `3D` | speed list | `32 46 50 5A 6E 82` = 50 ... 130 km/h, sent twice; same as CAN `2A7` / `267` |
 | `3E` | obstacle | `80` while the sensors are active and a zone is below 7, else `00` (19 of 19 frames) |
-| `44` | economy mode | `01` with ignition on and engine off, `00` with the engine running; from CAN `036` byte 3 bit 7 |
+| `44` | economy mode | copy of CAN `036` byte 3 bit 7 (economy mode of the BSI): `01` seen with ignition on and engine off, `00` with the engine running; with ignition on and engine off it can also be `00` (author's capture, 2026-11-20) |
 | `71` | protocol version | `0A 05 16 10 20 56 02 19 06`; the radio shows it as "XP_PSA_2016_10_20 V2256" |
 | `30` | box version text | ASCII |
 | `EA` | power | `01 0A` within 30 ms after CAN `0F6` byte 1 leaves `80` (ignition on); `00 0A` 2.5 s after it returns to `80` |
@@ -136,7 +136,7 @@ box (Raise) showed no such delay (the author's observation, not recorded).
 
 | CMD | Meaning | Content as recorded | Effect on CAN (box) |
 |---|---|---|---|
-| `A6` | date and time | year - 2000, month, day, hour, minute; every second | |
+| `A6` | date and time | year - 2000, month, day, hour, minute; every second with the Simple Soft box, once a minute (at the minute change) with this device | |
 | `81` | radio state | `01` on, `00` switching off; 4 times about 1 s apart | the box answers each `81 01` with `38` + `3C` |
 | `90` | request a frame | `90 71 00` with each `81` (version); `90 21 ...` on entering the climate screen; `90 33 00 00 00` on entering the trip computer screen | |
 | `C4` | volume | 0-36, `80` = mute | `1A5` = level, 4-10 ms later; mute: `165` byte 1 = `E0` |

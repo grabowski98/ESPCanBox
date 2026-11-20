@@ -1,6 +1,10 @@
-<!-- Project name: "project_name" in project.json. tools/set_project_name.py --apply rewrites the title line ("# ...") under the logo. The logo is a drawing: no tool rewrites it (docs/en/contributing/brand.md). -->
+<!-- Project name: "project_name" in project.json. tools/set_project_name.py --apply rewrites the title line ("# ...") under the logo. The logo is a drawing: no tool rewrites it; the animated header logo is generated from it by tools/make_logo_animation.py (docs/en/contributing/brand.md). -->
 <p align="center">
-  <img src="docs/assets/brand/logo-transparent.svg" alt="Логотип проекта: точечно-матричный дисплей с названием проекта" width="527">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/logo-animated.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/logo-animated.svg">
+    <img src="docs/assets/brand/logo-transparent.svg" alt="Логотип проекта: точечно-матричный дисплей с названием проекта" width="527">
+  </picture>
 </p>
 
 # ESPCanBox
@@ -14,8 +18,6 @@ Android и может заменить CAN-адаптер, который про
 > **Машинный перевод, требует проверки.** Этот файл — перевод [README.md](README.md).
 > Обязательным является английский текст. Как сообщить об ошибке:
 > [Переводы](docs/en/contributing/translations.md#send-your-work).
-
-![«Обзор» веб-панели (макет устройства, тёмная тема)](docs/assets/screenshots/panel-dashboard.png)
 
 > [!WARNING]
 > **Любительский проект, предоставляется КАК ЕСТЬ, без каких-либо гарантий.** Вы используете
@@ -32,6 +34,21 @@ Android и может заменить CAN-адаптер, который про
 > - Проект не связан с Peugeot, Stellantis, Simple Soft, Raise, Junsun или FYT, не одобрен
 >   ими и не имеет к ним отношения. Их названия используются только для того, чтобы сказать,
 >   что было проверено.
+
+## Скриншоты
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-dashboard.png"><img src="docs/assets/screenshots/panel-dashboard.png" alt="«Обзор», двигатель работает, передние датчики пищат" width="250"></a><br><sub>«Обзор»: состояние автомобиля и парктроник</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-can.png"><img src="docs/assets/screenshots/panel-can.png" alt="Вкладка CAN: таблица кадров и просмотр записи в реальном времени" width="250"></a><br><sub>Вкладка CAN: кадры в реальном времени</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-radio-keymap.png"><img src="docs/assets/screenshots/panel-radio-keymap.png" alt="Редактор переназначения кнопок со стандартными заменами и последней нажатой кнопкой" width="250"></a><br><sub>Вкладка «Радио»: переназначение кнопок</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-system-firmware-wizard.png"><img src="docs/assets/screenshots/panel-system-firmware-wizard.png" alt="Мастер обновления: файл декодера для устройства только для прослушивания требует явной отметки" width="250"></a><br><sub>Обновление прошивки из браузера</sub></td>
+  </tr>
+</table>
+
+Все экраны с пояснениями: [Обзор панели](docs/en/reference/panel-tour.md) (на английском). Картинки сделаны на макете устройства, не в автомобиле.
 
 ## Для кого это
 
@@ -72,14 +89,11 @@ Android и может заменить CAN-адаптер, который про
   (см. [Тесты на компьютере](docs/en/testing/host-tests.md)).
 - **Необязательная сборка с передачей** (`decoder_tx_wifi`): по умолчанию она может отправлять
   только один кадр — запрос настроек автомобиля `15B` (проверяется только по ID и длине), и
-  только после того, как вы разрешите передачу. Ещё два пробных кадра есть только в
-  экспериментальной сборке. Управление климат-контролем с магнитолы таким способом **не**
+  только после того, как вы разрешите передачу. Пробный кадр `1A9` есть только в сборке с
+  `-DCAN_TX_EXPERIMENTAL=1`. Управление климат-контролем с магнитолы таким способом **не**
   заработало. Подробности: [Передача в шину CAN](docs/en/safety/transmit.md).
 
-Не сделано или неизвестно: глубокий сон при молчащей шине написан, но не проверен на железе.
-Прошивка в этом репозитории переработана на основе версии, которая работает в эталонном автомобиле; она
-компилируется и проходит тесты на компьютере, но это дерево **ещё не проверено на стенде** на
-устройстве.
+Состояние: версия 2.0.0 компилируется, проходит тесты на компьютере, проверена на стенде на плате ESP32-S3-WROOM-1-N16R8 и опробована в одном автомобиле 20.11.2026, включая глубокий сон и пробуждение от шины.
 
 ## Поддерживаемые автомобили
 
@@ -183,10 +197,29 @@ GitHub; все ссылки между ними работают и там.
 
 ## Лицензии
 
-Предварительно, до первого публичного выпуска:
-
 - код: Apache-2.0 ([LICENSE](LICENSE), [NOTICE](NOTICE));
 - документация и изображения: CC BY 4.0 ([LICENSE-docs](LICENSE-docs));
 - аппаратная часть (файлы KiCad, корпус): CERN-OHL-S-2.0 ([LICENSE-hardware](LICENSE-hardware)).
+
+Какая лицензия относится к каким файлам:
+
+| Лицензия | Файлы |
+|---|---|
+| Apache-2.0 | `firmware/` (с веб-панелью, тестовыми данными и записями), `tools/`, код в `extras/`, `vehicles/*/*.dbc`, `hardware/prototype-v1/enclosure/gen_enclosure.py`, файлы сборки и CI, а также любой файл, не названный в двух строках ниже |
+| CC BY 4.0 | `docs/`, любой файл Markdown (`*.md`), логотипы (`docs/assets/brand/`, `hardware/brand/`), фотографии, снимки экрана, рендеры и рисунки |
+| CERN-OHL-S-2.0 | в `hardware/prototype-v1/`: файлы KiCad, файлы PDF и для печати, `bom.csv`, модели корпуса (STL) |
+
+**Лицензия отдельных файлов.** У файлов нет собственных лицензионных заголовков. К файлу без
+собственного заголовка применяется таблица выше; файл, в котором указана своя лицензия,
+распространяется по ней. Части других проектов, которые входят в образ прошивки (ядро Arduino
+для ESP32 по LGPL-2.1-or-later, ESP-IDF и его компоненты, библиотеки времени выполнения
+компилятора), перечислены с лицензиями и ссылками в [NOTICE](NOTICE). Каждый архив выпуска
+содержит тексты лицензий, NOTICE и заметку о том, где взять исходный код именно этой версии
+([LICENSES/](LICENSES/THIRD-PARTY.md)).
+
+Peugeot, Stellantis, Simple Soft, Raise, Junsun, FYT и другие названия продуктов и компаний
+принадлежат их владельцам. Они используются только для описания совместимости. Проект не связан
+ни с одним из них и не одобрен ими. ESP32 — товарный знак Espressif Systems; другие названия —
+товарные знаки их владельцев и используются только для описания совместимости.
 
 Автор: grabowski98.

@@ -76,6 +76,12 @@ Wersja `listen` albo `listen_wifi`. Skrzynka CAN zostaje podłączona i robi wsz
    tylko jako mały prąd, zobacz
    [Zasilanie i ACC, krok 3](power-and-acc.md#step-3-measure-the-parked-current).
 
+[![Zapłon włączony, silnik nie pracuje](../../assets/screenshots/panel-dashboard-ignition-on.png)](../../assets/screenshots/panel-dashboard-ignition-on.png)
+
+[![Silnik pracuje, czujniki czekają](../../assets/screenshots/panel-dashboard-engine-running.png)](../../assets/screenshots/panel-dashboard-engine-running.png)
+
+[![Wsteczny: tylne czujniki aktywne i pikają](../../assets/screenshots/panel-dashboard-park-rear.png)](../../assets/screenshots/panel-dashboard-park-rear.png)
+
 ## Runda 2: dekoder (urządzenie zastępuje skrzynkę) {#round-2-decoder-the-device-replaces-the-box}
 
 Tylko dla auta z profilem, który obsługuje radio (`psa_aee2010` w aucie wzorcowym). Wersja
@@ -91,7 +97,7 @@ Tylko dla auta z profilem, który obsługuje radio (`psa_aee2010` w aucie wzorco
    ([Połączenie z radiem](radio-connection.md)).
 2. Zapłon włączony. Radio startuje. Linia startowa zawierała `LISTEN ONLY` i
    `Mode: DECODER (sends to the radio, drives ACC).`; `stat` pokazuje `mode=DECODER` i `acc=1`.
-3. `radio`: przychodzą ramki z radia (`received frames=` rośnie, `bad checksum=0`).
+3. `radio`: przychodzą ramki z radia (`received frames=` rośnie). Niektóre radia wysyłają wadliwą ramkę `C5`; każda liczy się jako jedna zła suma i trzy bajty śmieci, więc powoli rosnące `bad checksum=` przy `garbage=` dokładnie trzy razy większym jest normalne. Inna proporcja oznacza błąd w przewodach albo w prędkości.
 4. Sprawdzaj po jednej funkcji i zapisuj wynik:
 
     | Sprawdzenie | Co powinieneś zobaczyć |
@@ -104,6 +110,8 @@ Tylko dla auta z profilem, który obsługuje radio (`psa_aee2010` w aucie wzorco
 
 5. Jeśli coś nie działa, wyłącz zapłon i wepnij z powrotem skrzynkę CAN. Auto działa jak
    wcześniej.
+
+[![Zakładka Radio programu dekodera z radiem, które odpowiada](../../assets/screenshots/panel-radio-decoder.png)](../../assets/screenshots/panel-radio-decoder.png)
 
 ### Co było w aucie wzorcowym {#what-happened-on-the-reference-car}
 
@@ -141,7 +149,9 @@ test bez niego.
   (12 V przy włączonym zapłonie).
 
 Nigdy nie przechodź na wersję z nadawaniem (`decoder_tx_wifi`), żeby coś „naprawić”. Nadawanie to
-osobny, świadomy krok: [Nadawanie na magistralę CAN](../safety/transmit.md).
+osobny, świadomy krok: [Nadawanie na magistralę CAN](../safety/transmit.md). Po wgraniu
+każdego nowego programu wersja z nadawaniem startuje rozbrojona i znowu potrzebuje `cantx on` i
+restartu ([Uzbrajanie](../safety/transmit.md#arming)).
 
 Dalej: podziel się wynikiem ([Udostępnij swoje auto](../make-it-yours/contribute.md)) albo nagraj
 swoje auto ([Nagrywanie magistrali](../make-it-yours/record.md)).

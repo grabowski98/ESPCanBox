@@ -83,7 +83,7 @@ do ramki CAN.
 | `3B` | zapamiętane prędkości (ogranicznik, tempomat) | `FC 28 3B 4F 63 82 01` = 40, 59, 79, 99, 130 km/h; te same wartości są w CAN `1E8` |
 | `3D` | lista prędkości | `32 46 50 5A 6E 82` = 50 ... 130 km/h, wysyłana dwa razy; to samo co CAN `2A7` / `267` |
 | `3E` | przeszkoda | `80`, gdy czujniki są aktywne i któraś strefa jest poniżej 7, w przeciwnym razie `00` (19 z 19 ramek) |
-| `44` | tryb ekonomiczny | `01` przy włączonym zapłonie i wyłączonym silniku, `00` przy pracującym silniku; z CAN `036` bajt 3 bit 7 |
+| `44` | tryb ekonomiczny | kopia CAN `036` bajt 3 bit 7 (tryb ekonomiczny BSI): `01` widziane przy włączonym zapłonie i wyłączonym silniku, `00` przy pracującym silniku; przy włączonym zapłonie i wyłączonym silniku bywa też `00` (zapis autora, 20.11.2026) |
 | `71` | wersja protokołu | `0A 05 16 10 20 56 02 19 06`; radio pokazuje ją jako „XP_PSA_2016_10_20 V2256” |
 | `30` | tekst wersji skrzynki | ASCII |
 | `EA` | zasilanie | `01 0A` w ciągu 30 ms po tym, jak CAN `0F6` bajt 1 przestaje mieć wartość `80` (zapłon włączony); `00 0A` 2,5 s po powrocie do `80` |
@@ -143,7 +143,7 @@ skrzynka (Raise) nie miała takiego opóźnienia (obserwacja autora, bez nagrani
 
 | CMD | Znaczenie | Treść w nagraniu | Skutek na CAN (skrzynka) |
 |---|---|---|---|
-| `A6` | data i godzina | rok - 2000, miesiąc, dzień, godzina, minuta; co sekundę | |
+| `A6` | data i godzina | rok - 2000, miesiąc, dzień, godzina, minuta; co sekundę ze skrzynką Simple Soft, raz na minutę (przy zmianie minuty) z tym urządzeniem | |
 | `81` | stan radia | `01` włączone, `00` wyłączanie; 4 razy w odstępach około 1 s | skrzynka odpowiada na każde `81 01` ramkami `38` + `3C` |
 | `90` | żądanie ramki | `90 71 00` przy każdym `81` (wersja); `90 21 ...` przy wejściu na ekran klimatyzacji; `90 33 00 00 00` przy wejściu na ekran komputera pokładowego | |
 | `C4` | głośność | 0-36, `80` = wyciszenie | `1A5` = poziom, 4-10 ms później; wyciszenie: `165` bajt 1 = `E0` |

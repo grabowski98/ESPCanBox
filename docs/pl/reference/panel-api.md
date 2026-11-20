@@ -267,7 +267,7 @@ Błędy: `401`, `429`, `503 not_ready`, `503 busy`.
 
 ```json
 {
- "sys": {"version":"2.0.0-beta.1","build":"Nov 18 2026 01:33:28","elf":"0F3A6C21D49B7E58","mode":"listen","canTx":false,
+ "sys": {"version":"2.0.0","build":"Nov 18 2026 01:33:28","elf":"0F3A6C21D49B7E58","mode":"listen","canTx":false,
          "boot":2893471123,"uptimeMs":734512,"resetReason":"deepsleep",
          "heapFree":182344,"heapMin":151208,"heapLargest":110580,
          "loopBusyPct":7,"cpu0Pct":12,"loopMaxUs":1840,"loopsPerSec":992,
@@ -528,7 +528,7 @@ nazwą pliku `<slug>_can.log` (`slug` z `project.json`; ustawiane w
 linie kończą się tylko `\n`:
 
 ```text
-# <fw_product> 2.0.0-beta.1 listen; time in seconds since the device started
+# <fw_product> 2.0.0 listen; time in seconds since the device started
 (734.501) can0 0E1#B0F000FCFC1EC200
 # masked
 (734.503) can0 21F#000000
@@ -802,7 +802,7 @@ z bajtów, które wysłała (zdarzenia postępu wysyłania); urządzenie nie ma 
 Odpowiedź po przyjęciu pliku:
 
 ```json
-{"ok":true,"bytes":1048576,"version":"2.0.0-beta.1","build":"Nov 18 2026 10:02:11","mode":"listen","canTx":false,"net":true,
+{"ok":true,"bytes":1048576,"version":"2.0.0","build":"Nov 18 2026 10:02:11","mode":"listen","canTx":false,"net":true,
  "elf":"7B1E90C4A2D35F68","restartInMs":1500}
 ```
 
@@ -859,7 +859,7 @@ każdym wgraniu) może trwać do ok. 2 s: urządzenie przegląda wtedy drugie mi
 ```json
 {"state":"valid","slotSize":3342336,"confirmInMs":0,"busy":false,"carBusy":false,
  "restartPending":false,"restartReason":"none","canRollback":true,
- "running":{"slot":"app1","version":"2.0.0-beta.1","build":"Nov 18 2026 01:33:28","mode":"listen","canTx":false,
+ "running":{"slot":"app1","version":"2.0.0","build":"Nov 18 2026 01:33:28","mode":"listen","canTx":false,
             "net":true,"elf":"0F3A6C21D49B7E58"},
  "other":{"slot":"app0","image":true,"scanned":true,"known":true,"bootable":true,
           "version":"0.9.0","build":"Nov 18 2026 00:12:03","mode":"listen","canTx":false,
@@ -999,7 +999,7 @@ panelem można pracować bez płytki. Musi zachować:
   w programie: `lib/car_psa_aee2010/psa_frames.*` (`0E1`, `0F6`, wsteczny, zapłon, światła `036`),
   `lib/car_psa_aee2010/psa_signals.cpp` (drzwi `1A1`), `lib/core/power_policy.cpp` (ACC, limity
   świeżości), `psa_signals.cpp` z `lib/radio_xp/xp_signals.cpp` (`car.settings.raw260`, `ageMs`,
-  `state38`; makieta nie ma radia, więc `last` = `null`, a liczniki są 0). Stałe mogą być:
+  `state38`; makieta bez `--demo-radio` nie ma radia, więc `last` = `null`, a liczniki są 0). Stałe mogą być:
   `sys.*` oprócz `uptimeMs` i `boot`, `radio.*`, `audio.*`, `wifi.*`;
 - **VIN:** przy wczytaniu nagrania makieta nadpisuje dane ramek `336`, `3B6`, `2B6` (na przykład
   zerami) i nigdy nie pokazuje ich prawdziwej treści. Nagrania dodawane do repozytorium jako dane
@@ -1013,7 +1013,9 @@ panelem można pracować bez płytki. Musi zachować:
 - **`/api/hello`:** `locked` > 0 tylko w trybie `--lan` (tak jak program robi dla klientów sieci
   urządzenia); `lang` = język zapisany przez `POST /api/lang`, polecenie konsoli `lang` albo import;
 - **ustawienia:** `POST /api/lang`, `GET` / `POST /api/settings` z tymi samymi sprawdzeniami
-  i szczegółami błędów co program (parser to uproszczona kopia w Pythonie).
+  i szczegółami błędów co program (parser to uproszczona kopia w Pythonie);
+- `--demo-radio`: radio, które odpowiada, z przykładowymi wartościami `GET /api/status` z rozdziału 3; tylko do zrzutów ekranu;
+- `--screenshot`, `--supply-v V`, `--password-stdin`: stała data zbudowania i skrót, nazwa sieci jak w urządzeniu, odczyt napięcia 12 V i hasło ze standardowego wejścia; używa ich `tools/make_screenshots.py`.
 
 Nie musi odtwarzać czasów blokady, zapisów do flash ani odmów `car_busy`.
 

@@ -19,15 +19,17 @@ You need uv and the code of the repository, see [Flash the firmware](../quick-st
     ```
 
 4. Press Enter, type `ver` and press Enter. Expected: a line that starts with `[ver]`, for
-   example `[ver] <product> 2.0.0-beta.1 listen, built Nov 18 2026 01:33:28`.
+   example `[ver] <product> 2.0.0 listen, built Nov 18 2026 01:33:28`.
 5. Leave the monitor with Ctrl+C.
 
 If the monitor cannot open the port, another program uses it (a second monitor, an upload). Close
 that program and try again. If no port is found at all, list the ports with
 `uvx platformio device list` and check the cable.
 
-The device accepts `\r`, `\n` or both at the end of a line. A command line can be at most 127
-characters long. Longer text is cut off.
+The device accepts `\r`, `\n` or both at the end of a line. A command line on USB can be at most
+191 characters long (room for `settings import` with the longest backup). A longer line is ignored
+whole, never run cut off: `[con] line longer than 191 characters: ignored`. A line from the panel
+can be at most 127 characters.
 
 > [!NOTE]
 > **No computer, no waiting**
@@ -43,7 +45,7 @@ transmission):
 ```text
 # <project name>. CAN 125 kbit/s LISTEN ONLY. Mode: alongside the box (sends nothing).
 # profile: car=psa_aee2010 radio=xp
-# version: <product> 2.0.0-beta.1, built Nov 18 2026 01:33:28, network=yes, volume=40%
+# version: <product> 2.0.0, built Nov 18 2026 01:33:28, network=yes, volume=40%
 # can=ok audio=ok radio=ok
 # start: power on
 ```
@@ -53,7 +55,8 @@ transmission):
 - One mode, three spellings: the console prints `alongside the box`, the panel says "beside the
   box", and `ver` prints `listen`. This page calls it "beside the box".
 - In the program that can transmit (environment `decoder_tx_wifi`) the first line says
-  `TRANSMIT 15B: built, armed=0` or `armed=1`, and a second line says whether the CAN controller
+  `TRANSMIT 15B: built, armed=0` or `armed=1` (with `-DCAN_TX_EXPERIMENTAL=1`:
+  `TRANSMIT 15B 1A9 (EXPERIMENTAL): built`), and a second line says whether the CAN controller
   runs in listen-only mode or in normal mode. See [Transmitting on the CAN bus](../safety/transmit.md).
 - `can=FAIL`, `audio=FAIL` or `radio=FAIL` means a driver did not start. The device then stays in
   the safe state: 12 V outputs off, nothing sent, red LED. See
@@ -76,7 +79,7 @@ The command names are English. Some old command names still work as aliases, see
 |---|---|
 | `stat` | Mode, driver state, CAN counters, ignition, ACC, reverse, lights, the last parking sensor frame and the CAN transmit gate. Details below. |
 | `radio` | What came from the radio over UART: frame counters, errors, the last volume, time and source. |
-| `ver` | Product, version, mode and build time, for example `[ver] <product> 2.0.0-beta.1 listen, built Nov 18 2026 01:33:28`. |
+| `ver` | Product, version, mode and build time, for example `[ver] <product> 2.0.0 listen, built Nov 18 2026 01:33:28`. |
 | `help` | The list of commands. Any unknown command prints `Unknown command: ...` and the same list. |
 
 `stat` prints lines like these:
@@ -96,7 +99,15 @@ The command names are English. Some old command names still work as aliases, see
   Below 6 V the line says `supply=no 12V (x.xxV)`: you are powering the board from USB only.
 - `ignition` shows the raw byte in brackets. On the reference car `0x80` = off, `0x88` = on,
   `0x8E` = engine running (measured: CAN recordings in `firmware/test_data/captures/`).
-- In a program without transmission the last line is always `can-tx=none` with zeros.
+- In a program without transmission the `can-tx` line is always `can-tx=none` with zeros.
+- The last line, `[diag] wakes=3 park-flips-asleep=0 1A9 press=0 release=0`, is a small record kept
+  in RTC memory: it survives deep sleep, so it shows what happened
+  overnight without anyone at the console, and it starts from zero after a power loss. `wakes` =
+  wake-ups from deep sleep, `park-flips-asleep` = wake-ups after which the parking sensors state
+  (frame `126`) differed from the state before sleep, `1A9 press` / `release` = button frames handed
+  to the CAN controller (only in a build with `-DCAN_TX_EXPERIMENTAL=1`). When such a difference is
+  found after a wake-up, the console prints once
+  `[park] sensors state changed while asleep: was ON, now OFF` (or the reverse).
 
 `radio` prints, among others, `[radio] dropped without ACC=N no slot for a state frame=N too long to frame=N`.
 The first counter grows in normal use (buttons and sensors while the radio is off). The second and
@@ -202,6 +213,16 @@ Notes:
   allow list only in a build with `-DCAN_TX_EXPERIMENTAL=1`; in the default build the gate refuses
   it even when the item is in the mask. No build sends anything for the radio climate commands
   (`8A`): they only print a `[climate]` line.
+- Item `05` (parking sensors) reads its state from frame `126` byte 1 (`18` = off, `00` = on), item
+  `0C` from `227` byte 3. During the first 3.5 s after the ignition comes on both are refused with
+  `no fresh state frame` and nothing is sent (the `227` lamp test lasts 3 s).
+- A build with `-DCAN_TX_EXPERIMENTAL=1 -DCAN_TX_1A9_RELEASE=1` follows every acknowledged `1A9`
+  press with one release frame `1A9 20 7F FF 00 FF 00 50 00`, when the gate pause after the press
+  ends (about 500 ms later). It prints
+  `[vset] 1A9 20 7F FF 00 FF 00 50 00 release sent (acked after N ms, M ms after the press)`, or
+  `release not sent (<reason>)` when the gate refused it (it retries a busy gate for at most 1 s).
+- A command that waits for the previous one is dropped when a command for another item takes its
+  place: `[vset] radio: 80 NN VV <name> = VV: REFUSED (previous send in progress)`.
 - Changes that write flash (`cantx on`, the mask) are skipped while the car needs the device
   (reverse gear or active parking sensors): `[cantx] skipped: the car needs the device ...`. Try again
   when parked. `cantx off` always takes effect at once.
@@ -282,7 +303,7 @@ This part is for people who write tools that read the console. The format is fix
 
 The tags you can meet: `[stat]`, `[radio]`, `[ver]`, `[park]`, `[car]`, `[key]`, `[audio]`,
 `[vset]`, `[cantx]`, `[climate]`, `[sound]`, `[radio_rx]`, `[can]`, `[wifi]`, `[www]`, `[ota]`,
-`[sleep]`.
+`[sleep]`, `[diag]`, `[lang]`, `[settings]`, `[con]`.
 
 The recording format of the `dump` command (`(s.mmm) can0 ID#DATA`) is the same as in the
 recordings in `firmware/test_data/captures/` and in the file the panel downloads.

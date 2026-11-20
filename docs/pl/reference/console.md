@@ -25,15 +25,17 @@ Potrzebujesz uv i kodu repozytorium, zobacz [Wgraj program](../quick-start/flash
     ```
 
 4. Naciśnij Enter, wpisz `ver` i naciśnij Enter. Oczekiwane: linia zaczynająca się od `[ver]`, na
-   przykład `[ver] <product> 2.0.0-beta.1 listen, built Nov 18 2026 01:33:28`.
+   przykład `[ver] <product> 2.0.0 listen, built Nov 18 2026 01:33:28`.
 5. Monitor zamykasz klawiszami Ctrl+C.
 
 Jeśli monitor nie może otworzyć portu, używa go inny program (drugi monitor, wgrywanie). Zamknij
 ten program i spróbuj ponownie. Jeśli żaden port się nie pojawia, wypisz porty poleceniem
 `uvx platformio device list` i sprawdź kabel.
 
-Urządzenie przyjmuje na końcu linii `\r`, `\n` albo oba. Linia polecenia może mieć najwyżej
-127 znaków. Dłuższy tekst jest obcinany.
+Urządzenie przyjmuje na końcu linii `\r`, `\n` albo oba. Linia polecenia przez USB może mieć
+najwyżej 191 znaków (miejsce na `settings import` z najdłuższą kopią). Dłuższa linia jest w całości
+pomijana, nigdy nie wykonuje się obcięta: `[con] line longer than 191 characters: ignored`. Linia
+z panelu może mieć najwyżej 127 znaków.
 
 > [!NOTE]
 > **Bez komputera, bez czekania**
@@ -49,7 +51,7 @@ CAN):
 ```text
 # <project name>. CAN 125 kbit/s LISTEN ONLY. Mode: alongside the box (sends nothing).
 # profile: car=psa_aee2010 radio=xp
-# version: <product> 2.0.0-beta.1, built Nov 18 2026 01:33:28, network=yes, volume=40%
+# version: <product> 2.0.0, built Nov 18 2026 01:33:28, network=yes, volume=40%
 # can=ok audio=ok radio=ok
 # start: power on
 ```
@@ -59,7 +61,8 @@ CAN):
 - Jeden tryb, trzy zapisy: konsola wypisuje `alongside the box`, panel mówi „obok skrzynki”,
   a `ver` wypisuje `listen`. Ta strona nazywa go „obok skrzynki”.
 - W programie, który umie nadawać (środowisko `decoder_tx_wifi`), pierwsza linia mówi
-  `TRANSMIT 15B: built, armed=0` albo `armed=1`, a druga linia mówi, czy kontroler CAN pracuje
+  `TRANSMIT 15B: built, armed=0` albo `armed=1` (z `-DCAN_TX_EXPERIMENTAL=1`:
+  `TRANSMIT 15B 1A9 (EXPERIMENTAL): built`), a druga linia mówi, czy kontroler CAN pracuje
   w trybie tylko nasłuchu, czy w trybie normalnym. Zobacz [Nadawanie na magistralę CAN](../safety/transmit.md).
 - `can=FAIL`, `audio=FAIL` albo `radio=FAIL` oznacza, że sterownik nie wystartował. Urządzenie
   zostaje wtedy w stanie bezpiecznym: wyjścia 12 V wyłączone, nic nie jest wysyłane, czerwona dioda.
@@ -82,7 +85,7 @@ Nazwy poleceń są angielskie. Część starych nazw nadal działa jako aliasy, 
 |---|---|
 | `stat` | Tryb, stan sterowników, liczniki CAN, zapłon, ACC, wsteczny, światła, ostatnia ramka czujników parkowania i brama nadawania CAN. Szczegóły niżej. |
 | `radio` | Co przyszło z radia przez UART: liczniki ramek, błędy, ostatnia głośność, czas i źródło. |
-| `ver` | Produkt, wersja, tryb i czas kompilacji, na przykład `[ver] <product> 2.0.0-beta.1 listen, built Nov 18 2026 01:33:28`. |
+| `ver` | Produkt, wersja, tryb i czas kompilacji, na przykład `[ver] <product> 2.0.0 listen, built Nov 18 2026 01:33:28`. |
 | `help` | Lista poleceń. Każde nieznane polecenie wypisuje `Unknown command: ...` i tę samą listę. |
 
 `stat` wypisuje linie takie jak te:
@@ -104,7 +107,15 @@ Nazwy poleceń są angielskie. Część starych nazw nadal działa jako aliasy, 
 - `ignition` pokazuje w nawiasie surowy bajt. W aucie wzorcowym `0x80` = wyłączony, `0x88` =
   włączony, `0x8E` = silnik pracuje (zmierzone (measured): nagrania CAN
   w `firmware/test_data/captures/`).
-- W programie bez nadawania ostatnia linia to zawsze `can-tx=none` z zerami.
+- W programie bez nadawania linia `can-tx` to zawsze `can-tx=none` z zerami.
+- Ostatnia linia, `[diag] wakes=3 park-flips-asleep=0 1A9 press=0 release=0`, to mały zapis
+  trzymany w pamięci RTC: przetrwa głęboki sen, więc pokazuje, co działo się
+  w nocy, bez nikogo przy konsoli, a po zaniku zasilania zaczyna od zera. `wakes` = wybudzenia
+  z głębokiego snu, `park-flips-asleep` = wybudzenia, po których stan czujników parkowania (ramka
+  `126`) różnił się od stanu sprzed snu, `1A9 press` / `release` = ramki przycisków przekazane do
+  kontrolera CAN (tylko w wersji zbudowanej z `-DCAN_TX_EXPERIMENTAL=1`). Gdy po wybudzeniu wyjdzie
+  taka różnica, konsola wypisuje raz
+  `[park] sensors state changed while asleep: was ON, now OFF` (albo odwrotnie).
 
 `radio` wypisuje między innymi `[radio] dropped without ACC=N no slot for a state frame=N too long to frame=N`.
 Pierwszy licznik rośnie przy normalnym używaniu (przyciski i czujniki, gdy radio jest wyłączone).
@@ -210,6 +221,16 @@ Uwagi:
   jest na liście dozwolonych tylko w wersji zbudowanej z `-DCAN_TX_EXPERIMENTAL=1`; w domyślnej
   wersji brama ją odrzuca, nawet gdy pozycja jest w masce. Żadna wersja nic nie wysyła na polecenia
   klimatyzacji z radia (`8A`): wypisują tylko linię `[climate]`.
+- Pozycja `05` (czujniki parkowania) czyta stan z ramki `126` bajt 1 (`18` = wyłączone, `00` =
+  włączone), pozycja `0C` z `227` bajt 3. Przez pierwsze 3,5 s po włączeniu zapłonu obie są
+  odrzucane z `no fresh state frame` i nic nie jest wysyłane (test lampek w `227` trwa 3 s).
+- Wersja zbudowana z `-DCAN_TX_EXPERIMENTAL=1 -DCAN_TX_1A9_RELEASE=1` po każdym potwierdzonym
+  naciśnięciu `1A9` wysyła jedną ramkę puszczenia `1A9 20 7F FF 00 FF 00 50 00`, gdy skończy się
+  przerwa bramy po naciśnięciu (ok. 500 ms później). Wypisuje
+  `[vset] 1A9 20 7F FF 00 FF 00 50 00 release sent (acked after N ms, M ms after the press)` albo
+  `release not sent (<powód>)`, gdy brama ją odrzuciła (zajętą bramę ponawia najwyżej przez 1 s).
+- Polecenie czekające na poprzednie jest porzucane, gdy jego miejsce zajmie polecenie dla innej
+  pozycji: `[vset] radio: 80 NN VV <nazwa> = VV: REFUSED (previous send in progress)`.
 - Zmiany zapisujące flash (`cantx on`, maska) są pomijane, gdy auto potrzebuje urządzenia (bieg
   wsteczny albo aktywne czujniki parkowania): `[cantx] skipped: the car needs the device ...`.
   Spróbuj ponownie na postoju. `cantx off` zawsze działa od razu.
@@ -290,7 +311,7 @@ Ta część jest dla osób, które piszą narzędzia czytające konsolę. Format
 
 Znaczniki, które możesz spotkać: `[stat]`, `[radio]`, `[ver]`, `[park]`, `[car]`, `[key]`,
 `[audio]`, `[vset]`, `[cantx]`, `[climate]`, `[sound]`, `[radio_rx]`, `[can]`, `[wifi]`, `[www]`,
-`[ota]`, `[sleep]`.
+`[ota]`, `[sleep]`, `[diag]`, `[lang]`, `[settings]`, `[con]`.
 
 Format nagrania z polecenia `dump` (`(s.mmm) can0 ID#DATA`) jest taki sam jak w nagraniach
 w `firmware/test_data/captures/` i w pliku, który pobiera panel.

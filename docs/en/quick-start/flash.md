@@ -7,14 +7,78 @@ panel. Steps 1-3 work without a board.
 > **Status of this firmware tree**
 >
 > This firmware compiles and passes the tests on a PC (all environments build, the host tests
-> match their references). It has not yet been checked on a board with the
-> [bench test protocol](../testing/bench-test-protocol.md). Earlier builds of the same code ran
-> in the reference car.
+> match their references). Version 2.0.0 was bench-tested on an ESP32-S3-WROOM-1-N16R8 board
+> ([bench test protocol](../testing/bench-test-protocol.md)) and tried in one car on 2026-11-20.
 
 **Which window to type in.** On Windows type every command of this page in **PowerShell** (or
 Windows Terminal). Git Bash is not needed to flash; it is needed for the tests on your computer and for the
 pages of [Make it yours](../make-it-yours/porting-checklist.md). On Linux
 and macOS use the normal terminal.
+
+## Quickest route: a ready image in the browser {#ready-image-in-the-browser}
+
+This is the recommended way for the first install. It needs no PlatformIO, no Python package
+for flashing and normally no extra driver: only Chrome or Edge and the image file. It also works where
+`pip install esptool` fails (on a very new Python version the installation can stop with a
+build error of a dependency).
+
+1. Get the image. Ready images are on the project page under **Releases**, one pair per
+   environment without CAN transmit (`listen`, `decoder`, `listen_wifi`, `decoder_wifi`,
+   `listen_generic_wifi`; read [Which environment](#which-environment)). A transmit image is
+   never offered ready. Pick the file by what you do:
+
+    | File | Address | Use it for |
+    |---|---|---|
+    | `<environment>-<version>-merged.bin` | `0x0` | first install; erases the whole flash, including the stored settings (the device then generates a new Wi-Fi password) |
+    | `<environment>-<version>.bin` | `0x10000` | update of a device that already runs this firmware; keeps the stored settings |
+
+    Your own build (steps 1-3 below) gives the application image
+    `.pio/build/<environment>/firmware.bin`: like the file without `-merged`, it goes to
+    `0x10000` and only updates a device that already runs this firmware.
+
+2. Plug the board into the computer with a data USB cable, into the native USB socket of the
+   ESP32-S3 (see [Connect the board](#4-connect-the-board)).
+3. Open <https://espressif.github.io/esptool-js/> in Chrome or Edge.
+4. Click **Connect** and choose the port of the board in the list the browser shows.
+5. Type the address from the table into the address field, choose the image file next to it and
+   click **Program**. No buttons on the module are needed: the board resets by itself.
+6. Expected: the log on the page ends with `Hash of data verified.` If the new program does not
+   start, press RESET or plug the cable in again.
+
+The console on that page only shows what the device prints; you cannot type commands there. To
+type commands, install the small serial terminal of Python once and start it (on Linux and macOS
+type `python3` instead of `python`):
+
+```text
+python -m pip install pyserial
+python -m serial.tools.miniterm - 115200
+```
+
+The `-` makes it list the ports; choose the board. Your typing is not shown: type a command
+blind and end it with Enter. Leave the terminal with Ctrl+].
+
+After a first install, `ver` shows the version. A build with network then opens its own Wi-Fi
+network `<project name>-XXXX` with the panel at `http://10.50.8.1`, for at most four devices at
+the same time. Continue with [First boot](first-boot.md#2-read-the-password-from-the-usb-console)
+to read the password.
+
+<details class="note" markdown="1">
+<summary>Alternative: esptool on the command line</summary>
+
+If `esptool` installs on your computer, it writes the same files with the same addresses. Use one
+of the two write commands:
+
+```text
+python -m pip install esptool
+python -m esptool --chip esp32s3 write-flash 0x0 <environment>-<version>-merged.bin
+python -m esptool --chip esp32s3 write-flash 0x10000 <environment>-<version>.bin
+```
+
+</details>
+
+**Build it yourself.** The numbered steps below build the firmware from the source code with
+PlatformIO and upload it over USB. Use them when there is no ready image for what you need, or
+when you change the code.
 
 ## 1. Install uv
 
@@ -212,7 +276,7 @@ lines. They look like this (the first line starts with the project name; `listen
 ```text
 # <project name>. CAN 125 kbit/s LISTEN ONLY. Mode: alongside the box (sends nothing).
 # profile: car=psa_aee2010 radio=xp
-# version: <product> 2.0.0-beta.1, built <date and time>, network=yes, volume=40%
+# version: <product> 2.0.0, built <date and time>, network=yes, volume=40%
 # can=ok audio=ok radio=ok
 # start: <reset reason>
 ```

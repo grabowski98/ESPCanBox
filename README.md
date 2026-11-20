@@ -1,6 +1,10 @@
-<!-- Project name: "project_name" in project.json. tools/set_project_name.py --apply rewrites the title line ("# ...") under the logo. The logo is a drawing: no tool rewrites it (docs/en/contributing/brand.md). -->
+<!-- Project name: "project_name" in project.json. tools/set_project_name.py --apply rewrites the title line ("# ...") under the logo. The logo is a drawing: no tool rewrites it; the animated header logo is generated from it by tools/make_logo_animation.py (docs/en/contributing/brand.md). -->
 <p align="center">
-  <img src="docs/assets/brand/logo-transparent.svg" alt="Project logo: a dot-matrix display with the project name" width="527">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/logo-animated.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/logo-animated.svg">
+    <img src="docs/assets/brand/logo-transparent.svg" alt="Project logo: a dot-matrix display with the project name" width="527">
+  </picture>
 </p>
 
 # ESPCanBox
@@ -9,8 +13,6 @@ An open ESP32-S3 device that sits between a car's CAN bus and an Android radio a
 the aftermarket CAN interface box sold with the radio.
 
 English | [Polski](README.pl.md) | [Deutsch](README.de.md) | [Español](README.es.md) | [Русский](README.ru.md) | [Українська](README.uk.md)
-
-![Dashboard of the web panel (mock device, dark scheme)](docs/assets/screenshots/panel-dashboard.png)
 
 > [!WARNING]
 > **Hobby project, provided AS IS, without any warranty.** You use it at your own risk, on your
@@ -25,6 +27,21 @@ English | [Polski](README.pl.md) | [Deutsch](README.de.md) | [Español](README.e
 >   Every other car is untested.
 > - This project is not affiliated with, endorsed by or connected to Peugeot, Stellantis,
 >   Simple Soft, Raise, Junsun or FYT. Their names are used only to say what was tested.
+
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-dashboard.png"><img src="docs/assets/screenshots/panel-dashboard.png" alt="Dashboard, engine running, front sensors beeping" width="250"></a><br><sub>Dashboard: car state and parking sensors</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-can.png"><img src="docs/assets/screenshots/panel-can.png" alt="CAN tab: frame table and live preview of a recording" width="250"></a><br><sub>CAN tab: live frames</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-radio-keymap.png"><img src="docs/assets/screenshots/panel-radio-keymap.png" alt="Key remap editor with the default swaps and the last pressed key" width="250"></a><br><sub>Radio tab: key remapping</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-system-firmware-wizard.png"><img src="docs/assets/screenshots/panel-system-firmware-wizard.png" alt="Firmware update wizard: a decoder file for a listen-only device needs an explicit tick" width="250"></a><br><sub>Firmware update from the browser</sub></td>
+  </tr>
+</table>
+
+Every screen, with what it means: [Panel tour](docs/en/reference/panel-tour.md). The pictures come from the device mock, not from a car.
 
 ## Who it is for
 
@@ -61,13 +78,14 @@ Hobbyists who can solder a small board, use a multimeter and build firmware with
   (see [Host tests](docs/en/testing/host-tests.md)).
 - **Optional transmit build** (`decoder_tx_wifi`): by default it can send only one frame, the
   vehicle settings request `15B` (checked by ID and length only), and only after you arm it.
-  Two more trial frames exist only in an experimental build. Climate control from the radio
+  The trial frame `1A9` exists only in a build with `-DCAN_TX_EXPERIMENTAL=1`. Climate control from the radio
   this way did **not** work. Details: [Transmitting on the CAN bus](docs/en/safety/transmit.md).
 
-Not done or not known: deep sleep when the bus is silent is written but not tested on the
-hardware. The firmware in this repository was reorganised from the version that runs in the
-reference car; it compiles and passes the host tests, but this tree has **not yet been
-bench-tested** on a device.
+Status of release 2.0.0: the firmware in this repository was reorganised from the version that
+ran in the reference car before it; it compiles, passes the host tests and was bench-tested on an
+ESP32-S3-WROOM-1-N16R8 board. It was tried in one car on 2026-11-20, including deep sleep and
+wake-up from the bus; the transmit guards (after ignition-on, cranking, reverse) are covered by
+host tests only. Details: [CHANGELOG.md](CHANGELOG.md).
 
 ## Supported cars
 
@@ -164,10 +182,29 @@ answer or a fix within any time.
 
 ## Licences
 
-Provisional until the first public release:
-
 - code: Apache-2.0 ([LICENSE](LICENSE), [NOTICE](NOTICE));
 - documentation and images: CC BY 4.0 ([LICENSE-docs](LICENSE-docs));
 - hardware (KiCad files, enclosure): CERN-OHL-S-2.0 ([LICENSE-hardware](LICENSE-hardware)).
+
+Which licence covers which files:
+
+| Licence | Files |
+|---|---|
+| Apache-2.0 | `firmware/` (with the web panel, the test data and the recordings), `tools/`, the code in `extras/`, `vehicles/*/*.dbc`, `hardware/prototype-v1/enclosure/gen_enclosure.py`, build and CI files, and every file not named in the two rows below |
+| CC BY 4.0 | `docs/`, every Markdown file (`*.md`), the logos (`docs/assets/brand/`, `hardware/brand/`), the photos, screenshots, renders and drawings |
+| CERN-OHL-S-2.0 | in `hardware/prototype-v1/`: the KiCad files, the PDF and print files, `bom.csv`, the enclosure models (STL) |
+
+**Licensing of files.** The files have no licence header of their own. A file without its own
+header is covered by the table above; a file that names its own licence follows it. The parts of
+other projects that a firmware image contains (Arduino core for ESP32 under LGPL-2.1-or-later,
+ESP-IDF and its components, the compiler runtime) are listed with their licences and links in
+[NOTICE](NOTICE). Every release archive carries the licence texts, NOTICE and a note on where to
+get the source of the exact version ([LICENSES/](LICENSES/THIRD-PARTY.md)).
+
+Peugeot, Stellantis, Simple Soft, Raise, Junsun, FYT and the other product and company names
+belong to their owners. They are used only to describe compatibility. This project is not
+affiliated with, endorsed by or connected to any of them. ESP32 is a trademark of Espressif
+Systems; other names are trademarks of their respective owners and are used only to describe
+compatibility.
 
 Author: grabowski98.

@@ -139,7 +139,7 @@ wersja programu nie wywoła konfliktu ze skrzynką.
 
 1. Tryb dekoder, skrzynka CAN wypięta, zapłon wyłączony.
 2. Zapłon włączony: radio startuje. Linia `stat` w konsoli pokazuje `acc=1`.
-3. `radio` w konsoli: `received frames=` rośnie, a `bad checksum=0`.
+3. `radio` w konsoli: `received frames=` rośnie. Niektóre radia wysyłają wadliwą ramkę `C5`; każda liczy się jako jedna zła suma i trzy bajty śmieci, więc powoli rosnące `bad checksum=` przy `garbage=` dokładnie trzy razy większym jest normalne. Inna proporcja oznacza błąd w przewodach albo w prędkości.
 4. Światła włączone: radio przyciemnia ekran (jeśli jest ustawione na ILL). `stat` pokazuje
    `lights=1`.
 5. Bieg wsteczny: radio pokazuje kamerę. `stat` pokazuje `reverse=1`.

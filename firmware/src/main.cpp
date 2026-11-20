@@ -64,6 +64,10 @@ static bool txWindowOpen() {
     return open;
 }
 AppState app;                          // driver startup results, "dump", "test" (app_state.h)
+// Overnight parking sensors record (lib/car_psa_aee2010/park_diag.h): in RTC slow memory, which keeps its content
+// in deep sleep and loses it on power loss. Zero at power-on (no valid magic): ParkDiag::begin starts it fresh.
+// Whether it also survives a software restart was not checked; the magic covers both cases.
+RTC_DATA_ATTR static psa::ParkDiagRecord s_parkDiag;
 // Amplifier kept on for 2 s after the last sound. A deadline with an "active" flag
 // (lib/core/loop_policy.h): a plain time comparison after approx. 24.9 days of running without sleep would say "running" again.
 static Deadline ampHold;
@@ -124,6 +128,7 @@ void setup() {
     dcfg.car = &CAR_PROFILE_SELECTED;          // -DCAR_PROFILE (config.h), default PSA AEE2010
     dcfg.radio = &RADIO_PROTOCOL_SELECTED;     // -DRADIO_PROTOCOL (config.h), default XP
     decoder.begin(dcfg, decoderLog);
+    decoder.attachParkDiag(&s_parkDiag, sleepWokeFromBus());   // counts the wake-up, compares the state once
 
     // --- arming of CAN transmission ---
     // NVS holds the build string of the program in which "cantx on" was entered. It is valid only for THIS
@@ -295,7 +300,9 @@ void loop() {
     }
 
     sleepPoll(busAlive, po.acc, hold, now);
-    netConfirmHealthy(now);        // last call before yielding the processor
+    // Last call before yielding the processor. It may write the otadata sector (confirmation or rollback of an
+    // update), which stops both cores: not while the CAN transmitter window is open, like netLoop above.
+    if (!txWindowOpen()) netConfirmHealthy(now);
 
     vTaskDelay(1);    // yields the processor to other tasks (sound), loop approx. every 1 ms
 }

@@ -109,6 +109,17 @@ and every check ends without errors (exit code 0).
 your change touches with `-e <name>`. Changes in `firmware/src/` have no host test: say in the
 pull request whether you tried them on a board.
 
+### Screenshots of the web panel and the animated logo
+
+Changed the panel? Make the pictures again with one command and commit the changed PNG files:
+`uvx --with playwright==1.65.2 --with pillow==13.0.0 python -I tools/make_screenshots.py`
+(Edge or Chrome, no device needed). Details: [Screenshots](docs/en/contributing/screenshots.md).
+
+Redrew the logo? Build the animated README logo again with
+`uvx --with pillow==13.0.0 python -I tools/make_logo_animation.py --gif`;
+`python -I tools/make_logo_animation.py --check` tells whether it still matches
+([Brand](docs/en/contributing/brand.md)).
+
 ## Scope of support
 
 - Supported: the reference car and radio listed in `vehicles/SUPPORTED.md`, the prototype board,

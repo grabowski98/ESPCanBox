@@ -404,9 +404,11 @@ bool netFlashBusy(uint32_t nowMs) {
         return true;
     }
     if (!s_flashSeen) return false;
-    int32_t since = (int32_t)(nowMs - s_lastFlashMs);
-    if (since < 0) since = 0;
-    return since < (int32_t)NET_FLASH_TAIL_MS;
+    // Unsigned difference: correct across the millis() wrap. Once the tail has passed the mark is dropped,
+    // so an old timestamp cannot come back as "busy" 24.9 days later.
+    if ((uint32_t)(nowMs - s_lastFlashMs) < NET_FLASH_TAIL_MS) return true;
+    s_flashSeen = false;
+    return false;
 }
 
 bool netRestartDue(uint32_t nowMs) {

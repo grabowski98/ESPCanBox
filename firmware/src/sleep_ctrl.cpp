@@ -1,6 +1,7 @@
 #include "sleep_ctrl.h"
 
 #include <Arduino.h>
+#include <driver/gpio.h>
 #include <driver/rtc_io.h>
 #include <esp_sleep.h>
 
@@ -14,12 +15,42 @@
 static uint32_t lastActiveMs = 0;
 static bool netStopAsked = false;      // the network was asked to stop before sleep
 static uint32_t netStopAskedMs = 0;    // when (first request)
+static bool rxPinReady = false;        // CAN RX pin set up as a plain input (only after a CAN driver failure)
+
+#if SLEEP_ENABLED
+// One sample of the CAN RX pin, used only when the CAN driver failed in setup() (lib/core/loop_policy.h,
+// sleepBusActivity). The pin is driven by the transceiver RXD output: HIGH = recessive, LOW = dominant bit.
+// The TWAI driver may be not installed (install failed) or installed but stopped (twai_start failed); in both
+// cases the pin is set up here once as a plain input with the pull-up, through the ESP-IDF calls (input enable
+// in the IO MUX, output off). gpio_get_level reads the pad level from the GPIO_IN register whatever the
+// peripheral routing. The pull-up keeps the pin HIGH (no false activity) when the CAN module is not plugged in,
+// the same as the RTC pull-up before deep sleep below. No ISR: one read per main loop pass is enough,
+// because the running car bus has dominant bits a good part of the time (~218 frames/s at 125 kbit/s).
+static bool canRxPinLow() {
+    if (PIN_CAN_RX == GPIO_NUM_NC) return false;
+    if (!rxPinReady) {
+        gpio_set_direction(PIN_CAN_RX, GPIO_MODE_INPUT);
+        gpio_pullup_en(PIN_CAN_RX);
+        gpio_pulldown_dis(PIN_CAN_RX);
+        rxPinReady = true;
+    }
+    return gpio_get_level(PIN_CAN_RX) == 0;
+}
+#endif
 
 void sleepPoll(bool busAlive, bool accOn, bool holdAwake, uint32_t nowMs) {
 #if SLEEP_ENABLED
     // We do not fall asleep when: the bus is alive, the radio still has ACC, the network asks to stay awake, or a computer
     // is connected to USB (then bench work or logging is in progress and the console must work).
-    if (busAlive || accOn || holdAwake || HWCDC::isPlugged()) {
+    // When the CAN driver failed in setup() no frame arrives, so bus activity comes from sampling the CAN RX pin on
+    // every pass (lib/core/loop_policy.h, sleepBusActivity): the device stays awake in the safe state (12 V outputs
+    // off, amplifier asleep, LED red) while the car bus is active and sleeps when it is silent, no sleep/wake loop.
+    DriverInit drv;
+    drv.can = app.canOk;
+    drv.audio = app.audioOk;
+    drv.radio = app.radioOk;
+    const bool rxLow = drv.can ? false : canRxPinLow();
+    if (sleepBusActivity(drv, busAlive, rxLow) || accOn || holdAwake || HWCDC::isPlugged()) {
         lastActiveMs = nowMs;
         netStopAsked = false;      // falling asleep interrupted: next time we count the time from scratch
         return;
@@ -75,6 +106,7 @@ void sleepPoll(bool busAlive, bool accOn, bool holdAwake, uint32_t nowMs) {
     (void)lastActiveMs;
     (void)netStopAsked;
     (void)netStopAskedMs;
+    (void)rxPinReady;
 #endif
 }
 

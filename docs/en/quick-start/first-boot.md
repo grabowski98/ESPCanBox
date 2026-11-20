@@ -10,7 +10,8 @@ No board yet? Skip to [Try the panel without a board](#try-the-panel-without-a-b
 
 ## 1. Flash a build with network
 
-If you flashed `listen_wifi` as on the page [Flash the firmware](flash.md), go to step 2.
+If you flashed `listen_wifi` as on the page [Flash the firmware](flash.md) (a ready image or your
+own build), go to step 2.
 Otherwise, in the terminal opened in the `firmware` folder (as on that page), run:
 
 ```text
@@ -90,6 +91,8 @@ Expected: the panel shows five tabs: **Dashboard**, **CAN**, **Radio**, **Consol
 
 [![Dashboard of the web panel (mock device, dark scheme)](../../assets/screenshots/panel-dashboard.png)](../../assets/screenshots/panel-dashboard.png)
 
+[![Login screen with the language picker](../../assets/screenshots/panel-login.png)](../../assets/screenshots/panel-login.png)
+
 ## 5. Choose the language
 
 The language picker is on the login screen and on the **System** tab. The panel starts in
@@ -118,6 +121,8 @@ Wi-Fi is on:
 - for the first 60 s after a start with a silent bus, so you have time to connect.
 
 `wifi off` turns the network off and keeps it off after a restart; `wifi on` turns it back on.
+
+[![No connection to the device](../../assets/screenshots/panel-offline.png)](../../assets/screenshots/panel-offline.png)
 
 ## Optional: your home network
 

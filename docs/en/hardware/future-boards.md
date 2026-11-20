@@ -58,7 +58,7 @@ If you design a board, keep the safety rules of the prototype:
 - a fuse and a surge clamp on the 12 V input;
 - 12 V outputs off after reset.
 
-Hardware files are shared under CERN-OHL-S-2.0 (provisional). If you improve the board, a pull
+Hardware files are shared under CERN-OHL-S-2.0. If you improve the board, a pull
 request is welcome: see [Contribute](../make-it-yours/contribute.md).
 
 Next: [Installation checklist](../install-in-car/checklist.md).

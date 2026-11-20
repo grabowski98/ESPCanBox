@@ -9,6 +9,7 @@
 
 #include "candump.h"
 #include "xp_car.h"
+#include "radio_commands.h"
 #include "xp_keys_custom.h"
 
 static int failures = 0;
@@ -102,6 +103,17 @@ int main(int argc, char** argv) {
         k.onEvent(ev(0xA4, 1), out);
         check(k.onIgnitionOff(out) && out.code == 0xA4 && out.state == 0, "ignition off with the screen blanked: released");
         check(k.onEvent(ev(0xA4, 1), out) && out.state == 1, "after ignition off the first press blanks again");
+        // The radio restarts (frame 81 01 = RADIO_ON, parsed as xp::decodeCommand does for Decoder::onRadioFrame):
+        // screen on again.
+        xp::Frame on;
+        on.cmd = 0x81;
+        on.len = 1;
+        on.data[0] = 0x01;
+        const RadioCmd c = parseRadioCmd(on);
+        check(c.kind == RadioCmdKind::RADIO_ON, "radio frame 81 01 = RADIO_ON");
+        if (c.kind == RadioCmdKind::RADIO_ON) k.onRadioOn();
+        check(!k.screenOff(), "after 81 01 the screen is marked as on");
+        check(k.onEvent(ev(0xA4, 1), out) && out.code == 0xA4 && out.state == 1, "after 81 01 the first press sends pressed again");
     }
     // --- remap table as text (serializeMap / parseMap / resetMap) ---
     {

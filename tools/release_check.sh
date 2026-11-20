@@ -13,8 +13,13 @@
 #              build of the six environments, check_no_can_tx.sh, check_tx_profile_lock.sh
 #              check_layering.py, check_i18n.py (all six panel languages)
 #   root       set_project_name.py --check, scan_private.py, check_excluded.py, strip_exif.py --check,
-#              check_provenance.py, check_doc_links.py, check_translations.py, mkdocs build --strict (into a temporary directory),
+#              check_provenance.py, check_doc_links.py, check_translations.py, make_screenshots.py --list,
+#              screenshot files against docs/assets/screenshots/manifest.json (size, sha256),
+#              make_logo_animation.py --check, mkdocs build --strict (into a temporary directory),
 #              actionlint on .github/workflows/
+#   optional   SCREENSHOTS=1: every panel picture made again into a temporary directory (needs uv and
+#              Edge or Chrome); a failure is reported but does not fail the check. The new pictures are
+#              not compared with the committed ones: counters and times in them differ from run to run.
 #
 # Variables: PIO (default "uvx platformio"), PYTHON (default "python"), CXX (host tests),
 #            MKDOCS (default: mkdocs-material with mkdocs-static-i18n through uvx),
@@ -82,6 +87,29 @@ pio_build() { local args=""; for e in $ENVS; do args="$args -e $e"; done; $PIO r
 mkdocs_build() { $MKDOCS build --strict --site-dir "$TMP/site"; }
 # shellcheck disable=SC2086,SC2329  # called through step()
 actionlint_run() { $ACTIONLINT .github/workflows/*.yml; }
+# Every file of the screenshot manifest exists with the recorded size and sha256, and no PNG is left out.
+# shellcheck disable=SC2329  # called through step()
+screenshots_manifest() {
+    "$PYTHON" -I -c '
+import hashlib, json, os, sys
+d = "docs/assets/screenshots"
+m = json.load(open(os.path.join(d, "manifest.json"), encoding="utf-8"))
+bad, listed = [], set()
+for e in m["files"]:
+    p = os.path.join(d, e["file"]); listed.add(e["file"])
+    if not os.path.isfile(p):
+        bad.append("missing " + e["file"]); continue
+    b = open(p, "rb").read()
+    if len(b) != e["bytes"] or hashlib.sha256(b).hexdigest() != e["sha256"]:
+        bad.append("changed without the manifest " + e["file"])
+for r, _, fs in os.walk(d):
+    for f in fs:
+        rel = os.path.relpath(os.path.join(r, f), d).replace(os.sep, "/")
+        if f.endswith(".png") and rel not in listed:
+            bad.append("not in the manifest " + rel)
+print("; ".join(bad) or "screenshots: %d files match manifest.json" % len(listed))
+sys.exit(1 if bad else 0)'
+}
 
 # --- firmware/ ---
 step host_tests firmware bash tools/run_host_tests.sh
@@ -109,6 +137,21 @@ step strip_exif . "$PYTHON" -I tools/strip_exif.py --check .
 step check_provenance . "$PYTHON" -I tools/check_provenance.py --root .
 step check_doc_links . "$PYTHON" -I tools/check_doc_links.py
 step check_translations . "$PYTHON" -I tools/check_translations.py
+step screenshots_list . "$PYTHON" -I -B tools/make_screenshots.py --list
+step screenshots_manifest . screenshots_manifest
+step logo_animation . "$PYTHON" -I tools/make_logo_animation.py --check
+# Optional, non-blocking: SCREENSHOTS=1 bash tools/release_check.sh makes every panel picture into a
+# temporary directory (needs uv and Edge or Chrome); a failure is reported but does not fail the check.
+if [ "${SCREENSHOTS:-0}" = 1 ]; then
+    echo
+    echo "=== screenshots (optional)"
+    if uvx --with playwright==1.65.2 --with pillow==13.0.0 python -I tools/make_screenshots.py \
+            --out "$TMP/screenshots" --keep-going > "$TMP/screenshots.log" 2>&1; then
+        echo "screenshots: ok (made into a temporary directory, removed at the end)"
+    else
+        echo "screenshots: WARNING, see the end of the log:"; tail -n 5 "$TMP/screenshots.log"
+    fi
+fi
 step mkdocs_strict . mkdocs_build
 step actionlint . actionlint_run
 

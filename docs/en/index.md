@@ -1,6 +1,6 @@
 # Overview
 
-![Project logo: a dot-matrix display](../assets/brand/logo-transparent.svg)
+![Project logo: a dot-matrix display](../assets/brand/logo-animated.svg)
 
 This project is an open ESP32-S3 device that sits between a car's CAN bus and an Android radio.
 It can replace the aftermarket CAN interface box ("the box") that is sold with the radio.
@@ -48,8 +48,9 @@ On the reference car the bus at the radio runs at 125 kbit/s (measured: received
 errors). Its voltages look like low-speed fault-tolerant CAN; an oscilloscope is needed to
 confirm it. Details: [Peugeot 508 SW](reference/vehicles/peugeot-508.md).
 
-The firmware tree of this repository was reorganised from the version that runs in the reference
-car. It compiles and passes the host tests, but it has **not yet been bench-tested** on a device.
+The firmware tree of this repository was reorganised from the version that ran in the reference
+car before it. Release 2.0.0 compiles, passes the host tests, was bench-tested on an ESP32-S3-WROOM-1-N16R8
+board and was tried in one car on 2026-11-20.
 
 ## Where to start
 
@@ -69,5 +70,6 @@ see [First boot](quick-start/first-boot.md).
 
 ## Licences
 
-Provisional until the first public release: code Apache-2.0, documentation CC BY 4.0, hardware
-CERN-OHL-S-2.0. Author: grabowski98.
+Code Apache-2.0, documentation CC BY 4.0, hardware CERN-OHL-S-2.0. Which licence covers which
+files, and the parts of other projects in the firmware images: `README.md` and `NOTICE` in the
+repository. Author: grabowski98.

@@ -1,0 +1,18 @@
+### park_diag
+--- power-on ---
+OK    garbage record: started fresh, all counters 0
+OK    126 in the first 3.5 s after ignition on: not stored
+OK    after 3.5 s, two equal 126 = 00: state ON stored, no report
+OK    awake change to 18 (our own press): stored as OFF, not counted as a change while asleep
+--- wake-up, same state ---
+OK    wake-up with 126 = 18 as before sleep: wakes=1, no change, counters kept
+--- wake-up, state changed while asleep ---
+OK    was OFF before sleep, ON after the wake-up: reported once, park-flips-asleep=1
+OK    later changes in the same awake period: stored, not reported
+--- unknown value and one frame only ---
+OK    00, 08, 00: never two equal known frames in a row, nothing stored
+OK    then 00 again: stable, differs from before sleep, reported
+--- RAM record (no RTC) ---
+OK    own record, the RTC record untouched
+park_diag: 10 checks, 0 errors
+### code=0

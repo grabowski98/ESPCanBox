@@ -108,10 +108,11 @@ Try the web panel without a board:
 
 ## Status
 
-The logic is checked on recordings from the reference car (host tests). The firmware of this tree
-has not yet been run through the bench test protocol
-([Bench test protocol](../docs/en/testing/bench-test-protocol.md)): treat it as not bench-tested.
+The logic is checked on recordings from the reference car (host tests). Release 2.0.0 was
+bench-tested on an ESP32-S3-WROOM-1-N16R8 board
+([Bench test protocol](../docs/en/testing/bench-test-protocol.md)) and tried in one car; see
+`CHANGELOG.md` for what was and was not exercised.
 The transmit hardware code (`src/can_tx/`, normal mode in `src/can_bus.cpp`) has no PC test.
 
-Code: Apache-2.0 (provisional until the first public release). Not affiliated with any car or
-radio maker.
+Code: Apache-2.0 (`LICENSE`); third-party parts of the images and their licences: `NOTICE`.
+Not affiliated with any car or radio maker.

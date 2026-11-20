@@ -55,6 +55,8 @@ lang default         forget the choice (English)
 panel saves a choice made after login at once, and a choice made on the login screen right after
 login. See [Panel API](panel-api.md).
 
+[![Language picker with the six panel languages](../../assets/screenshots/panel-system-language-list.png)](../../assets/screenshots/panel-system-language-list.png)
+
 ## Backup and restore
 
 The backup is one JSON object without passwords:
@@ -85,3 +87,7 @@ fields are written one by one and the console prints
 
 Over the network the same backup is `GET /api/settings` and `POST /api/settings`. The panel has no
 export / import buttons yet (planned).
+
+[![Settings imported](../../assets/screenshots/panel-system-backup-imported.png)](../../assets/screenshots/panel-system-backup-imported.png)
+
+[![Import refused by the device](../../assets/screenshots/panel-system-backup-import-rejected.png)](../../assets/screenshots/panel-system-backup-import-rejected.png)

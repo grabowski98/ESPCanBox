@@ -1,6 +1,10 @@
-<!-- Nombre del proyecto: "project_name" en project.json. tools/set_project_name.py --apply reescribe la línea de título ("# ...") bajo el logotipo. El logotipo es un dibujo: ninguna herramienta lo reescribe (docs/en/contributing/brand.md). -->
+<!-- Nombre del proyecto: "project_name" en project.json. tools/set_project_name.py --apply reescribe la línea de título ("# ...") bajo el logotipo. El logotipo es un dibujo: ninguna herramienta lo reescribe; el logotipo animado de la cabecera se genera a partir de él con tools/make_logo_animation.py (docs/en/contributing/brand.md). -->
 <p align="center">
-  <img src="docs/assets/brand/logo-transparent.svg" alt="Logotipo del proyecto: una pantalla de matriz de puntos con el nombre del proyecto" width="527">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/logo-animated.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/logo-animated.svg">
+    <img src="docs/assets/brand/logo-transparent.svg" alt="Logotipo del proyecto: una pantalla de matriz de puntos con el nombre del proyecto" width="527">
+  </picture>
 </p>
 
 # ESPCanBox
@@ -15,8 +19,6 @@ y puede sustituir a la caja de interfaz CAN de posventa que se vende con la radi
 > [README.md](README.md). El texto vinculante es el inglés. Cómo avisar de un error:
 > [Traducciones](docs/en/contributing/translations.md#send-your-work).
 
-![Resumen del panel web (dispositivo simulado, tema oscuro)](docs/assets/screenshots/panel-dashboard.png)
-
 > [!WARNING]
 > **Proyecto de aficionado, ofrecido TAL CUAL (AS IS), sin ninguna garantía.** Lo usas bajo tu
 > propia responsabilidad y en tu propio coche.
@@ -30,6 +32,21 @@ y puede sustituir a la caja de interfaz CAN de posventa que se vende con la radi
 >   Ningún otro coche está probado.
 > - Este proyecto no está vinculado, respaldado ni relacionado con Peugeot, Stellantis,
 >   Simple Soft, Raise, Junsun ni FYT. Sus nombres se usan solo para indicar qué se ha probado.
+
+## Capturas de pantalla
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-dashboard.png"><img src="docs/assets/screenshots/panel-dashboard.png" alt="Resumen, motor en marcha, sensores delanteros pitando" width="250"></a><br><sub>Resumen: estado del coche y sensores de aparcamiento</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-can.png"><img src="docs/assets/screenshots/panel-can.png" alt="Pestaña CAN: tabla de tramas y vista previa en vivo de una grabación" width="250"></a><br><sub>Pestaña CAN: tramas en vivo</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-radio-keymap.png"><img src="docs/assets/screenshots/panel-radio-keymap.png" alt="Editor de reasignación de botones con los cambios por defecto y el último botón pulsado" width="250"></a><br><sub>Pestaña Radio: reasignación de botones</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-system-firmware-wizard.png"><img src="docs/assets/screenshots/panel-system-firmware-wizard.png" alt="Asistente de actualización: un archivo de decodificador para un dispositivo solo de escucha necesita una marca explícita" width="250"></a><br><sub>Actualización de firmware desde el navegador</sub></td>
+  </tr>
+</table>
+
+Todas las pantallas con su explicación: [Recorrido por el panel](docs/en/reference/panel-tour.md) (en inglés). Las imágenes salen del dispositivo simulado, no de un coche.
 
 ## Para quién es
 
@@ -70,14 +87,12 @@ PlatformIO (las guías muestran cada comando). Lo que obtienes depende de tu coc
   (consulta [Pruebas en el ordenador](docs/en/testing/host-tests.md)).
 - **Compilación de transmisión opcional** (`decoder_tx_wifi`): por defecto solo puede enviar una
   trama, la petición de ajustes del vehículo `15B` (comprobada solo por ID y longitud), y solo
-  después de armarla. Otras dos tramas de prueba existen solo en una compilación experimental. El
+  después de armarla. La trama de prueba `1A9` existe solo en una compilación con
+  `-DCAN_TX_EXPERIMENTAL=1`. El
   climatizador desde la radio de esta forma **no** funcionó. Detalles:
   [Transmitir en el bus CAN](docs/en/safety/transmit.md).
 
-Pendiente o desconocido: el sueño profundo cuando el bus está en silencio está escrito, pero no
-probado en el hardware. El firmware de este repositorio se reorganizó a partir de la versión que
-funciona en el coche de referencia; compila y pasa las pruebas en el ordenador, pero este árbol
-**todavía no se ha probado en banco** en un dispositivo.
+Estado: la versión 2.0.0 compila, pasa las pruebas en el ordenador, se probó en banco en una placa ESP32-S3-WROOM-1-N16R8 y se probó en un solo coche el 20-11-2026, incluido el sueño profundo y el despertar desde el bus.
 
 ## Coches compatibles
 
@@ -179,10 +194,30 @@ ninguna promesa de respuesta ni de arreglo en ningún plazo.
 
 ## Licencias
 
-Provisionales hasta la primera versión pública:
-
 - código: Apache-2.0 ([LICENSE](LICENSE), [NOTICE](NOTICE));
 - documentación e imágenes: CC BY 4.0 ([LICENSE-docs](LICENSE-docs));
 - hardware (archivos KiCad, caja): CERN-OHL-S-2.0 ([LICENSE-hardware](LICENSE-hardware)).
+
+Qué licencia cubre qué archivos:
+
+| Licencia | Archivos |
+|---|---|
+| Apache-2.0 | `firmware/` (con el panel web, los datos de prueba y las grabaciones), `tools/`, el código de `extras/`, `vehicles/*/*.dbc`, `hardware/prototype-v1/enclosure/gen_enclosure.py`, los archivos de compilación y CI, y todo archivo que no aparezca en las dos filas de abajo |
+| CC BY 4.0 | `docs/`, todo archivo Markdown (`*.md`), los logotipos (`docs/assets/brand/`, `hardware/brand/`), las fotos, capturas de pantalla, renders y dibujos |
+| CERN-OHL-S-2.0 | en `hardware/prototype-v1/`: los archivos KiCad, los PDF y archivos de impresión, `bom.csv`, los modelos de la caja (STL) |
+
+**Licencia de cada archivo.** Los archivos no llevan cabecera de licencia propia. A un archivo
+sin cabecera propia se le aplica la tabla de arriba; un archivo que indica su propia licencia
+queda bajo esa licencia. Las partes de otros proyectos que contiene una imagen de firmware
+(núcleo Arduino para ESP32 bajo LGPL-2.1-or-later, ESP-IDF y sus componentes, las bibliotecas de
+ejecución del compilador) figuran con su licencia y enlace en [NOTICE](NOTICE). Cada archivo de
+una versión publicada incluye los textos de las licencias, NOTICE y una nota sobre dónde obtener
+el código fuente de esa versión exacta ([LICENSES/](LICENSES/THIRD-PARTY.md)).
+
+Peugeot, Stellantis, Simple Soft, Raise, Junsun, FYT y los demás nombres de productos y empresas
+pertenecen a sus propietarios. Se usan solo para describir la compatibilidad. Este proyecto no
+está vinculado, respaldado ni relacionado con ninguno de ellos. ESP32 es una marca comercial de
+Espressif Systems; los demás nombres son marcas de sus respectivos propietarios y se usan solo
+para describir la compatibilidad.
 
 Autor: grabowski98.

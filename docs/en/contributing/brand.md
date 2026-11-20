@@ -82,19 +82,27 @@ Everything is in `docs/assets/brand/`, except the silkscreen files in `hardware/
 | `icon.svg`, `icon-dark.svg`, `icon-mono.svg`, `icon-2x8.svg`, `icon-2x8-dark.svg` | icon |
 | `icon-32.png` ... `icon-512.png`, `icon-dark-32.png` ... `icon-dark-512.png`, `favicon.ico` | icon renders and the favicon (16, 32 and 48 px) |
 | `panel-header-icon.svg` | 24 px icon for the header of the device web panel |
-| `readme-banner-light.png`, `readme-banner-dark.png` | raster banner 1600 × 400 with a filled background, for places that cannot show an SVG; the READMEs use `logo-transparent.svg` |
+| `readme-banner-light.png`, `readme-banner-dark.png` | raster banner 1600 × 400 with a filled background, for places that cannot show an SVG; the READMEs show `logo-animated.svg`, with `logo-transparent.svg` as the fallback |
 | `github-social-preview.png`, `github-avatar.png` | repository preview 1280 × 640 and avatar 500 × 500 |
 | `espcanbox-intro.gif` | intro animation 1280 × 360, 2.85 s: the name is typed letter by letter, then the "Can" block lights up |
+| `logo-animated.svg`, `logo-animated.gif`, `logo-animated-dark.gif` | README header: the name is typed on the display, then the static logo holds; 10 s loop, still logo under "reduce motion". The GIF files (1054 px, on `#ffffff` and `#0d1117`) are for viewers that do not animate SVG. Generated, do not edit |
 | `site.css` | colours of the documentation site, taken from the table above |
 | `hardware/brand/pcb-*.svg`, `hardware/brand/pcb-*.png` | silkscreen, one colour; PNG files are 1 bit at 1200 dpi |
 
 The SVG files are the masters: paths only, no fonts, no filters. The script that draws them is
 not in the repository yet.
 
+The animated logo is the exception: `tools/make_logo_animation.py` builds it from the dots of
+`logo-transparent.svg`, so redraw the static logo first and then run
+`python tools/make_logo_animation.py --gif`. `python -I tools/make_logo_animation.py --check`
+tells whether the animated SVG still matches the static logo and `project.json`.
+
 The project name is part of the drawings: the dots of the logo, the banners, the preview, the
 animation, the `<title>` of the SVG files and the file name `espcanbox-intro.gif`.
 `tools/set_project_name.py` does not rewrite them and its `--check` does not look at them. After
-a change of the project name, replace these files by hand.
+a change of the project name, replace these files by hand (the animated logo: run the script above).
+
+Screenshots of the web panel are not brand files: they are made by a script, see [Screenshots](screenshots.md).
 
 ## Licence
 

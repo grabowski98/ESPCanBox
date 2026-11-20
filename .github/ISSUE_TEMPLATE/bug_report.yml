@@ -15,7 +15,7 @@ body:
     attributes:
       label: Firmware version and build
       description: The output of the console command `ver`, or the version shown in the panel (System tab).
-      placeholder: "2.0.0-beta.1, built ..."
+      placeholder: "2.0.0, built ..."
     validations:
       required: true
   - type: dropdown

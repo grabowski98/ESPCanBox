@@ -16,6 +16,8 @@ poleceniem `cantx on` i restarcie, i tylko ramki z listy dozwolonych w profilu a
 wzorcowym ramkę `15B`, sprawdzaną tylko po ID i długości. Ramka `1A9` istnieje tylko w wersji
 zbudowanej z `-DCAN_TX_EXPERIMENTAL=1`. Szczegóły: [Nadawanie na magistralę CAN](../safety/transmit.md).
 
+[![Pulpit, program tylko do nasłuchu, silnik pracuje, przednie czujniki pikają](../../assets/screenshots/pl/panel-dashboard.png)](../../assets/screenshots/pl/panel-dashboard.png)
+
 ## Czy zadziała z moim autem? {#will-it-work-with-my-car}
 
 Zmierzony profil ma tylko Peugeot 508 SW z 2015 roku (PSA AEE2010). W każdym innym aucie zaczynasz
@@ -55,8 +57,8 @@ nadajniki na jednej linii radia i dwa źródła ACC zwierają wyjścia.
 
 ## Czy rozładuje mi akumulator? {#will-it-drain-my-battery}
 
-Nie wiadomo. Prąd urządzenia w uśpieniu nie jest zmierzony, a głębokie uśpienie nie było jeszcze
-testowane na sprzęcie. Wi-Fi pobiera około 100 mA (liczba z komentarza w kodzie, nie pomiar tej
+Nie wiadomo. Prąd urządzenia w uśpieniu nie jest zmierzony; głębokie uśpienie i wybudzenie z
+magistrali wypróbowano w jednym aucie 20.11.2026. Wi-Fi pobiera około 100 mA (liczba z komentarza w kodzie, nie pomiar tej
 płytki), dlatego wyłącza się, gdy auto zasypia.
 
 ## Które środowisko wgrać najpierw? {#which-environment-should-i-flash-first}

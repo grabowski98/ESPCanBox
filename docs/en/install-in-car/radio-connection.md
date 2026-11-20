@@ -129,7 +129,7 @@ cause a conflict with the box.
 
 1. Decoder mode, CAN box unplugged, ignition off.
 2. Ignition on: the radio starts. The console `stat` line shows `acc=1`.
-3. `radio` in the console: `received frames=` rises and `bad checksum=0`.
+3. `radio` in the console: `received frames=` rises. Some radios send a malformed `C5` frame; each one counts as one bad checksum and three garbage bytes, so `bad checksum=` rising slowly with `garbage=` exactly three times as large is normal. Any other ratio means a wiring or baud-rate problem.
 4. Lights on: the radio dims its screen (if it is set to follow ILL). `stat` shows `lights=1`.
 5. Reverse gear: the radio shows the camera. `stat` shows `reverse=1`.
 6. Ignition off: the radio switches off about 2.5 s later (plus its own shutdown delay, if set

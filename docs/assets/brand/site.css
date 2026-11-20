@@ -30,14 +30,17 @@
 /* Logo on a page: the SVG master, shown at a whole dot pitch so every dot is drawn the same.
    The drawing is 3952 units wide and the pitch is 60 units: width = 3952 / 60 x pitch.
    8 px pitch = 526.93 px (wide view), 5 px pitch = 329.33 px (phone). */
-.md-typeset img[src$="logo-transparent.svg"] { width: 526.93px; max-width: 100%; height: auto; }
+.md-typeset img[src$="logo-transparent.svg"],
+.md-typeset img[src$="logo-animated.svg"] { width: 526.93px; max-width: 100%; height: auto; }
 @media screen and (max-width: 36em) {
-  .md-typeset img[src$="logo-transparent.svg"] { width: 329.33px; }
+  .md-typeset img[src$="logo-transparent.svg"],
+  .md-typeset img[src$="logo-animated.svg"] { width: 329.33px; }
 }
 
-/* Screenshots of the panel are links to the full-size file. The two phone screenshots stand side
-   by side instead of one under the other. */
-.md-typeset img[src*="/screenshots/panel-phone-"] { width: 48%; max-width: 320px; vertical-align: top; }
+/* Screenshots of the panel are links to the full-size file. Phone screenshots (English and the
+   Polish ones in screenshots/pl/) stand side by side instead of one under the other. */
+.md-typeset img[src*="/screenshots/panel-phone-"],
+.md-typeset img[src*="/screenshots/pl/panel-phone-"] { width: 48%; max-width: 320px; vertical-align: top; }
 
 /* Search field in the header (wide view): a lighter field instead of the darker default, so the
    placeholder and the icon keep the ink colour.

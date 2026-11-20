@@ -1,6 +1,6 @@
 # Überblick
 
-![Projektlogo: eine Punktmatrix-Anzeige](../assets/brand/logo-transparent.svg)
+![Projektlogo: eine Punktmatrix-Anzeige](../assets/brand/logo-animated.svg)
 
 > [!NOTE]
 > **Maschinelle Übersetzung, Prüfung ausstehend**
@@ -58,9 +58,7 @@ Am Referenzauto läuft der Bus am Radio mit 125 kbit/s (gemessen: fehlerfrei emp
 Spannungen sehen nach fehlertolerantem Low-Speed-CAN aus; zur Bestätigung ist ein Oszilloskop
 nötig. Details: [Peugeot 508 SW](../en/reference/vehicles/peugeot-508.md).
 
-Der Firmware-Baum dieses Repositorys wurde aus der Version umgebaut, die im Referenzauto läuft.
-Er kompiliert und besteht die Host-Tests, wurde aber **noch nicht auf dem Prüftisch** an einem
-Gerät getestet.
+Stand: Version 2.0.0 kompiliert, besteht die Host-Tests, wurde auf dem Prüftisch auf einer Platine ESP32-S3-WROOM-1-N16R8 getestet und am 20.11.2026 in einem einzigen Auto ausprobiert, einschließlich Tiefschlaf und Aufwachen durch den Bus.
 
 ## Wo anfangen? {#where-to-start}
 
@@ -81,5 +79,6 @@ Aufzeichnung aus dem Auto, siehe [Erster Start](quick-start/first-boot.md).
 
 ## Lizenzen {#licences}
 
-Vorläufig bis zur ersten öffentlichen Version: Code Apache-2.0, Dokumentation CC BY 4.0,
-Hardware CERN-OHL-S-2.0. Autor: grabowski98.
+Code Apache-2.0, Dokumentation CC BY 4.0, Hardware CERN-OHL-S-2.0. Welche Lizenz für welche
+Dateien gilt und welche Teile anderer Projekte in den Firmware-Images stecken: `README.md` und
+`NOTICE` im Repository. Autor: grabowski98.

@@ -15,7 +15,16 @@
 //   6. waiting for frame 260 (1300 ms from the acknowledgement, more than 2 periods of 260): ACCEPTED or NOT_ACCEPTED;
 //      if other bits of 260 changed together with the requested field -> SIDE_EFFECT and the gate latches.
 // No repetitions of frame 15B. A command that arrived during the previous one waits in ONE slot
-// (the last one wins) and is computed afresh on frame 260 after the previous one finishes.
+// (the last one wins) and is computed afresh on frame 260 after the previous one finishes. When the slot
+// is taken by a command for ANOTHER item, that older command is dropped with a REFUSED report (txRefuse =
+// BUSY), so the console shows it; a newer command for the same item replaces it without a report.
+//
+// Button items (frame 1A9) with -DCAN_TX_1A9_RELEASE=1: RELEASE_DELAY_MS after the press was acknowledged on
+// the bus, one release frame (1A9 20 7F FF 00 FF 00 50 00) goes through the same gate (all its conditions apply).
+// While the gate has its pause after the press (500 ms) the release is retried on every pass, at most
+// RELEASE_GIVEUP_MS from its due time, then given up (takeReleaseEvent: "not sent"). A press without an
+// acknowledgement gets no release. The press report (ACCEPTED / NOT ACCEPTED) does not wait for the release;
+// a next command waits until the release is finished.
 #pragma once
 #include <stdint.h>
 
@@ -53,7 +62,20 @@ struct TxEvent {
     uint16_t canId = 0x15B;
     uint8_t frame[8] = {0};
     bool acked = false;      // acknowledged by another node
+    bool handedOver = false; // the frame reached the CAN controller (CanTxGate::handedOver); false = never on the bus
     uint16_t ms = 0;         // from acceptance by the gate to the result
+};
+
+// Result of the release frame after a button press (CAN_TX_1A9_RELEASE=1 only), for the console line
+// "[vset] 1A9 ... release sent / release not sent (...)".
+struct ReleaseEvent {
+    uint8_t frame[8] = {0};
+    bool sent = false;              // accepted by the gate (then 'acked' tells the result)
+    bool acked = false;
+    bool handedOver = false;        // the frame reached the CAN controller (CanTxGate::handedOver)
+    TxRefuse refuse = TxRefuse::OK; // not sent: reason from the gate (BUSY = still busy after RELEASE_GIVEUP_MS)
+    uint16_t ms = 0;                // sent: from acceptance by the gate to the result
+    uint16_t afterPressMs = 0;      // from the acknowledgement of the press to the result
 };
 
 class SettingsChanger {
@@ -63,6 +85,13 @@ public:
     static const uint32_t RETRY_CONTROLLER_MS = 300;  // retrying on a temporary controller refusal
     static const uint32_t RETRY_BUSY_MS = 600;        // retrying while the gate has its pause after a frame (500 ms)
     static const uint32_t TX_WAIT_MS = 200;           // safeguard: the gate gave no result
+    // Release after a button press (CAN_TX_1A9_RELEASE=1). Measured (can_20261110_190421.log): the box sent no
+    // separate release; it sent 1A9 periodically (every ~204 ms, 20 7F FF 00 FF 00 50 00 with ignition on), a press
+    // replaced one periodic frame (e.g. 1207.859) and the next periodic frame followed ~204 ms later (1208.066).
+    // Our release imitates that next frame. Whether a press without it causes a later toggle is a hypothesis.
+    // Our gate pause is 500 ms, so in practice the release goes out when the pause ends, about 500 ms after the press.
+    static const uint32_t RELEASE_DELAY_MS = 200;
+    static const uint32_t RELEASE_GIVEUP_MS = 1000;   // retrying a busy gate, counted from the due time
 
     void begin(CanTxGate* gate, uint32_t enabledMask);
     void setEnabledMask(uint32_t mask) { mask_ = mask; }
@@ -75,10 +104,13 @@ public:
     bool takeReport(ChangeReport& out);
     // Frame send result (one-shot). Collect after every tick, before takeReport.
     bool takeTxEvent(TxEvent& out);
-    bool busy() const { return state_ != State::IDLE || havePending_; }
+    // Release frame result (one-shot, CAN_TX_1A9_RELEASE=1 only). Collect after every tick.
+    bool takeReleaseEvent(ReleaseEvent& out);
+    bool busy() const { return state_ != State::IDLE || havePending_ || rel_ != Rel::NONE; }
 
 private:
     enum class State : uint8_t { IDLE, WAIT_GATE, WAIT_TX, WAIT_260 };
+    enum class Rel : uint8_t { NONE, DUE, WAIT_TX };   // release frame: waiting for its time / the gate, sent
 
     CanTxGate* gate_ = nullptr;
     uint32_t mask_ = ENABLED_DEFAULT;
@@ -100,7 +132,15 @@ private:
     bool haveTxEvent_ = false;
     TxEvent txEvent_;
     ChangeReport report_;
+    Rel rel_ = Rel::NONE;
+    uint32_t tPressAck_ = 0;           // when the press was acknowledged (release due RELEASE_DELAY_MS later)
+    uint32_t tRelReq_ = 0;             // when the gate accepted the release
+    bool haveRelEvent_ = false;
+    ReleaseEvent relEvent_;
 
+    void tickRelease(const TxConditions& c, uint32_t nowMs);
+    void endRelease(bool sent, bool acked, TxRefuse refuse, uint32_t nowMs);
+    void dropPending(uint32_t nowMs);
     void start(uint8_t id, uint8_t value, const CarState& car, const TxConditions& c, uint32_t nowMs);
     void attempt(const CarState& car, const TxConditions& c, uint32_t nowMs);
     void attemptButton(const CarState& car, const TxConditions& c, uint32_t nowMs);

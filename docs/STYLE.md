@@ -189,5 +189,5 @@ The same convention as the code comments, `vehicles/` and `radios/`:
 
 ## Licence of the text
 
-Documentation is CC BY 4.0 (provisional until the first public release). Write only text you may
+Documentation is CC BY 4.0 (`LICENSE-docs`). Write only text you may
 publish under it: your own words, your own photos and measurements.

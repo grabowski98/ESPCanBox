@@ -69,6 +69,12 @@ Build `listen` or `listen_wifi`. The CAN box stays connected and does everything
    shows only as a low current, see
    [Power and ACC, Step 3](power-and-acc.md#step-3-measure-the-parked-current).
 
+[![Ignition on, engine not running](../../assets/screenshots/panel-dashboard-ignition-on.png)](../../assets/screenshots/panel-dashboard-ignition-on.png)
+
+[![Engine running, sensors waiting](../../assets/screenshots/panel-dashboard-engine-running.png)](../../assets/screenshots/panel-dashboard-engine-running.png)
+
+[![Reverse gear: rear sensors active and beeping](../../assets/screenshots/panel-dashboard-park-rear.png)](../../assets/screenshots/panel-dashboard-park-rear.png)
+
 ## Round 2: decoder (the device replaces the box)
 
 Only for a car with a profile that drives a radio (`psa_aee2010` on the reference car). Build
@@ -84,7 +90,7 @@ Only for a car with a profile that drives a radio (`psa_aee2010` on the referenc
    ([Radio connection](radio-connection.md)).
 2. Ignition on. The radio starts. The start line said `LISTEN ONLY` and
    `Mode: DECODER (sends to the radio, drives ACC).`; `stat` shows `mode=DECODER` and `acc=1`.
-3. `radio`: frames from the radio arrive (`received frames=` rises, `bad checksum=0`).
+3. `radio`: frames from the radio arrive (`received frames=` rises). Some radios send a malformed `C5` frame; each one counts as one bad checksum and three garbage bytes, so `bad checksum=` rising slowly with `garbage=` exactly three times as large is normal. Any other ratio means a wiring or baud-rate problem.
 4. Check one function at a time and write the result down:
 
     | Check | What you should see |
@@ -97,6 +103,8 @@ Only for a car with a profile that drives a radio (`psa_aee2010` on the referenc
 
 5. If something does not work, switch the ignition off and plug the CAN box back in. The car
    works as before.
+
+[![Radio tab of the decoder build with a radio that answers](../../assets/screenshots/panel-radio-decoder.png)](../../assets/screenshots/panel-radio-decoder.png)
 
 ### What happened on the reference car
 
@@ -134,7 +142,9 @@ test without it.
   meter (12 V with the ignition on).
 
 Never switch to the transmit build (`decoder_tx_wifi`) to "fix" something. Transmitting is a
-separate, deliberate step: [Transmitting on the CAN bus](../safety/transmit.md).
+separate, deliberate step: [Transmitting on the CAN bus](../safety/transmit.md). After you flash
+any new program, the transmit build starts disarmed and needs `cantx on` and a restart again
+([Arming](../safety/transmit.md#arming)).
 
 Next: share your result ([Share your car](../make-it-yours/contribute.md)) or record your car
 ([Record the bus](../make-it-yours/record.md)).

@@ -76,11 +76,10 @@ komputerze), `MKDOCS` i `ACTIONLINT` (inne polecenia dla tych dwóch narzędzi).
 ## `release.yml` {#releaseyml}
 
 > [!WARNING]
-> **Test na stole przed pierwszym wydaniem**
+> **Test na stole przed znacznikiem wersji**
 >
-> Ten stan repozytorium nie był jeszcze wgrany do urządzenia. Przed pierwszym znacznikiem wersji
-> przejdź [protokół testu na stole](bench-test-protocol.md) z obrazem z ręcznego uruchomienia tego
-> procesu i wypchnij znacznik dopiero po zaliczeniu. Ręczne uruchomienie z wejściem
+> Przed znacznikiem wersji przejdź [protokół testu na stole](bench-test-protocol.md) z obrazem z
+> ręcznego uruchomienia tego procesu i wypchnij znacznik dopiero po zaliczeniu. Ręczne uruchomienie z wejściem
 > `bench_tested` pozostawionym na `false` nadaje każdemu obrazowi nazwę `…-NOT-BENCH-TESTED`.
 
 1. Czyta `FW_VERSION` z `firmware/src/version.h`; przy znaczniku musi on być równy `v` + ta wersja.

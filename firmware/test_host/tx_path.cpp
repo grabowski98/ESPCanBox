@@ -434,7 +434,9 @@ static void testExperimentalOff() {
     uint32_t m = 0;
     vset::maskChange(s.d.settingsMask(), 0x05, true, m);
     s.d.setSettingsMask(m);
+    s.step(600);                                   // more than 3.5 s after ignition on: the button state is known
     s.d.onCanFrame(frame(0x227, {0x00, 0x00, 0x00, 0x00, 0x00}), s.now, true);   // radar button LED off
+    s.d.onCanFrame(frame(0x126, {0x00, 0xB0, 0x00}), s.now, true);               // parking sensors on
     s.radio80(0x05, 0x01);
     s.step(1000);
     printLines();

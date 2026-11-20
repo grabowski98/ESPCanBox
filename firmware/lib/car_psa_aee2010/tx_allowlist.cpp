@@ -21,10 +21,21 @@ bool txSettingsAnyContent(const CanFrame& f) { return f.len == 8; }
 #if CAN_TX_EXPERIMENTAL
 // 1A9, 8 bytes, EXACTLY one of two contents, both recorded from the aftermarket box with a reaction of the car
 // (can_20261110_190421.log): 00 7F FF 04 FF 00 10 00 (parking sensors), 00 7F FF 20 FF 00 10 00 (blind spot).
+// With -DCAN_TX_1A9_RELEASE=1 also the release 20 7F FF 00 FF 00 50 00 (no button bit): the box's periodic 1A9
+// with ignition on (every ~204 ms, 4189 frames in can_20261110_190421.log; each press replaced one periodic frame
+// and the next periodic frame followed it). 00 7F FF 00 FF 00 10 00 (seen only with ignition 80 and once at box
+// start-up) is never allowed.
 // Other bits of 1A9 mean, among others, trip reset, eCall, tyre calibration: we never send them.
 bool txButtonsValid(const CanFrame& f) {
     if (f.len != 8) return false;
     const uint8_t* d = f.data;
+#if CAN_TX_1A9_RELEASE
+    static const uint8_t REL[8] = {0x20, 0x7F, 0xFF, 0x00, 0xFF, 0x00, 0x50, 0x00};   // release after a press
+    bool rel = true;
+    for (int i = 0; i < 8; i++)
+        if (d[i] != REL[i]) rel = false;
+    if (rel) return true;
+#endif
     if (d[0] != 0x00 || d[1] != 0x7F || d[2] != 0xFF || d[4] != 0xFF || d[5] != 0x00 || d[6] != 0x10 || d[7] != 0x00)
         return false;
     return d[3] == 0x04 || d[3] == 0x20;

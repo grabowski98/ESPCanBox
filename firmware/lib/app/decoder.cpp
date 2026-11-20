@@ -41,6 +41,7 @@ void Decoder::begin(const DecoderConfig& cfg, LogFn log) {
     // CAN transmit gate without hardware (port = nullptr): state NOT_BUILT, every command 80 = refusal.
     gate_.begin(nullptr, cfg_.car);
     changer_.begin(&gate_, vset::ENABLED_DEFAULT);
+    parkDiag_.begin(nullptr, false);   // own RAM record; the device hands over its RTC record (attachParkDiag)
 }
 
 // Program with transmission: the gate gets the hardware. The item mask stays (set by setSettingsMask).
@@ -124,6 +125,11 @@ void Decoder::onCanFrame(const CanFrame& f, uint32_t now, bool fromBus) {
         car_.onCanFrame(f, now, fromBus);
         // Personalization reference state: first complete frame 260 since startup (the "vset" command shows the difference).
         if (f.id == psa::ID_PERSONALIZATION && !start260_.seen && car_.state().f260.len == 7) start260_ = car_.state().f260;
+        // Parking sensors state for the overnight record: the first stable 126 after a wake-up is compared with
+        // the one stored before sleep (park_diag.h). Only frames from the bus.
+        uint8_t was = 0, st = 0;
+        if (f.id == psa::ID_PARKING_COMMAND && fromBus && parkDiag_.on126(car_.state(), now, was, st))
+            logf("[park] sensors state changed while asleep: was %s, now %s\n", was ? "OFF" : "ON", st ? "OFF" : "ON");
     }
     keys_.onCanFrame(f, now);              // buttons from the profile key map (PSA: frames 21F, 122, 0A2, 221, 036)
 
@@ -228,6 +234,8 @@ void Decoder::onRadioFrame(const RadioFrame& f, uint32_t now) {
     // vehicles/peugeot-508-sw-2015/settings-map.md). We do the same, in this order; the second frame is not sent
     // until the car has reported which settings it has (PSA AEE2010: frame 361). The frame numbers are the ones
     // the protocol's encoders gave.
+    // A (re)started radio has the screen on: forget the latch keys (XP: moon A4), so that the next press blanks.
+    if (c.kind == RadioCmdKind::RADIO_ON) keyCustom_.onRadioOn();
     if (cfg_.settingsFromCan && c.kind == RadioCmdKind::RADIO_ON) {
         if (haveCarStateFrame_) radio_.resendState(carStateFrame_.cmd);
         if (havePresent_) radio_.resendState(presentCmd_);
@@ -273,7 +281,10 @@ TxConditions Decoder::txConditions(uint32_t nowMs) const {
 // In the program without transmission there are no send or latch events: only the report remains, as before.
 void Decoder::pumpSettings() {
     vset::TxEvent ev;
-    if (changer_.takeTxEvent(ev) && cfg_.logRadioCommands) {
+    const bool haveEv = changer_.takeTxEvent(ev);
+    // Count only a 1A9 press that was handed to the controller (not one the gate ended before send()).
+    if (haveEv && ev.canId == vset::ID_BUTTONS && ev.handedOver) parkDiag_.notePress();
+    if (haveEv && cfg_.logRadioCommands) {
         const uint8_t* b = ev.frame;
         if (ev.acked)
             logf("[vset] %03X %02X %02X %02X %02X %02X %02X %02X %02X sent (acked after %u ms)\n", ev.canId, b[0], b[1],
@@ -281,6 +292,23 @@ void Decoder::pumpSettings() {
         else
             logf("[vset] %03X %02X %02X %02X %02X %02X %02X %02X %02X NOT ACKED (after %u ms)\n", ev.canId, b[0], b[1], b[2],
                  b[3], b[4], b[5], b[6], b[7], ev.ms);
+    }
+    // Release frame after a 1A9 press (only with -DCAN_TX_1A9_RELEASE=1; never produced otherwise).
+    vset::ReleaseEvent re;
+    if (changer_.takeReleaseEvent(re)) {
+        if (re.handedOver) parkDiag_.noteRelease();
+        if (cfg_.logRadioCommands) {
+            const uint8_t* b = re.frame;
+            if (re.sent && re.acked)
+                logf("[vset] 1A9 %02X %02X %02X %02X %02X %02X %02X %02X release sent (acked after %u ms, %u ms after the press)\n",
+                     b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], re.ms, re.afterPressMs);
+            else if (re.sent)
+                logf("[vset] 1A9 %02X %02X %02X %02X %02X %02X %02X %02X release NOT ACKED (after %u ms)\n", b[0], b[1],
+                     b[2], b[3], b[4], b[5], b[6], b[7], re.ms);
+            else
+                logf("[vset] 1A9 %02X %02X %02X %02X %02X %02X %02X %02X release not sent (%s)\n", b[0], b[1], b[2], b[3],
+                     b[4], b[5], b[6], b[7], re.refuse == TxRefuse::BUSY ? "gate still busy after 1 s" : txRefuseName(re.refuse));
+        }
     }
     vset::ChangeReport rep;
     if (changer_.takeReport(rep)) onSettingReport(rep);
@@ -428,6 +456,8 @@ const DecoderOutputs& Decoder::tick(uint32_t now, bool flashBusy) {
     // ACC goes off: every latched key (XP: the screen blanked with the moon button) first gets "released".
     if (!po.acc && powerOut_.acc)
         while (keyCustom_.onIgnitionOff(ke)) radio_.onKey(ke);
+    // ACC comes on: latch keys pressed while it was off were never seen by the radio, forget them.
+    if (po.acc && !powerOut_.acc) keyCustom_.onAccOn();
     powerOut_ = po;
     radio_.onPower(po.acc, now);
     // Without fresh 0E1 frames the radio must get "no data", not the last graph.
@@ -536,6 +566,12 @@ void Decoder::formatCanTx(char* buf, size_t n) const {
     else if (gate_.state() == TxState::FAULT) st = "FAIL";
     snprintf(buf, n, "[stat] can-tx=%s sent=%lu acked=%lu failed=%lu refused=%lu\n", st,
              (unsigned long)t.sent, (unsigned long)t.acked, (unsigned long)t.failed, (unsigned long)t.refused);
+}
+
+void Decoder::formatParkDiag(char* buf, size_t n) const {
+    const psa::ParkDiagRecord& r = parkDiag_.record();
+    snprintf(buf, n, "[diag] wakes=%lu park-flips-asleep=%lu 1A9 press=%lu release=%lu\n", (unsigned long)r.wakes,
+             (unsigned long)r.flipsAsleep, (unsigned long)r.presses, (unsigned long)r.releases);
 }
 
 void Decoder::formatSettingRow(uint8_t i, uint32_t nowMs, char* buf, size_t n) const {

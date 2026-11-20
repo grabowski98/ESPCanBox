@@ -64,7 +64,7 @@ Jeśli projektujesz płytkę, zachowaj zasady bezpieczeństwa prototypu:
 - bezpiecznik i ogranicznik przepięć na wejściu 12 V;
 - wyjścia 12 V wyłączone po resecie.
 
-Pliki sprzętu są udostępnione na licencji CERN-OHL-S-2.0 (tymczasowo). Jeśli ulepszysz płytkę,
+Pliki sprzętu są udostępnione na licencji CERN-OHL-S-2.0. Jeśli ulepszysz płytkę,
 pull request jest mile widziany: zobacz [Udostępnij swoje auto](../make-it-yours/contribute.md).
 
 Dalej: [Lista kontrolna montażu](../install-in-car/checklist.md).

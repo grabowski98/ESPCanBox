@@ -77,6 +77,14 @@ jest śledzony w repozytorium).
 | `-DARDUINO_USB_MODE=1`, `-DARDUINO_USB_CDC_ON_BOOT=1` | | wszystkie środowiska | konsola (`Serial`) działa przez natywne USB układu ESP32-S3 |
 | `-I include`, `-I boards` | | wszystkie środowiska | nagłówek tożsamości projektu i nagłówki płytek |
 
+`-DCAN_TX_1A9_RELEASE=` (domyślnie `0`, nie ustawia go żadne środowisko): `1`, tylko razem
+z `CAN_TX_EXPERIMENTAL=1`, wysyła jedną ramkę puszczenia `1A9 20 7F FF 00 FF 00 50 00` ok. 200 ms po
+potwierdzonym naciśnięciu `1A9` (w praktyce, gdy skończy się 500 ms przerwy bramy). To okresowa `1A9`,
+którą skrzynka z rynku wtórnego wysyłała co ok. 204 ms przy włączonym zapłonie; naciśnięcie skrzynki
+zastępowało jedną ramkę okresową, a po nim szła następna ramka okresowa (osobnego puszczenia skrzynka
+nie wysyłała). Że naciśnięcie bez takiej następnej ramki powoduje późniejsze przełączenie, to
+hipoteza, niezmierzona.
+
 Resztę robi `build_src_filter`: bez sieci katalog `src/net/` w ogóle nie jest kompilowany; poza
 `decoder_tx_wifi` w ogóle nie jest kompilowany katalog `src/can_tx/`.
 
@@ -102,7 +110,8 @@ Kontrole w `config.h` i `boards/board_common.h` zatrzymują kompilację z czytel
 - nadawanie na CAN jest połączone z `CAR_PROFILE=GENERIC` albo `CAR_PROFILE=CUSTOM` albo z profilem,
   którego lista dozwolonych ramek jest pusta (nowe auto najpierw potrzebuje nazwanego profilu ze
   zmierzonymi ramkami);
-- `CAN_TX_EXPERIMENTAL` jest inne niż 0 albo 1.
+- `CAN_TX_EXPERIMENTAL` jest inne niż 0 albo 1;
+- `CAN_TX_1A9_RELEASE` jest inne niż 0 albo 1 albo ma wartość 1 bez `CAN_TX_EXPERIMENTAL=1`.
 
 ## Profil auta i protokół radia {#car-profile-and-radio-protocol}
 

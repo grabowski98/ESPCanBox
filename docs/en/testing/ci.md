@@ -68,11 +68,10 @@ Variables: `PIO` (default `uvx platformio`), `PYTHON` (default `python`), `CXX` 
 ## `release.yml`
 
 > [!WARNING]
-> **Bench test before the first release**
+> **Bench test before a version tag**
 >
-> The tree has not been flashed to a device yet. Before the first version tag, run the
-> [bench test protocol](bench-test-protocol.md) with an image from a manual run of this workflow,
-> and push the tag only after it passed. A manual run with the input `bench_tested` left at
+> Before a version tag, run the [bench test protocol](bench-test-protocol.md) with an image from a
+> manual run of this workflow, and push the tag only after it passed. A manual run with the input `bench_tested` left at
 > `false` names every image `…-NOT-BENCH-TESTED`.
 
 1. Reads `FW_VERSION` from `firmware/src/version.h`; on a tag, the tag must be `v` + that version.

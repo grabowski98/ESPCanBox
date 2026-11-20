@@ -31,6 +31,15 @@ struct CarState {
     psa::BodyState body;
     RawFrame f036;                           // economy mode, lights
     RawFrame f260, f361, f227, f3E1, f217;   // personalization and its surroundings (read for frame 38)
+    RawFrame f126;                           // parking aid command: state of the parking sensors (item 05)
+    // Ignition on: the last moment a 0F6 with ignition ON / ENGINE followed a 0F6 without it, or came first
+    // (after startup, or after more than IGNITION_GAP_MS without 0F6: the bus slept). Cranking (ON -> 9x/8A -> ENGINE) is not a new start.
+    bool ignitionOnSeen = false;
+    uint32_t msIgnitionOn = 0;
+    // Reverse released: the last moment a 0F6 without reverse (byte 8 bit 7) followed a 0F6 with it.
+    // Used by vset::buttonState (item 0C): 227 byte 3 bit 0 is cleared while reversing.
+    bool reverseOffSeen = false;
+    uint32_t msReverseOff = 0;
     // There was a door frame from which psa::decodeDoors built the door state (128 with the lamp off
     // or 1A1 with a door message while the lamp is lit).
     bool haveDoors = false;
@@ -38,6 +47,7 @@ struct CarState {
 
 class CarModel {
 public:
+    static const uint32_t IGNITION_GAP_MS = 2000;   // 0F6 every 500 ms: a longer gap = the bus was asleep
     // Copies min(len, 8) bytes of the frame into the proper field. fromBus = false (frame pasted
     // from the web panel) does not count as bus traffic. Sends nothing.
     void onCanFrame(const CanFrame& f, uint32_t nowMs, bool fromBus);
@@ -48,6 +58,7 @@ public:
 
 private:
     CarState s_;
+    bool ignitionWasOff_ = true;   // ignition OFF or a silent bus seen since the last "ignition on" (start-up: true)
     bool doorLampOn_ = false;   // door-open lamp (128 byte 5 bit 6), as in psa::decodeDoors
     static void store(RawFrame& r, const CanFrame& f, uint32_t nowMs, bool fromBus);
 };

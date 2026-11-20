@@ -114,6 +114,8 @@ ACC, gdy urządzenie restartuje się po aktualizacji.
 
 </details>
 
+[![Brak ruchu na CAN: każda wartość auta to „brak ramki”, kropka magistrali jest żółta](../../assets/screenshots/panel-dashboard-bus-silent.png)](../../assets/screenshots/panel-dashboard-bus-silent.png)
+
 ## 6. Przed autem {#6-before-the-car}
 
 - Transil (`D2` w prototypie v1) jest wlutowany, a kondensator wejściowy jest na 35 V lub więcej.

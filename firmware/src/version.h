@@ -16,10 +16,11 @@
 #include "project_identity.h"
 
 #define FW_PRODUCT PROJECT_FW_PRODUCT  // at most 15 characters (field FwIdent::product); value in project.json
-// Semantic Versioning: x.y.z, or x.y.z-beta.N for a pre-release (the "beta" is then visible in "ver", the
-// panel and the names of the release files). Only characters 0-9, a-z, A-Z, '.', '-': .github/workflows/release.yml
-// reads the value with that pattern and requires the tag v<FW_VERSION>. Nothing compares versions.
-#define FW_VERSION "2.0.0-beta.1"      // at most 15 characters (field FwIdent::version)
+// Semantic Versioning: x.y.z, or x.y.z-beta.N / x.y.z-rc.N for a pre-release (the suffix is then visible in
+// "ver", the panel and the names of the release files). Only characters 0-9, a-z, A-Z, '.', '-':
+// .github/workflows/release.yml reads the value with that pattern and requires the tag v<FW_VERSION>.
+// Nothing compares versions.
+#define FW_VERSION "2.0.0"             // at most 15 characters (field FwIdent::version)
 // Version of the docs/PANEL_API.md description. Increases only on a backward incompatible change (removed field,
 // different meaning). The panel and the Python mock compare it with the "api" field of the /api/hello response.
 #define FW_API_VERSION 1

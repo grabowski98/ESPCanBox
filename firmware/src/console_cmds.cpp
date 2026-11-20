@@ -49,6 +49,9 @@ static void printStat(uint32_t now) {
     // CAN transmit gate: in the program without transmission always "can-tx=none" and zeros.
     decoder.formatCanTx(park, sizeof(park));
     conPrintf("%s", park);
+    // Overnight record (RTC memory): wake-ups, parking sensors state changes while asleep, 1A9 presses / releases.
+    decoder.formatParkDiag(park, sizeof(park));
+    conPrintf("%s", park);
 }
 
 static void printRadio() {
@@ -512,11 +515,21 @@ void cmdHandleLine(char* line, uint32_t now, cantx::Source src) {
 static const size_t USB_LINE_MAX = 16 + backup::TEXT_MAX;
 static_assert(USB_LINE_MAX >= CON_LINE_MAX, "a USB line must hold every panel line");
 
+// Work per call (per main loop pass), like RX_BUDGET in src/radio_uart.cpp: a capture pasted or streamed into the
+// USB console must not hold the loop (CAN receive, radio UART, watchdog) until the whole burst is read. The rest
+// stays in the USB receive buffer for the next passes (the host is held back by USB flow control).
+static const int USB_RX_BUDGET = 256;     // bytes per call
+static const int USB_LINES_MAX = 2;       // complete lines handled per call
+
 void cmdPollUsb(uint32_t now) {
     static char buf[USB_LINE_MAX];
     static LineAssembler line(buf, sizeof(buf));    // lib/core/line_assembler.h: an overlong line is dropped whole
-    while (Serial.available()) {
-        const LineAssembler::Result r = line.feed((char)Serial.read());
+    int budget = USB_RX_BUDGET;
+    int lines = 0;
+    while (budget-- > 0 && Serial.available() > 0) {
+        const int c = Serial.read();
+        if (c < 0) break;
+        const LineAssembler::Result r = line.feed((char)c);
         if (r == LineAssembler::TOO_LONG) {
             conPrintf("[con] line longer than %u characters: ignored\n", (unsigned)(USB_LINE_MAX - 1));
         } else if (r == LineAssembler::LINE) {
@@ -526,6 +539,7 @@ void cmdPollUsb(uint32_t now) {
             // the window timer. Leave them in the USB buffer for a later loop pass, when the window is closed.
             const TxState s = decoder.canTxState();
             if (s == TxState::OPENING || s == TxState::SENDING) return;
+            if (++lines >= USB_LINES_MAX) return;   // the next lines on a later pass
         }
     }
 }

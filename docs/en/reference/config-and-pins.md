@@ -73,6 +73,13 @@ tracked).
 | `-DARDUINO_USB_MODE=1`, `-DARDUINO_USB_CDC_ON_BOOT=1` | | all environments | the console (`Serial`) runs over the native USB of the ESP32-S3 |
 | `-I include`, `-I boards` | | all environments | project identity header and board headers |
 
+`-DCAN_TX_1A9_RELEASE=` (`0` by default, set by no environment): `1`, only together with
+`CAN_TX_EXPERIMENTAL=1`, sends one release frame `1A9 20 7F FF 00 FF 00 50 00` about 200 ms after an
+acknowledged `1A9` press (in practice when the 500 ms gate pause ends). It is the periodic `1A9` the
+aftermarket box sent every ~204 ms with ignition on; a press of the box replaced one periodic frame
+and the next periodic frame followed it (the box sent no separate release). Whether a press without
+such a following frame causes a later toggle is a hypothesis, not measured.
+
 `build_src_filter` does the rest: without network the directory `src/net/` is not compiled at all;
 outside `decoder_tx_wifi` the directory `src/can_tx/` is not compiled at all.
 
@@ -96,7 +103,8 @@ The checks in `config.h` and `boards/board_common.h` stop the build with a reada
 - CAN transmission is combined with `CAR_PROFILE=GENERIC` or `CAR_PROFILE=CUSTOM`, or with a
   profile whose transmit allow list is empty (a new car needs a named profile with measured frames
   first);
-- `CAN_TX_EXPERIMENTAL` is not 0 or 1.
+- `CAN_TX_EXPERIMENTAL` is not 0 or 1;
+- `CAN_TX_1A9_RELEASE` is not 0 or 1, or it is 1 without `CAN_TX_EXPERIMENTAL=1`.
 
 ## Car profile and radio protocol
 

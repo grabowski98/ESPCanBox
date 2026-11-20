@@ -43,7 +43,7 @@ Full harness map: [Peugeot 508 SW](../reference/vehicles/peugeot-508.md).
 > [!WARNING]
 > **Sleep current not measured**
 >
-> Deep sleep is in the code but was not tested on the hardware. The current the device draws
+> Deep sleep and wake-up from the bus were tried in one car on 2026-11-20. The current the device draws
 > from the battery while the car is parked was **not measured**. Measure it yourself before you
 > leave the device in a car for days (Step 3).
 
@@ -148,3 +148,5 @@ drop is not measured exactly). On USB only, without 12 V, the line says `supply=
 
 Next: [CAN connection](can-connection.md). How to wire the ACC, ILL and REV outputs:
 [Radio connection](radio-connection.md).
+
+[![Ignition off: ACC has gone off, the car still talks on the bus](../../assets/screenshots/panel-dashboard-ignition-off.png)](../../assets/screenshots/panel-dashboard-ignition-off.png)

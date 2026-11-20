@@ -13,13 +13,79 @@ und ihr Web-Panel öffnet. Die Schritte 1-3 funktionieren ohne Platine.
 > **Stand dieses Firmware-Baums**
 >
 > Diese Firmware lässt sich bauen und besteht die Tests auf einem PC (alle Umgebungen bauen, die
-> Host-Tests stimmen mit ihren Referenzen überein). Auf einer Platine wurde sie noch nicht mit dem
-> [Prüftisch-Protokoll](../../en/testing/bench-test-protocol.md) geprüft. Frühere Builds desselben
-> Codes liefen im Referenzauto.
+> Host-Tests stimmen mit ihren Referenzen überein). Version 2.0.0 wurde auf einer Platine ESP32-S3-WROOM-1-N16R8
+> mit dem [Prüftisch-Protokoll](../../en/testing/bench-test-protocol.md) geprüft und am 20.11.2026 in
+> einem einzigen Auto ausprobiert.
 
 **In welches Fenster Sie tippen.** Unter Windows tippen Sie alle Befehle dieser Seite in
 **PowerShell** (oder Windows Terminal). Git Bash brauchen Sie zum Flashen nicht, nur für die Tests
 auf dem Computer und für die Seiten von [Für Ihr Auto anpassen](../make-it-yours/porting-checklist.md). Unter Linux und macOS nehmen Sie das normale Terminal.
+
+## Am schnellsten: ein fertiges Image im Browser {#ready-image-in-the-browser}
+
+Das ist der empfohlene Weg für die erste Installation. Sie brauchen kein PlatformIO, kein
+Python-Paket zum Flashen und normalerweise keinen zusätzlichen Treiber: nur Chrome oder Edge und
+die Image-Datei. Er funktioniert auch dort, wo `pip install esptool` scheitert (auf einer sehr
+neuen Python-Version kann die Installation mit einem Build-Fehler einer Abhängigkeit abbrechen).
+
+1. Laden Sie das Image. Fertige Images liegen auf der Projektseite unter **Releases**, je ein
+   Paar pro Umgebung ohne Senden auf CAN (`listen`, `decoder`, `listen_wifi`, `decoder_wifi`,
+   `listen_generic_wifi`; lesen Sie [Welche Umgebung](#which-environment)). Ein Image mit Senden
+   gibt es nie fertig. Wählen Sie die Datei nach dem, was Sie tun:
+
+    | Datei | Adresse | Wofür |
+    |---|---|---|
+    | `<environment>-<version>-merged.bin` | `0x0` | erste Installation; löscht den ganzen Flash-Speicher samt den gespeicherten Einstellungen (das Gerät erzeugt danach ein neues WLAN-Passwort) |
+    | `<environment>-<version>.bin` | `0x10000` | Update eines Geräts, auf dem diese Firmware schon läuft; die gespeicherten Einstellungen bleiben |
+
+    Ein eigener Build (Schritte 1-3 unten) liefert das Anwendungs-Image
+    `.pio/build/<environment>/firmware.bin`: wie die Datei ohne `-merged` gehört es nach `0x10000`
+    und aktualisiert nur ein Gerät, auf dem diese Firmware schon läuft.
+
+2. Stecken Sie die Platine mit einem USB-Datenkabel an den Computer, in die native USB-Buchse des
+   ESP32-S3 (siehe [Platine anschließen](#4-connect-the-board)).
+3. Öffnen Sie <https://espressif.github.io/esptool-js/> in Chrome oder Edge.
+4. Klicken Sie auf **Connect** und wählen Sie den Port der Platine in der Liste des Browsers.
+5. Tragen Sie die Adresse aus der Tabelle in das Adressfeld ein, wählen Sie daneben die
+   Image-Datei und klicken Sie auf **Program**. Tasten am Modul sind nicht nötig: die Platine
+   setzt sich selbst zurück.
+6. Erwartet: das Protokoll auf der Seite endet mit `Hash of data verified.` Startet das neue
+   Programm nicht, drücken Sie RESET oder stecken Sie das Kabel neu ein.
+
+Die Konsole auf jener Seite zeigt nur, was das Gerät ausgibt; Befehle können Sie dort nicht
+eingeben. Zum Eingeben installieren Sie einmal das kleine serielle Terminal von Python und
+starten es (unter Linux und macOS `python3` statt `python`):
+
+```text
+python -m pip install pyserial
+python -m serial.tools.miniterm - 115200
+```
+
+Das `-` lässt es die Ports auflisten; wählen Sie die Platine. Ihre Eingabe wird nicht angezeigt:
+tippen Sie den Befehl blind und schließen Sie ihn mit Enter ab. Beenden mit Ctrl+].
+
+Nach einer ersten Installation zeigt `ver` die Version. Ein Build mit Netzwerk öffnet dann sein
+eigenes WLAN `<project name>-XXXX` mit dem Panel unter `http://10.50.8.1`, für höchstens vier
+Geräte gleichzeitig. Weiter mit [Erster Start](first-boot.md#2-read-the-password-from-the-usb-console),
+um das Passwort zu lesen.
+
+<details class="note" markdown="1">
+<summary>Alternative: esptool auf der Kommandozeile</summary>
+
+Wenn sich `esptool` auf Ihrem Computer installieren lässt, schreibt es dieselben Dateien an
+dieselben Adressen. Nehmen Sie einen der beiden Schreibbefehle:
+
+```text
+python -m pip install esptool
+python -m esptool --chip esp32s3 write-flash 0x0 <environment>-<version>-merged.bin
+python -m esptool --chip esp32s3 write-flash 0x10000 <environment>-<version>.bin
+```
+
+</details>
+
+**Selbst bauen.** Die nummerierten Schritte unten bauen die Firmware aus dem Quellcode mit
+PlatformIO und laden sie über USB hoch. Nehmen Sie sie, wenn es für Ihren Zweck kein fertiges
+Image gibt oder wenn Sie den Code ändern.
 
 ## 1. uv installieren {#1-install-uv}
 
@@ -228,7 +294,7 @@ die Startzeilen zu sehen. Sie sehen so aus (die erste Zeile beginnt mit dem Proj
 ```text
 # <project name>. CAN 125 kbit/s LISTEN ONLY. Mode: alongside the box (sends nothing).
 # profile: car=psa_aee2010 radio=xp
-# version: <product> 2.0.0-beta.1, built <date and time>, network=yes, volume=40%
+# version: <product> 2.0.0, built <date and time>, network=yes, volume=40%
 # can=ok audio=ok radio=ok
 # start: <reset reason>
 ```

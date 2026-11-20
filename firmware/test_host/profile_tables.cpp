@@ -84,6 +84,7 @@ static void expect(const vehicle::CarProfile* p, const CanFrame& f, TxRefuse wan
 
 int main() {
     std::printf("CAN_TX_EXPERIMENTAL = %d\n", CAN_TX_EXPERIMENTAL);
+    std::printf("CAN_TX_1A9_RELEASE = %d\n", CAN_TX_1A9_RELEASE);
     listRows(kCarPsaAee2010);
     listRows(kCarGeneric);
     listRows(kCarExample);
@@ -123,6 +124,12 @@ int main() {
            "1A9 two buttons at once");
     expect(p, frame(0x1A9, {0x80, 0x7F, 0xFF, 0x04, 0xFF, 0x00, 0x10, 0x00}), TxRefuse::ID_NOT_ALLOWED,
            "1A9 with another bit set in byte 1");
+    // Release after a press: only with CAN_TX_1A9_RELEASE=1 (which needs CAN_TX_EXPERIMENTAL=1).
+    // The release is the box's periodic 1A9 with ignition on (can_20261110_190421.log, every ~204 ms).
+    expect(p, frame(0x1A9, {0x20, 0x7F, 0xFF, 0x00, 0xFF, 0x00, 0x50, 0x00}),
+           CAN_TX_1A9_RELEASE ? TxRefuse::OK : TxRefuse::ID_NOT_ALLOWED, "1A9 release = periodic frame of the box, ignition on");
+    expect(p, frame(0x1A9, {0x00, 0x7F, 0xFF, 0x00, 0xFF, 0x00, 0x10, 0x00}), TxRefuse::ID_NOT_ALLOWED,
+           "1A9 00 7F FF 00 FF 00 10 00 (ignition 80 / box start-up, never allowed)");
     expect(p, frame(0x364, {0x00, 0x00, 0x1E, 0x00}), TxRefuse::ID_NOT_ALLOWED, "364 idle, 4 bytes");
     expect(p, frame(0x364, {0x80, 0x00, 0x1E, 0x00}), TxRefuse::ID_NOT_ALLOWED, "364 one button bit, 4 bytes");
     expect(p, frame(0x364, {0x00, 0x00, 0x1E, 0x78, 0xE0, 0x00}), TxRefuse::ID_NOT_ALLOWED, "364 sliders unavailable, 6 bytes");

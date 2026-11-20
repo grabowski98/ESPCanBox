@@ -1,6 +1,10 @@
-<!-- Назва проєкту: "project_name" у project.json. tools/set_project_name.py --apply переписує рядок заголовка ("# ...") під логотипом. Логотип є рисунком: жоден інструмент його не переписує (docs/en/contributing/brand.md). -->
+<!-- Назва проєкту: "project_name" у project.json. tools/set_project_name.py --apply переписує рядок заголовка ("# ...") під логотипом. Логотип є рисунком: жоден інструмент його не переписує; анімований логотип у заголовку створюється з нього скриптом tools/make_logo_animation.py (docs/en/contributing/brand.md). -->
 <p align="center">
-  <img src="docs/assets/brand/logo-transparent.svg" alt="Логотип проєкту: точково-матричний дисплей із назвою проєкту" width="527">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/logo-animated.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/logo-animated.svg">
+    <img src="docs/assets/brand/logo-transparent.svg" alt="Логотип проєкту: точково-матричний дисплей із назвою проєкту" width="527">
+  </picture>
 </p>
 
 # ESPCanBox
@@ -14,8 +18,6 @@
 > **Машинний переклад, потребує перевірки.** Цей файл — переклад [README.md](README.md).
 > Обов'язковим є англійський текст. Як повідомити про помилку:
 > [Переклади](docs/en/contributing/translations.md#send-your-work).
-
-![«Огляд» веб-панелі (імітатор пристрою, темна тема)](docs/assets/screenshots/panel-dashboard.png)
 
 > [!WARNING]
 > **Хобі-проєкт, наданий «ЯК Є» (AS IS), без жодних гарантій.** Ви використовуєте його на
@@ -32,6 +34,21 @@
 > - Цей проєкт не пов'язаний з Peugeot, Stellantis, Simple Soft, Raise, Junsun чи FYT, не
 >   схвалений ними і не має з ними жодних стосунків. Їхні назви вжито лише для того, щоб
 >   сказати, що саме перевірено.
+
+## Знімки екрана
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-dashboard.png"><img src="docs/assets/screenshots/panel-dashboard.png" alt="«Огляд», двигун працює, передні датчики пищать" width="250"></a><br><sub>«Огляд»: стан автомобіля і парктронік</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-can.png"><img src="docs/assets/screenshots/panel-can.png" alt="Вкладка CAN: таблиця кадрів і перегляд запису наживо" width="250"></a><br><sub>Вкладка CAN: кадри наживо</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-radio-keymap.png"><img src="docs/assets/screenshots/panel-radio-keymap.png" alt="Редактор перепризначення кнопок зі стандартними замінами й останньою натиснутою кнопкою" width="250"></a><br><sub>Вкладка «Радіо»: перепризначення кнопок</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/assets/screenshots/panel-system-firmware-wizard.png"><img src="docs/assets/screenshots/panel-system-firmware-wizard.png" alt="Майстер оновлення: файл декодера для пристрою лише для прослуховування потребує явної позначки" width="250"></a><br><sub>Оновлення прошивки з браузера</sub></td>
+  </tr>
+</table>
+
+Усі екрани з поясненнями: [Огляд панелі](docs/en/reference/panel-tour.md) (англійською). Картинки зроблено на імітаторі пристрою, не в автомобілі.
 
 ## Для кого це
 
@@ -73,14 +90,11 @@
   (див. [Тести на комп'ютері](docs/en/testing/host-tests.md)).
 - **Необов'язкова збірка з передачею** (`decoder_tx_wifi`): типово вона може надсилати
   лише один кадр, запит налаштувань автомобіля `15B` (перевіряється лише за ID і довжиною),
-  і лише після того, як ви її активуєте. Ще два пробні кадри існують лише в експериментальній
-  збірці. Клімат-контроль з магнітоли таким способом **не** запрацював. Подробиці:
+  і лише після того, як ви її активуєте. Пробний кадр `1A9` існує лише у збірці з
+  `-DCAN_TX_EXPERIMENTAL=1`. Клімат-контроль з магнітоли таким способом **не** запрацював. Подробиці:
   [Передача на шину CAN](docs/en/safety/transmit.md).
 
-Не зроблено або невідомо: глибокий сон при тихій шині написаний, але не перевірений на
-обладнанні. Прошивку в цьому репозиторії перебудовано з версії, яка працює в еталонному
-автомобілі; вона компілюється і проходить тести на комп'ютері, але це дерево **ще не перевірене
-на стенді** на пристрої.
+Стан: версія 2.0.0 компілюється, проходить тести на комп'ютері, перевірена на стенді на платі ESP32-S3-WROOM-1-N16R8 і випробувана в одному автомобілі 20.11.2026, включно з глибоким сном і пробудженням від шини.
 
 ## Підтримувані автомобілі
 
@@ -182,10 +196,28 @@ GitHub; усі посилання між ними працюють і там.
 
 ## Ліцензії
 
-Тимчасові до першого публічного випуску:
-
 - код: Apache-2.0 ([LICENSE](LICENSE), [NOTICE](NOTICE));
 - документація і зображення: CC BY 4.0 ([LICENSE-docs](LICENSE-docs));
 - апаратна частина (файли KiCad, корпус): CERN-OHL-S-2.0 ([LICENSE-hardware](LICENSE-hardware)).
+
+Яка ліцензія охоплює які файли:
+
+| Ліцензія | Файли |
+|---|---|
+| Apache-2.0 | `firmware/` (з веб-панеллю, тестовими даними і записами), `tools/`, код у `extras/`, `vehicles/*/*.dbc`, `hardware/prototype-v1/enclosure/gen_enclosure.py`, файли збирання і CI, а також кожен файл, не названий у двох рядках нижче |
+| CC BY 4.0 | `docs/`, кожен файл Markdown (`*.md`), логотипи (`docs/assets/brand/`, `hardware/brand/`), фотографії, знімки екрана, рендери і рисунки |
+| CERN-OHL-S-2.0 | у `hardware/prototype-v1/`: файли KiCad, файли PDF і для друку, `bom.csv`, моделі корпусу (STL) |
+
+**Ліцензія окремих файлів.** Файли не мають власних ліцензійних заголовків. До файлу без
+власного заголовка застосовується таблиця вище; файл, що називає власну ліцензію, поширюється
+за нею. Частини інших проєктів, які містить образ прошивки (ядро Arduino для ESP32 за
+LGPL-2.1-or-later, ESP-IDF і його компоненти, бібліотеки часу виконання компілятора), наведено
+з ліцензіями і посиланнями в [NOTICE](NOTICE). Кожен архів випуску містить тексти ліцензій,
+NOTICE і примітку, де взяти вихідний код саме цієї версії ([LICENSES/](LICENSES/THIRD-PARTY.md)).
+
+Peugeot, Stellantis, Simple Soft, Raise, Junsun, FYT та інші назви продуктів і компаній належать
+їхнім власникам. Їх вжито лише для опису сумісності. Цей проєкт не пов’язаний з жодним із них
+і не схвалений ними. ESP32 — торговельна марка Espressif Systems; інші назви — торговельні марки
+їхніх власників і вжиті лише для опису сумісності.
 
 Автор: grabowski98.

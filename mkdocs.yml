@@ -15,7 +15,7 @@
 site_name: ESPCanBox
 site_description: Open ESP32-S3 platform that replaces the CAN interface box between a car and an Android radio.
 site_author: grabowski98
-# Licences are provisional until the first public release.
+# Licences: README.md, section "Licences"; LICENSE, LICENSE-docs, LICENSE-hardware, NOTICE.
 copyright: "Text: CC BY 4.0. Code: Apache-2.0. Hardware: CERN-OHL-S-2.0. Not affiliated with any car or radio maker."
 
 docs_dir: docs
@@ -234,6 +234,7 @@ nav:
       - reference/console.md
       - reference/panel-api.md
       - reference/panel-guide.md
+      - reference/panel-tour.md
       - reference/settings.md
       - reference/config-and-pins.md
       - reference/architecture.md
@@ -257,3 +258,4 @@ nav:
       - contributing/translations.md
       - contributing/glossary.md
       - contributing/brand.md
+      - contributing/screenshots.md

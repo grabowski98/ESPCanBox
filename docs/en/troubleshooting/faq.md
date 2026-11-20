@@ -10,6 +10,8 @@ and the controller runs in listen-only mode. `decoder_tx_wifi` transmits only af
 car frame `15B`, checked by ID and length only. Frame `1A9` exists only in a build with
 `-DCAN_TX_EXPERIMENTAL=1`. Details: [Transmitting on the CAN bus](../safety/transmit.md).
 
+[![Dashboard, listen-only build, engine running, front sensors beeping](../../assets/screenshots/panel-dashboard.png)](../../assets/screenshots/panel-dashboard.png)
+
 ## Will it work with my car?
 
 Only the Peugeot 508 SW of 2015 (PSA AEE2010) has a measured profile. On any other car you start
@@ -47,8 +49,8 @@ first, because two senders on one radio line and two ACC sources short the outpu
 
 ## Will it drain my battery?
 
-Not known. The current of the device in sleep is not measured, and deep sleep is not tested on the
-hardware yet. Wi-Fi draws about 100 mA (figure from a code comment, not a measurement of this board), which is why it switches off when the
+Not known. The current of the device in sleep is not measured; deep sleep and wake-up from the bus
+were tried in one car on 2026-11-20. Wi-Fi draws about 100 mA (figure from a code comment, not a measurement of this board), which is why it switches off when the
 car sleeps.
 
 ## Which environment should I flash first?

@@ -106,6 +106,8 @@ ACC while the device restarts after an update.
 
 </details>
 
+[![No CAN traffic (on the bench, USB power): every car value says 'no frame', the bus dot is amber](../../assets/screenshots/panel-dashboard-bus-silent.png)](../../assets/screenshots/panel-dashboard-bus-silent.png)
+
 ## 6. Before the car
 
 - The surge clamp diode (`D2` on prototype v1) is fitted and the input capacitor is rated 35 V

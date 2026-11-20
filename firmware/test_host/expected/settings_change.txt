@@ -17,7 +17,8 @@ OK    no ignition / flash write: REFUSED with the gate reason, no retry
 OK    gate without hardware (NOT_BUILT): every command at once REFUSED with txRefuse = NOT_BUILT, nobody asks the gate
 --- two commands, retrying, 260 changing meanwhile ---
 OK    80 01 01 and 50 ms later 80 02 01: two 15B frames 505 ms apart, the second = 00 34 97 BA F5 40 00 00 (has the change of the first)
-OK    three commands: one waiting place, the last one wins (80 02 01 skipped without a report)
+OK    three commands: one waiting place, the last one wins (80 02 01 dropped with a report: REFUSED, busy)
+OK    80 02 01, then 80 02 00 while waiting: the same item is replaced without a report (80 02 00 = ALREADY)
 OK    REC != 0 for 150 ms, meanwhile a new 260: 15B frame built from the NEW 260 (00 1C 97 BA D5 40 00 00)
 OK    REC != 0 longer than 300 ms: REFUSED (CONTROLLER), no latch
 --- foreign bits of frame 260 ---
@@ -31,14 +32,22 @@ OK    counters for the panel: 3 refused, the last 05 = blocked, no frame; after 
       [stat] can-tx=none sent=0 acked=0 failed=0 refused=0
 OK    gate in Decoder: NOT_BUILT, stat line can-tx=none, zeros only
 OK    default mask = item 01 only
-OK    80 05 01 with 227 = 00..: one 1A9 = 00 7F FF 04 FF 00 10 00; after 227 = 40..: ACCEPTED
-OK    80 05 01 with 227 = 40..: the car already has this state, nothing sent
+OK    80 05 01 with 126 = 00.. (227 = 40.. ignored): one 1A9 = 00 7F FF 04 FF 00 10 00; after 126 = 18..: ACCEPTED
+OK    80 05 01 with 126 = 18.. (227 = 00.. ignored): the car already has this state, nothing sent
+OK    126 = 18.. and 80 05 00: one press; after 126 = 00..: ACCEPTED
+OK    126 = 00.. and 80 05 00: ALREADY, nothing sent
+OK    126 byte 1 = 08 (one inhibition bit only): no state, refused, nothing sent
 OK    80 0C 00 with 227 byte 3 = 11: one 1A9 = 00 7F FF 20 FF 00 10 00; after 227 byte 3 = 10: ACCEPTED
 OK    80 0D 01 (Start/Stop): no known frame, nothing sent (no 1A9 content was ever recorded for it)
 OK    default mask: 80 05 01 refused (disabled in mask)
 OK    a stale 227 or a 227 pasted from the panel: refused (no fresh state frame), nothing sent
+OK    a stale 126 or a 126 pasted from the panel: refused (no fresh state frame), nothing sent
+OK    ignition on, 227 = 10 00 10 then 50 00 10: 80 05 01, 80 0C 01, 80 05 00 refused (no state), nothing sent; after 3.5 s 80 05 01 = ALREADY
+OK    engine start 88 -> 90 -> 91 -> 92 -> 8A -> 8E: no new settle time, 80 05 01 right after 8E = ALREADY
+OK    blind spot on, reverse engaged, 227 byte 3 = 10: 80 0C 01 refused (no state), nothing sent; reverse released, 227 byte 3 = 11: refused for 500 ms, then 80 0C 01 = ALREADY
+OK    80 0C 00 sent, then reverse clears 227 byte 3 bit 0: not taken as ACCEPTED (NOT_ACCEPTED)
 OK    gate: 1A9 with content outside the two allowed ones (also 00 90, Stop and Start), 364 in any form, frame 2E9: refused
-settings_change: 33 checks, 0 errors
+settings_change: 42 checks, 0 errors
 ### code=0
 ### settings_change can_20261111_191045.log
   562.656 s  radio: 80 01 01

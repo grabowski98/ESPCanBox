@@ -11,7 +11,10 @@
 #     python tools/mock_device.py <capture.log> --lan --lan-admin    as after "wifi lan on"
 # Then open http://127.0.0.1:8080/ in a browser. The mock password is printed at startup
 # (or --password ...). Other options: --port, --host, --speed (replay speed), --mode decoder,
-# --no-loop (do not loop the capture).
+# --no-loop (do not loop the capture), --demo-radio (a radio that answers, with the example values of
+# docs/en/reference/panel-api.md), --screenshot (fixed build string and ELF hash, a network name like a real
+# device's, console lines without "(mock)"), --supply-v V (voltage of the 12 V input), --password-stdin.
+# The last four exist for tools/make_screenshots.py.
 #
 # Privacy: when a capture is loaded, the data of frames with the VIN number (336, 3B6, 2B6) is replaced with zeros;
 # the real content never leaves the mock. Raw captures from the car are not added to the repository
@@ -96,6 +99,13 @@ def read_fw_version():
     except OSError:
         pass
     return "0.0.0"
+
+
+# --screenshot: the same build string and ELF hash in every picture (earlier than the build date that
+# tools/make_screenshots.py writes into the "new" firmware file), and the network name of a device.
+SHOT_BUILD = "Jan 10 2026 09:00:00"
+SHOT_ELF = "3C9A51E07B24D816"
+SHOT_AP_SUFFIX = "A1B2"   # a documentation placeholder (tools/scan_private.py)
 
 
 def build_stamp():
@@ -206,8 +216,12 @@ class Device:
         self.last_bad_pw = None      # last wrong password (by password only, as the device)
         self.last_bad_t = 0.0
         # programs in the two slots
-        self.running = {"slot": "app0", "version": read_fw_version(), "build": build_stamp(),
-                        "mode": args.mode, "net": True, "elf": "%016X" % random.getrandbits(64),
+        shot = args.screenshot
+        self.sfx = "" if shot else " (mock)"    # --screenshot: console lines as the firmware prints them
+        self.running = {"slot": "app0", "version": read_fw_version(),
+                        "build": SHOT_BUILD if shot else build_stamp(),
+                        "mode": args.mode, "net": True,
+                        "elf": SHOT_ELF if shot else "%016X" % random.getrandbits(64),
                         # canTx byte of the marker (+70): 0 = the program cannot transmit on the car CAN;
                         # 1 with the --can-tx option (program decoder_tx_wifi)
                         "canTx": 1 if getattr(args, "can_tx", False) else 0}
@@ -268,8 +282,20 @@ class Device:
         self.restart_at = None
         self.restart_reason = "none"
         self.confirm_at = None
-        self.log("# " + IDENT["PROJECT_NAME"] + " (MOCK). CAN 125 kbit/s LISTEN ONLY. Mode: %s." %
-                 ("DECODER" if self.running["mode"] == "decoder" else "alongside the box"))
+        if self.args.screenshot:
+            # the start-up lines of src/main.cpp
+            mode = ("DECODER (sends to the radio, drives ACC)" if self.running["mode"] == "decoder"
+                    else "alongside the box (sends nothing)")
+            if self.running.get("canTx", 0):
+                self.log("# %s. CAN 125 kbit/s, TRANSMIT 15B: built, armed=%d. Mode: %s." %
+                         (IDENT["PROJECT_NAME"], int(self.tx_armed), mode))
+                self.log("# CAN controller: %s" % ("NORMAL, transmitter closed outside the window of one 15B frame"
+                                                   if self.tx_armed else "LISTEN ONLY (transmit disarmed)"))
+            else:
+                self.log("# %s. CAN 125 kbit/s LISTEN ONLY. Mode: %s." % (IDENT["PROJECT_NAME"], mode))
+        else:
+            self.log("# " + IDENT["PROJECT_NAME"] + " (MOCK). CAN 125 kbit/s LISTEN ONLY. Mode: %s." %
+                     ("DECODER" if self.running["mode"] == "decoder" else "alongside the box"))
         if self.ota_state == "pending":
             self.confirm_at = CONFIRM_MS
 
@@ -528,11 +554,13 @@ class Device:
                 return
         if line == "stat":
             po = self.power.out
-            self.log("[stat] mode=%s can=ok audio=ok radio=ok (mock)" %
-                     ("DECODER" if self.running["mode"] == "decoder" else "alongside the box"))
+            self.log("[stat] mode=%s can=ok audio=ok radio=ok%s" %
+                     ("DECODER" if self.running["mode"] == "decoder" else "alongside the box", self.sfx))
             alive = self.last_bus_ms is not None and now - self.last_bus_ms < 1000
-            self.log("[stat] rx=%d lost=0 errors=0 bus=%s volume=%d%% supply=no 12V (0.00V)" %
-                     (self.rx, "active" if alive else "quiet", self.volume))
+            sv = self.args.supply_v
+            self.log("[stat] rx=%d lost=0 errors=0 bus=%s volume=%d%% %s" %
+                     (self.rx, "active" if alive else "quiet", self.volume,
+                      "supply=%.2fV (after the diode)" % sv if sv else "supply=no 12V (0.00V)"))
             self.log("[stat] ignition=%d (0x%02X) acc=%d reverse=%d lights=%d" %
                      (po["ignition"], self.body_raw, po["acc"], po["reverse"], po["lights"]))
             self.print_park()
@@ -541,8 +569,8 @@ class Device:
                      ("YES" if self.running["mode"] == "decoder" else "no"))
             self.log("[radio] the radio has not spoken yet")
         elif line == "ver":
-            self.log("[ver] %s %s %s, built %s (mock)" % (PRODUCT, self.running["version"],
-                                                                 self.running["mode"], self.running["build"]))
+            self.log("[ver] %s %s %s, built %s%s" % (PRODUCT, self.running["version"],
+                                                                 self.running["mode"], self.running["build"], self.sfx))
         elif line.startswith("vol "):
             try:
                 v = max(0, min(100, int(line[4:].strip() or "0")))
@@ -683,7 +711,7 @@ class Device:
             self.locked = True
             self.next_lock = 300.0 if self.next_lock >= 150 else self.next_lock * 2
             self.fails = 0
-            self.log("[www] login lockout (mock)")
+            self.log("[www] login lockout" + self.sfx)
 
     def guard_success(self, t):
         if self.lock_len == 0 or self.lock_left() > 0:
@@ -754,7 +782,7 @@ class Device:
                     "last": None, "accepted": 0, "notAccepted": 0, "refused": 0,
                     "mask": self.vset_mask}        # mask of the enabled items (since 1.0.0)
         tx_built = r.get("canTx", 0) != 0
-        return {
+        s = {
             "sys": {"version": r["version"], "build": r["build"], "elf": r["elf"], "mode": r["mode"],
                     "canTx": r.get("canTx", 0) != 0,
                     "boot": self.boot, "uptimeMs": now, "resetReason": "poweron",
@@ -774,7 +802,7 @@ class Device:
                            "sent": 0, "acked": 0, "failed": 0, "refused": 0, "tec": 0, "rec": 0}},
             "car": {"ignition": po["ignition"], "ignitionRaw": self.body_raw if fresh0f6 else None, "acc": po["acc"],
                     "reverse": po["reverse"], "lights": po["lights"], "doors": self.doors if self.doors_known else None,
-                    "batteryV": None, "outsideTempC": round(self.temp, 1) if have_temp else None,
+                    "batteryV": self.args.supply_v or None, "outsideTempC": round(self.temp, 1) if have_temp else None,
                     "settings": settings},
             "park": {"fresh": pf, "rearStatus": p["rearStatus"], "frontStatus": p["frontStatus"],
                      "sound": p["sound"], "soundFront": p["soundFront"], "interval": p["interval"],
@@ -788,7 +816,7 @@ class Device:
                       "settingCount": 0,
                       "lastSetting": [0, 0], "airCount": 0, "lastAir": [0, 0], "unknownCount": 0},
             "audio": {"ok": True, "volume": self.volume, "volumeMax": VOLUME_MAX},
-            "wifi": {"on": True, "phase": "running", "apSsid": IDENT["PROJECT_AP_SSID_PREFIX"] + "MOCK", "apIp": "10.50.8.1",
+            "wifi": {"on": True, "phase": "running", "apSsid": IDENT["PROJECT_AP_SSID_PREFIX"] + (SHOT_AP_SUFFIX if self.args.screenshot else "MOCK"), "apIp": "10.50.8.1",
                      "apChannel": 1, "apStations": 1, "staConfigured": sta, "staSsid": self.wifi_sta or "",
                      "staConnected": False, "staIp": None, "staRssi": None, "staLastReason": self.sta_reason,
                      "hostname": IDENT["PROJECT_MDNS_HOST"], "maxStepMs": 180, "startFails": 0, "gaveUp": False,
@@ -796,6 +824,31 @@ class Device:
             "log": {"head": self.line_head, "oldest": self.line_head - len(self.lines)},
             "trace": {"head": self.trace_head, "oldest": self.trace_head - len(self.trace)},
         }
+        return self.demo_radio(s) if self.args.demo_radio else s
+
+    # --demo-radio: a radio that answers, with the example values of docs/en/reference/panel-api.md
+    # (GET /api/status). Only for screenshots and work on the panel: the mock still has no UART.
+    def demo_radio(self, s):
+        dec = self.running["mode"] == "decoder"
+        s["radio"].update({"heard": True, "ageMs": 310, "on": True, "volume": 12, "muted": False,
+                           "source": [1, 1, 0, 0, 0, 0, 0, 0], "time": "2026-11-16 21:14",
+                           "rxFrames": 812, "rxStray": 3,
+                           # decoder: the radio acknowledges each frame of the device (byte FF, xp_protocol.h)
+                           # and the device each radio frame; ACC is on, so nothing is gated; two bad checksums,
+                           # so that the panel shows its red mark. Listen: the example of panel-api.md.
+                           "rxAcks": 455 if dec else 0, "rxBadChecksum": 2 if dec else 0,
+                           "txFrames": 455 if dec else 0, "txAcks": 812 if dec else 0,
+                           "txSuppressed": 0 if dec else 455, "txGated": 0 if dec else 37,
+                           "settingCount": 1, "lastSetting": [1, 1]})
+        tx = self.running.get("canTx", 0) != 0
+        st = s["car"]["settings"]
+        st["last"] = {"id": 1, "value": 1, "result": "accepted" if (tx and self.tx_armed) else "refused",
+                      "tookMs": 367 if (tx and self.tx_armed) else 0, "ageMs": 5300, "frame": None}
+        if tx and self.tx_armed:
+            st["accepted"] = 1
+        else:
+            st["refused"] = 1
+        return s
 
     def ota_status(self):
         o = self.other
@@ -1190,7 +1243,8 @@ class Handler(BaseHTTPRequestHandler):
     def g_keymap(self, q):
         dev = self.dev
         self.send_json(200, {"max": MAP_SIZE, "map": [list(p) for p in dev.keymap],
-                             "defaults": [list(p) for p in DEFAULT_MAP], "lastKey": None})
+                             "defaults": [list(p) for p in DEFAULT_MAP],
+                             "lastKey": {"code": "9F", "state": 0, "ageMs": 4200} if dev.args.demo_radio else None})
 
     def g_settings(self, q):
         self.send_json(200, self.dev.export())
@@ -1384,7 +1438,7 @@ class Handler(BaseHTTPRequestHandler):
         def apply():
             dev.wifi_sta = ssid or None
             dev.sta_reason = 0
-            dev.log("[wifi] home network %s (mock)" % ("stored" if ssid else "forgotten"))
+            dev.log("[wifi] home network %s%s" % ("stored" if ssid else "forgotten", dev.sfx))
             if ssid:
                 # the mock connects to no network: after a while "network not found"
                 dev.timers.append([dev.now() + APPLY_MS + 3000, lambda: setattr(dev, "sta_reason", 201)])
@@ -1415,7 +1469,7 @@ class Handler(BaseHTTPRequestHandler):
 
         def apply():
             dev.password = new
-            dev.log("[wifi] password changed (mock)")
+            dev.log("[wifi] password changed" + dev.sfx)
         dev.queue.append(apply)
         self.send_json(200, {"queued": True, "applyInMs": APPLY_MS})
 
@@ -1566,12 +1620,22 @@ def main():
     ap.add_argument("--can-tx", action="store_true",
                     help="the running program can send frame 15B (canTx = 1, like decoder_tx_wifi); "
                          "the mock transmits nothing, it only shows the arming switch")
+    ap.add_argument("--demo-radio", action="store_true",
+                    help="a radio that answers, with the example values of panel-api.md (screenshots only)")
+    ap.add_argument("--screenshot", action="store_true",
+                    help="fixed build string and ELF hash, a device-like network name, no '(mock)' in the console")
+    ap.add_argument("--supply-v", type=float, default=0.0,
+                    help="voltage of the 12 V input after the diode (0 = powered from USB, batteryV = null)")
+    ap.add_argument("--password-stdin", action="store_true",
+                    help="read the password from the first line of standard input (not visible in the process list)")
     ap.add_argument("--speed", type=float, default=1.0, help="capture replay speed (1 = real time)")
     ap.add_argument("--no-loop", action="store_true", help="do not loop the capture")
     ap.add_argument("--verbose", action="store_true", help="print HTTP requests")
     args = ap.parse_args()
     if args.speed <= 0:
         ap.error("--speed must be positive")
+    if args.password_stdin:
+        args.password = sys.stdin.readline().strip()
     if args.password is None:
         alphabet = string.ascii_letters + string.digits
         args.password = "".join(secrets.choice(alphabet) for _ in range(12))

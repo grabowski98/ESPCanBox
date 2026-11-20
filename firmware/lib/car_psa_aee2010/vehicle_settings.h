@@ -81,7 +81,7 @@ enum class Refuse : uint8_t {
     STALE_260,             // 260 older than FRESH_260_MS
     BAD_LEN_260,           // length other than 7
     INVALID_260,           // 2.2 = 0 or byte 7 != 0 or bits 6.1-6.0 != 0 (a state never seen in recordings)
-    NO_STATE,              // button item (1A9): no fresh state frame 227 from the bus
+    NO_STATE,              // button item (1A9): no fresh state frame (126 / 227) from the bus, or ignition just on
 };
 const char* refuseName(Refuse r);     // short console text, no Polish diacritics
 
@@ -106,18 +106,44 @@ bool accepted(const RawFrame& f260, uint8_t id, uint8_t value);
 // Two items of the radio screen have no field in 15B: in the car they are toggled by "pressing a screen button",
 // i.e. ONE frame 1A9 with one bit. The frame TOGGLES the state (does not set it), so before sending
 // the state from the bus must be known, and nothing is sent when the car already has what the radio wants. No repetitions.
-//   80 05 parking sensors:     1A9 = 00 7F FF 04 FF 00 10 00, state 227 byte 1 bit 6
-//         (measurement: Simple Soft box recording from 2026-11-10, 4 presses and 4 reactions of the car);
+//   80 05 parking sensors:     1A9 = 00 7F FF 04 FF 00 10 00, state 126 byte 1 bits 4-3 (sound and visual
+//         inhibition, PSA-RE PARKING_AID_COMMAND): 18 = off, 00 = on (measurement: Simple Soft box recording from
+//         2026-11-10, 4 presses and 4 reactions of the car; 126 stayed 18 through ignition off and on, 19.11.2026).
+//         Until 2.0.0-beta.1 the state came from 227 byte 1 bit 6 (button LED), which shows a wrong value for
+//         about 95 ms after ignition on and has a 3 s lamp test (centralka_can_20261119_150048.log 487.68 s);
 //   80 0C blind spot:          1A9 = 00 7F FF 20 FF 00 10 00, state 227 byte 3 bit 0 (same recording).
+// For both items there is no state during the first IGNITION_SETTLE_MS after the ignition comes on (refusal
+// NO_STATE, nothing sent): the lamp test of 227 lasts 3.0 s.
 // 80 0D (Start/Stop) is NOT a button item: no 1A9 content for it was ever recorded on this car (Kind::NO_FRAME).
 // Its state (3E1 byte 4) is only read for the radio screen (psa::decodeSettings).
-// The "state" is computed the same way as this item in the radio data (psa::decodeSettings, psa_signals.h), so the value
-// from the radio command is compared with it directly.
+// Value 1 = the same polarity as the radio data (psa::decodeSettings, psa_signals.h; for 05: 1 = sensors off,
+// LED lit), so the value from the radio command is compared with it directly. What the radio is told for 05
+// still comes from 227 (unchanged).
 const uint32_t ID_BUTTONS = 0x1A9;
 const uint32_t FRESH_227_MS = 1500;   // 227 every 500 ms
+const uint32_t FRESH_126_MS = 1500;   // 126 every 500 ms
+const uint32_t IGNITION_SETTLE_MS = 3500;   // after ignition on: 227 lamp test 3.0 s plus a margin
 bool isButton(uint8_t id);            // item of Kind::KNOWN_BLOCKED
-// State of a button item from frame 227. false = no fresh frame from the bus (a pasted one does not count).
+// The ignition came on (or the first 0F6 with ignition on after startup or after a 2 s gap) less than
+// IGNITION_SETTLE_MS ago. false when no such moment was seen.
+bool ignitionJustOn(const CarState& car, uint32_t nowMs);
+// Blind spot (0C) LED 227 byte 3 bit 0 is cleared about 40 ms after reverse is engaged and returns about 40 ms
+// after it is released (measured, can_20261111_151209.log, all 20 reverse cycles, e.g. 504.224 -> 504.265 s and
+// 508.174 -> 508.215 s). So item 0C has no state while the last 0F6 shows reverse, and for
+// REVERSE_SETTLE_MS after reverse was released.
+const uint32_t REVERSE_SETTLE_MS = 500;     // after reverse released: 40 ms measured plus a margin
+bool reverseMasksBlindSpot(const CarState& car, uint32_t nowMs);
+// Parking sensors state from 126 byte 1 (bits 4-3): 18 -> 1 (off), 00 -> 0 (on), anything else -> false.
+bool parkingInhibited(uint8_t byte1, uint8_t& value);
+// State of a button item: 05 from frame 126, 0C from frame 227. false = no fresh frame from the bus (a pasted
+// one does not count), a value of 126 other than 00 / 18, or the first IGNITION_SETTLE_MS after ignition on;
+// for 0C also reverse engaged or released less than REVERSE_SETTLE_MS ago (reverseMasksBlindSpot).
 bool buttonState(const CarState& car, uint32_t nowMs, uint8_t id, uint8_t& value);
+// Release frame after a press (CAN_TX_1A9_RELEASE=1): 20 7F FF 00 FF 00 50 00, no button bit. Measured: the
+// box's periodic 1A9 with ignition on (every ~204 ms, can_20261110_190421.log); a press replaced one periodic
+// frame and the next periodic frame followed it. The box sent no separate release. Whether a press without a
+// following byte-4 = 00 frame causes a later unwanted toggle is a hypothesis, not measured.
+void releaseFrame(uint8_t out[8]);
 // Bytes of frame 1A9 for a button item. Refusals: UNKNOWN_ID, FIXED_REFUSE (the item is not
 // a button), DISABLED_BY_MASK, BAD_VALUE, NO_STATE. On refusal 'out' is zeroed.
 Refuse buildButton(const CarState& car, uint32_t nowMs, uint8_t id, uint8_t value, uint32_t enabledMask,

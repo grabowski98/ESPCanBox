@@ -164,7 +164,7 @@ read from the bus before a press, and nothing is sent when the car already has t
 
 | Radio command | Item | `1A9` content | State read from | Recorded from the aftermarket box | Sent by this device (single frame) |
 |---|---|---|---|---|---|
-| `80 05 v` | parking sensors on / off | `00 7F FF 04 FF 00 10 00` | `227` 1.6 (LED "sensors off") | measured: 4 presses, 4 reactions (`can_20261110_190421.log`) | measured: **accepted both ways**; `227` changed after 286 ms and 236 ms, `0E1` state went 6 -> 2 -> 6 |
+| `80 05 v` | parking sensors on / off | `00 7F FF 04 FF 00 10 00` | `126` 1.4-1.3 (`18` = off, `00` = on); until 2.0.0-beta.1 `227` 1.6 (LED "sensors off") | measured: 4 presses, 4 reactions (`can_20261110_190421.log`) | measured: **accepted both ways**; `227` changed after 286 ms and 236 ms, `0E1` state went 6 -> 2 -> 6 |
 | `80 0C v` | blind spot monitoring | `00 7F FF 20 FF 00 10 00` | `227` 3.0 | measured: 4 presses, 4 reactions (`can_20261110_190421.log`) | measured: switching **off accepted** (76 ms); switching on 1.2 s later **not accepted** (no change in `227` for 2.5 s). One trial, cause not known |
 
 Stop and Start (`80 0D`) is not a button item: a single `1A9` `00 7F FF 00 FF 00 90 00` (bit 7.7,
@@ -172,11 +172,24 @@ from public descriptions, never recorded on this car) was **not accepted** (two 
 unchanged), and the firmware no longer has this content: it refuses `80 0D` (no known frame).
 
 The aftermarket box sent `1A9` every 204 ms in the background. The device sends only the single
-press frame. The device results come from the console of an earlier transmit build of this
+press frame; a build with `-DCAN_TX_1A9_RELEASE=1` adds one release frame `20 7F FF 00 FF 00 50 00`
+after an acknowledged press. That is the box's periodic `1A9` with ignition on (4189 frames in
+`can_20261110_190421.log`): the box sent no separate release, a press replaced one periodic frame
+(e.g. 1207.859 s) and the next periodic frame followed it (1208.066 s). `00 7F FF 00 FF 00 10 00`
+was seen only with ignition `80` and once at box start-up; it is never sent. Whether a press without
+a following byte-4 = `00` frame causes a later toggle is a hypothesis, not measured.
+
+The parking sensors state comes from `126` byte 1 (sound and visual inhibition): it stayed `18`
+through ignition off and on, while `227` 1.6 showed the value from before the ignition for about
+95 ms after ignition on and the `227` lamp test lasts 3.0 s (`centralka_can_20261119_150048.log`
+487.68 s). The firmware refuses both button items during the first 3.5 s after ignition on. The device results come from the console of an earlier transmit build of this
 firmware in the car (log not published).
 
 Bit `227` 3.0 toggles with the blind spot button and also clears in reverse and after engine off;
-its exact meaning on this car is not determined.
+its exact meaning on this car is not determined. In reverse it clears about 40 ms after the gear is
+engaged and returns about 40 ms after it is released (`can_20261111_151209.log`, all 20 reverse cycles),
+so the firmware treats the blind spot state as unknown (`80 0C` refused, nothing sent) while reverse is
+engaged and for 500 ms after it is released.
 
 > [!CAUTION]
 > **Not in the default transmit build**

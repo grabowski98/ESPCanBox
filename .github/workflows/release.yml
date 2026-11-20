@@ -1,9 +1,10 @@
 # Release images, built ONLY here in CI (a local build carries paths of the build machine).
 #
-# BEFORE THE FIRST RELEASE: the tree has never been flashed to a device. Run the bench test protocol
-# (docs/en/testing/bench-test-protocol.md) on a bench board with an image from this workflow (manual run,
-# bench_tested = false), and push a version tag only after it passed and CHANGELOG.md no longer says
-# "not yet bench-tested". Until then the images are named ...-NOT-BENCH-TESTED.
+# BEFORE A VERSION TAG: run the bench test protocol (docs/en/testing/bench-test-protocol.md) on a bench
+# board with an image from this workflow (manual run, bench_tested = false), and push a version tag only
+# after it passed and CHANGELOG.md does not say "not yet bench-tested". Images of a manual run without
+# bench_tested are named ...-NOT-BENCH-TESTED. Release 2.0.0 was bench-tested on an ESP32-S3-WROOM-1-N16R8
+# board and tried in one car (CHANGELOG.md, section 2.0.0).
 #
 # What it does:
 #   1. tools/release_check.sh (all checks; builds the six environments with -ffile-prefix-map, so the
@@ -13,11 +14,16 @@
 #      merged image written at address 0 (tools/merge_image.py, for ESP Web Tools or one esptool command).
 #      decoder_tx_wifi is built only so check_no_can_tx.sh can confirm it is the one program with
 #      twai_transmit; it is never packed. Whoever wants to transmit builds it on purpose (docs, safety).
-#   3. checks dist/ (no transmit image, private data scan of the binaries) and uploads it as a workflow
-#      artifact with SHA256SUMS. Publishing a GitHub release from it is a manual step of the owner.
+#      dist/licenses/ gets LICENSE, LICENSE-docs, LICENSE-hardware, NOTICE, LICENSES/LGPL-2.1.txt,
+#      LICENSES/THIRD-PARTY.md (with the repository, ref, commit and package versions of this build
+#      appended) and LICENSES/third-party/ (licence texts of the third-party parts in the images).
+#   3. checks dist/ (no transmit image, private data scan of the binaries), then adds the source archive of
+#      the exact Arduino core for ESP32 tag (LGPL-2.1 section 6(d)) as dist/source-arduino-esp32-<version>.tar.gz
+#      and uploads dist/ as a workflow artifact with SHA256SUMS. Publishing a GitHub release from it is a
+#      manual step of the owner (attach every file of the artifact, including licenses/ and the source archive).
 #
 # Runs by hand (Actions -> Release -> Run workflow) or on a version tag v<FW_VERSION> (v<x.y.z>, or a
-# pre-release such as v2.0.0-beta.1; both match the trigger "v*.*.*") that must match FW_VERSION in
+# pre-release such as v2.0.0-rc.1; both match the trigger "v*.*.*") that must match FW_VERSION in
 # firmware/src/version.h. No secrets; read-only token.
 name: Release
 
@@ -45,6 +51,8 @@ jobs:
       PYTHON: python
       PYTHONDONTWRITEBYTECODE: "1"
       RELEASE_ENVS: listen decoder listen_wifi decoder_wifi listen_generic_wifi
+      # Arduino core version named in LICENSES/THIRD-PARTY.md; the build stops when another one was installed.
+      ARDUINO_ESP32_VERSION: "3.3.12"
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -104,13 +112,78 @@ jobs:
           done
           rm -f ../dist/meta.json
 
+      # Licence texts and the source note go with every archive: the images are linked with the
+      # Arduino core for ESP32 (LGPL-2.1-or-later), whose section 6 asks for the licence text and
+      # for access to the source needed to relink (NOTICE, LICENSES/THIRD-PARTY.md). The ESP-IDF parts
+      # (BSD, MIT, Apache-2.0 ...) ask for their copyright notices and licence texts: LICENSES/third-party/.
+      # A subfolder, so the "*tx*" name check below sees only "licenses" (the .txt files would match).
+      - name: Pack licences and source note
+        run: |
+          mkdir -p dist/licenses
+          cp LICENSE LICENSE-docs LICENSE-hardware NOTICE LICENSES/LGPL-2.1.txt LICENSES/THIRD-PARTY.md dist/licenses/
+          cp -R LICENSES/third-party dist/licenses/
+          # The packages PlatformIO really installed (the platform asks for the framework by range).
+          pkgs="${PLATFORMIO_CORE_DIR:-${HOME}/.platformio}/packages"
+          core=$(sed -n 's/^version=//p' "${pkgs}/framework-arduinoespressif32/platform.txt" | tr -d '\r')
+          if [ "$core" != "${ARDUINO_ESP32_VERSION}" ]; then
+            echo "Arduino core ${core} installed, LICENSES/THIRD-PARTY.md names ${ARDUINO_ESP32_VERSION}: update both"
+            exit 1
+          fi
+          pkgver() { python -I -c 'import json, sys; print(json.load(open(sys.argv[1]))["version"])' "${pkgs}/$1/package.json"; }
+          {
+            echo
+            echo "- Repository: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}"
+            echo "- Tag or branch: ${GITHUB_REF_NAME}"
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Source of this commit: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/tree/${GITHUB_SHA}"
+            echo "- Firmware version: ${FW_VERSION}${NAME_SUFFIX}"
+            echo "- PlatformIO packages used: framework-arduinoespressif32 $(pkgver framework-arduinoespressif32)," \
+              "framework-arduinoespressif32-esp32s3-libs $(pkgver framework-arduinoespressif32-esp32s3-libs)," \
+              "toolchain-xtensa-esp-elf $(pkgver toolchain-xtensa-esp-elf)"
+            echo "- Source of the Arduino core for ESP32 next to the images: source-arduino-esp32-${core}.tar.gz"
+          } >> dist/licenses/THIRD-PARTY.md
+
       - name: Check dist
         run: |
           for f in dist/*; do
             case "${f#dist/}" in *tx*) echo "a transmit image in dist/: $f"; exit 1 ;; esac
           done
           python -I tools/scan_private.py dist
+          # scan_private.py looks for Windows profile paths only: also refuse runner paths that
+          # -ffile-prefix-map (step "Version and build flags") should have replaced.
+          if grep -a -l -F -e "${GITHUB_WORKSPACE}" -e "${HOME}/" dist/*.bin; then
+            echo "a runner path (${GITHUB_WORKSPACE} or ${HOME}/) is inside an image above"
+            exit 1
+          fi
           (cd dist && sha256sum ./*.bin > SHA256SUMS)
+          cat dist/SHA256SUMS
+
+      # LGPL-2.1 section 6(d): the source of the library offered from the same place as the images. The
+      # archive of the exact tag, checked against the core PlatformIO installed (only core_version.h is
+      # generated by the package). After "Check dist": the upstream archive is not scanned for private
+      # data of this project, but the "*tx*" name check runs again.
+      - name: Add the source of the Arduino core
+        run: |
+          name="source-arduino-esp32-${ARDUINO_ESP32_VERSION}.tar.gz"
+          curl --fail --location --silent --show-error --retry 3 --output "dist/${name}" \
+            "https://github.com/espressif/arduino-esp32/archive/refs/tags/${ARDUINO_ESP32_VERSION}.tar.gz"
+          [ -s "dist/${name}" ] || { echo "dist/${name} is empty"; exit 1; }
+          gzip -t "dist/${name}"
+          src=$(mktemp -d)
+          tar -xzf "dist/${name}" -C "$src"
+          top="${src}/arduino-esp32-${ARDUINO_ESP32_VERSION}"
+          [ -s "${top}/cores/esp32/Arduino.h" ] || { echo "no cores/esp32/Arduino.h in dist/${name}"; exit 1; }
+          pkg="${PLATFORMIO_CORE_DIR:-${HOME}/.platformio}/packages/framework-arduinoespressif32"
+          diff -r -x core_version.h "${top}/cores" "${pkg}/cores"
+          for lib in WiFi Network ESPmDNS Preferences; do
+            diff -r "${top}/libraries/${lib}" "${pkg}/libraries/${lib}"
+          done
+          rm -rf "$src"
+          for f in dist/*; do
+            case "${f#dist/}" in *tx*) echo "a transmit image in dist/: $f"; exit 1 ;; esac
+          done
+          (cd dist && sha256sum "./${name}" >> SHA256SUMS)
+          ls -l dist
           cat dist/SHA256SUMS
 
       - name: Upload images
