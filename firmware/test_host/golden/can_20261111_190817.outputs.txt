@@ -1,0 +1,10 @@
+94548 magistrala=1
+95548 magistrala=0
+187364 magistrala=1
+190284 magistrala=0
+192479 magistrala=1
+205830 acc=1
+205830 acc_siec=1
+332850 magistrala=0
+335200 acc=0
+335200 acc_siec=0

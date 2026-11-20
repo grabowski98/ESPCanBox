@@ -1,0 +1,259 @@
+# Documentation site: MkDocs + Material + mkdocs-static-i18n (folder layout).
+#
+# Build (from the repository root, nothing is published):
+#   uvx --from mkdocs-material==9.8.1 --with mkdocs-static-i18n==1.3.1 mkdocs build --strict
+# Preview on this computer:
+#   uvx --from mkdocs-material==9.8.1 --with mkdocs-static-i18n==1.3.1 mkdocs serve
+# Dead relative links and anchors, offline and without MkDocs:
+#   python -I tools/check_doc_links.py
+#
+# Layout: docs/en/ is the source. Translations go to docs/<lang>/ with the same file names;
+# a page missing in a translation falls back to the English one. Writing rules: docs/STYLE.md.
+
+# site_name = "project_name" in project.json (the only source of the name; tools/set_project_name.py
+# --dry-run lists this line for review when the name changes).
+site_name: ESPCanBox
+site_description: Open ESP32-S3 platform that replaces the CAN interface box between a car and an Android radio.
+site_author: grabowski98
+# Licences are provisional until the first public release.
+copyright: "Text: CC BY 4.0. Code: Apache-2.0. Hardware: CERN-OHL-S-2.0. Not affiliated with any car or radio maker."
+
+docs_dir: docs
+site_dir: site
+# The style guide is for writers, it is not a page of the site.
+exclude_docs: |
+  STYLE.md
+  _hooks/
+
+hooks:
+  - docs/_hooks/alert_titles.py
+
+theme:
+  name: material
+  language: en
+  # Icon of the project (connector housing) in the header, and the tab icon. Brand rules:
+  # docs/en/contributing/brand.md. The header keeps the display colours of the logo in both schemes.
+  logo: assets/brand/icon.svg
+  favicon: assets/brand/icon-dark-32.png
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - content.code.copy
+  palette:
+    # First entry = follow the system setting (also after a later change of the system theme);
+    # the button then switches to a fixed light or dark scheme.
+    - media: "(prefers-color-scheme)"
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-auto
+        name: Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Follow the system setting
+
+# Colours of the logo for the header and the links (contrast figures are in the file).
+extra_css:
+  - assets/brand/site.css
+
+# Boxes use the GitHub alert syntax ("> [!NOTE]", "> [!TIP]", "> [!WARNING]", "> [!CAUTION]") and
+# collapsible boxes use <details markdown="1">, so the same files render on GitHub and on this site
+# (docs/STYLE.md, "Boxes"). pymdownx.quotes turns the alerts into Material admonitions; md_in_html
+# parses Markdown inside <details>; the hook moves the bold first line into the box title.
+markdown_extensions:
+  - attr_list
+  - tables
+  - md_in_html
+  - pymdownx.quotes:
+      callouts: true
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+      # Unicode-aware heading ids (also for ru/uk); tools/check_doc_links.py uses the same rule.
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+
+plugins:
+  - search
+  - i18n:
+      docs_structure: folder
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        # Translations in docs/<locale>/; a page missing there falls back to English (fallback_to_default).
+        # nav_translations: the section titles of "nav:" below; page titles come from the first heading
+        # of the translated page. tools/check_translations.py checks the translated pages.
+        - locale: pl
+          name: Polski
+          build: true
+          nav_translations:
+            Overview: Przegląd
+            Getting started: Pierwsze kroki
+            Quick start: Szybki start
+            Hardware: Sprzęt
+            Install in the car: Montaż w aucie
+            Make it yours: Dostosuj do siebie
+            Reference: Informacje techniczne
+            Vehicles: Samochody
+            Safety: Bezpieczeństwo
+            Testing: Testy
+            Troubleshooting: Rozwiązywanie problemów
+            Case studies: Studia przypadków
+            Contributing: Współtworzenie
+        - locale: de
+          name: Deutsch
+          build: true
+          nav_translations:
+            Overview: Überblick
+            Getting started: Erste Schritte
+            Quick start: Schnellstart
+            Install in the car: Einbau im Auto
+            Make it yours: Für Ihr Auto anpassen
+            Reference: Referenz
+            Vehicles: Fahrzeuge
+            Safety: Sicherheit
+            Testing: Tests
+            Troubleshooting: Fehlersuche
+            Case studies: Fallstudien
+            Contributing: Mitwirken
+        - locale: es
+          name: Español
+          build: true
+          nav_translations:
+            Overview: Presentación
+            Getting started: Primeros pasos
+            Quick start: Inicio rápido
+            Install in the car: Instalación en el coche
+            Make it yours: Adáptalo a tu coche
+            Reference: Referencia
+            Vehicles: Vehículos
+            Safety: Seguridad
+            Testing: Pruebas
+            Troubleshooting: Solución de problemas
+            Case studies: Casos prácticos
+            Contributing: Contribuir
+        - locale: ru
+          name: Русский
+          build: true
+          nav_translations:
+            Overview: Обзор
+            Getting started: Начало работы
+            Quick start: Быстрый старт
+            Hardware: Оборудование
+            Install in the car: Установка в автомобиль
+            Make it yours: Под свой автомобиль
+            Reference: Справочник
+            Vehicles: Автомобили
+            Safety: Безопасность
+            Testing: Тестирование
+            Troubleshooting: Устранение неполадок
+            Case studies: Разбор случаев
+            Contributing: Участие в проекте
+        - locale: uk
+          name: Українська
+          build: true
+          nav_translations:
+            Overview: Огляд
+            Getting started: Початок роботи
+            Quick start: Швидкий старт
+            Hardware: Обладнання
+            Install in the car: Встановлення в автомобіль
+            Make it yours: Під свій автомобіль
+            Reference: Довідник
+            Vehicles: Автомобілі
+            Safety: Безпека
+            Testing: Тестування
+            Troubleshooting: Усунення несправностей
+            Case studies: Розбір випадків
+            Contributing: Участь у проєкті
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+# Paths are relative to docs/<locale>/.
+nav:
+  - Overview: index.md
+  - Getting started:
+      - getting-started/safety.md
+      - getting-started/how-it-works.md
+      - getting-started/requirements.md
+  - Quick start:
+      - quick-start/flash.md
+      - quick-start/first-boot.md
+      - quick-start/bench-test.md
+  - Hardware:
+      - hardware/overview.md
+      - hardware/bom.md
+      - hardware/schematic.md
+      - hardware/prototype-pcb.md
+      - hardware/enclosure.md
+      - hardware/wiring.md
+      - hardware/future-boards.md
+  - Install in the car:
+      - install-in-car/checklist.md
+      - install-in-car/power-and-acc.md
+      - install-in-car/can-connection.md
+      - install-in-car/radio-connection.md
+      - install-in-car/first-drive.md
+  - Make it yours:
+      - make-it-yours/porting-checklist.md
+      - make-it-yours/find-your-bus.md
+      - make-it-yours/record.md
+      - make-it-yours/decode.md
+      - make-it-yours/write-a-profile.md
+      - make-it-yours/test-your-profile.md
+      - make-it-yours/radio-mapping.md
+      - make-it-yours/contribute.md
+  - Reference:
+      - reference/xp-protocol.md
+      - Vehicles:
+          - reference/vehicles/peugeot-508.md
+      - reference/console.md
+      - reference/panel-api.md
+      - reference/panel-guide.md
+      - reference/settings.md
+      - reference/config-and-pins.md
+      - reference/architecture.md
+      - reference/versioning.md
+  - Safety:
+      - safety/transmit.md
+      - safety/security.md
+  - Testing:
+      - testing/host-tests.md
+      - testing/golden-files.md
+      - testing/captures.md
+      - testing/ci.md
+      - testing/bench-test-protocol.md
+  - Troubleshooting:
+      - troubleshooting/index.md
+      - troubleshooting/faq.md
+  - Case studies:
+      - case-studies/parking-tone-bug.md
+      - case-studies/inside-a-can-box.md
+  - Contributing:
+      - contributing/translations.md
+      - contributing/glossary.md
+      - contributing/brand.md

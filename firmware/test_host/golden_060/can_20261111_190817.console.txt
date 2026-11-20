@@ -1,0 +1,48 @@
+187428 [park] rear=6 front=6 sound=0 rear interval=0x3F zones rear 777 front 777
+205830 [car] acc=1
+224777 [key] code=14 state=1
+224977 [key] code=14 state=0
+226037 [key] code=14 state=1
+226237 [key] code=14 state=0
+229530 [key] code=15 state=1
+229730 [key] code=15 state=0
+230937 [key] code=15 state=1
+231137 [key] code=15 state=0
+235262 [key] code=16 state=1
+235462 [key] code=16 state=0
+238430 [key] code=16 state=1
+238630 [key] code=16 state=0
+241231 [key] code=21 state=1 -> to radio 1F state=1
+241431 [key] code=21 state=2 -> to radio 1F state=2
+241631 [key] code=21 state=0 -> to radio 1F state=0
+246480 [key] code=17 state=1
+249755 [key] code=18 state=1
+261205 [key] code=50 state=1
+261405 [key] code=50 state=0
+265831 [key] code=07 state=1
+266031 [key] code=07 state=0
+273993 [key] code=30 state=1
+274193 [key] code=30 state=2
+274393 [key] code=30 state=2
+274593 [key] code=30 state=2
+274793 [key] code=30 state=2
+274993 [key] code=30 state=2
+275193 [key] code=30 state=2
+275393 [key] code=30 state=2
+275593 [key] code=30 state=2
+275793 [key] code=30 state=2
+275993 [key] code=30 state=2
+276193 [key] code=30 state=2
+276393 [key] code=30 state=2
+276593 [key] code=30 state=2
+276793 [key] code=30 state=2
+276993 [key] code=30 state=0
+280700 [key] code=23 state=1
+280900 [key] code=23 state=0
+283300 [key] code=23 state=1
+283500 [key] code=23 state=0
+286000 [key] code=23 state=1
+286200 [key] code=23 state=0
+289349 [key] code=23 state=1
+289549 [key] code=23 state=0
+335200 [car] acc=0

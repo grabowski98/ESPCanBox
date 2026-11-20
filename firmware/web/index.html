@@ -1,0 +1,331 @@
+<!doctype html>
+<!-- Service panel of the device. tools/embed_web.py inserts app.css, app.js, the dictionaries web/i18n/*.json
+     and the vehicle profile web/profiles/*.json in place of the tags below and packs everything into the firmware.
+     Rules: one script, no on...= attributes (the CSP header blocks them), no external resources (the panel
+     works without internet). Texts: elements carry data-i18n / data-i18n-title / data-i18n-placeholder /
+     data-i18n-aria keys and stay empty here; app.js fills them from the dictionary (web/i18n/README.md). -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>{{PROJECT_NAME}}</title>
+<!-- Tab icon: docs/assets/brand/icon-dark-32.png as a data: address (CSP img-src data:), so no request leaves the page. -->
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAe0lEQVR4nGPk4xf4zzCAgGkgLR91AAiwkBpkSzab4ZWP8T01GgVDKxcwopcDhOKYUoCeRpgYBksILKGxz3GFBBPDAAMmXBJlebfAmFbiBB1AL8DEMNIdwDiaCxgGGDANWgeUjZYDIyUNMI74coBxtEXEN9o3HGAw4OUAAJa6NlD8O0lFAAAAAElFTkSuQmCC">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="12" width="8" height="9" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></symbol>
+  <symbol id="i-car" viewBox="0 0 24 24"><path d="M4 16v-3l2-5a2 2 0 0 1 2-1h8a2 2 0 0 1 2 1l2 5v3"/><path d="M3 16h18v2H3z"/><circle cx="7.5" cy="13.5" r="1"/><circle cx="16.5" cy="13.5" r="1"/></symbol>
+  <symbol id="i-park" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2"/><path d="M10 8a6 6 0 0 1 0 8"/><path d="M14 5a10 10 0 0 1 0 14"/><path d="M18 3a13 13 0 0 1 0 18"/></symbol>
+  <symbol id="i-radio" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="12" rx="2"/><circle cx="8" cy="13" r="2.5"/><path d="M14 11h4M14 15h4M7 7l9-4"/></symbol>
+  <symbol id="i-bus" viewBox="0 0 24 24"><path d="M3 8h18M3 16h18"/><circle cx="8" cy="8" r="2"/><circle cx="16" cy="16" r="2"/><path d="M8 10v3M16 14v-3"/></symbol>
+  <symbol id="i-term" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12 15h5"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="10" y="10" width="4" height="4"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-6"/><circle cx="12" cy="17" r="1"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M3 9a13 13 0 0 1 18 0"/><path d="M6 12.5a9 9 0 0 1 12 0"/><path d="M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19" r="1"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M12 4v10M8 10l4 4 4-4"/><path d="M4 16v3h16v-3"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 15V5M8 9l4-4 4 4"/><path d="M4 15v4h16v-4"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h14M14 4l4 4-4 4"/><path d="M20 16H6M10 12l-4 4 4 4"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M4 9h6l2 6h8"/><path d="M4 15h3M17 9h3"/><circle cx="4" cy="9" r="1"/><circle cx="20" cy="15" r="1"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="3"/><path d="M9 12h6M12 9v6"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 12 2-6h6"/></symbol>
+</svg>
+<header class="top"><div class="top-in">
+  <div class="brand"><span id="conn" class="dot ok" data-i18n-title="app.conn_title"></span>
+    <!-- Project icon (connector housing): docs/assets/brand/panel-header-icon.svg in the text colour, pin holes cut out. -->
+    <svg class="mark" viewBox="0 0 24 24" shape-rendering="crispEdges" aria-hidden="true"><path fill-rule="evenodd" d="M5 21L5 20L4 20L4 7L5 7L5 6L9 6L9 3L15 3L15 6L19 6L19 7L20 7L20 20L19 20L19 21ZM8 18L7 18L7 15L8 15ZM10 9L11 9L11 12L10 12ZM14 12L13 12L13 9L14 9ZM10 15L11 15L11 18L10 18ZM17 12L16 12L16 9L17 9ZM17 18L16 18L16 15L17 15ZM14 18L13 18L13 15L14 15ZM8 12L7 12L7 9L8 9Z"/></svg><b>{{PROJECT_NAME}}</b></div>
+  <div class="badges">
+    <span class="badge" id="badge-ver">v—</span>
+    <span class="badge" id="badge-mode" data-i18n="app.mode_unknown"></span>
+    <span class="badge listen" id="badge-can" data-i18n="app.listen_badge"></span>
+  </div>
+</div></header>
+<div id="banner" class="banner" hidden></div>
+
+<section id="login" class="login" hidden>
+  <form id="login-form" class="card narrow" autocomplete="off">
+    <h1 data-i18n="login.title"></h1>
+    <p class="muted" id="login-info">—</p>
+    <label for="login-pw" data-i18n="login.password_label"></label>
+    <input id="login-pw" type="password" autocomplete="current-password" required>
+    <label class="check"><input type="checkbox" id="login-remember"> <span data-i18n="login.remember"></span></label>
+    <p class="muted small" data-i18n="login.remember_note"></p>
+    <button class="btn primary" type="submit" data-i18n="login.submit"></button>
+    <p id="login-msg" class="msg"></p>
+    <p class="muted small" data-i18n="login.forgot"></p>
+    <div class="langpick">
+      <label for="login-lang" data-i18n="lang.label"></label>
+      <select id="login-lang" class="lang-select"></select>
+    </div>
+  </form>
+</section>
+
+<main id="app" hidden>
+  <!-- ===== Dashboard ===== -->
+  <section id="tab-pulpit" class="tabpane">
+    <div class="grid dash">
+      <div class="card car-card">
+        <h2><svg class="ic g-car" aria-hidden="true"><use href="#i-car"/></svg><span data-i18n="car.title"></span> <span class="dot" id="can-state" data-i18n-title="car.bus_title"></span></h2>
+        <div class="chips">
+          <span class="chip" id="chip-ign" data-i18n="car.chip.ign"></span>
+          <span class="chip" id="chip-acc" data-i18n="car.chip.acc"></span>
+          <span class="chip" id="chip-rev" data-i18n="car.chip.reverse"></span>
+          <span class="chip" id="chip-lights" data-i18n="car.chip.lights"></span>
+        </div>
+        <svg class="car" viewBox="0 0 200 340" role="img" data-i18n-aria="car.svg_label">
+          <rect id="zf0" class="zone off" x="48" y="6" width="34" height="22" rx="6"/>
+          <rect id="zf1" class="zone off" x="84" y="2" width="32" height="22" rx="6"/>
+          <rect id="zf2" class="zone off" x="118" y="6" width="34" height="22" rx="6"/>
+          <rect class="body" x="52" y="36" width="96" height="268" rx="34"/>
+          <path class="glass" d="M66 96 Q100 80 134 96 L128 128 Q100 120 72 128 Z"/>
+          <path class="glass" d="M72 238 Q100 246 128 238 L132 262 Q100 272 68 262 Z"/>
+          <rect class="roof" x="72" y="132" width="56" height="102" rx="10"/>
+          <rect id="d40" class="door" x="44" y="112" width="8" height="58" rx="3"/>
+          <rect id="d80" class="door" x="148" y="112" width="8" height="58" rx="3"/>
+          <rect id="d10" class="door" x="44" y="176" width="8" height="56" rx="3"/>
+          <rect id="d20" class="door" x="148" y="176" width="8" height="56" rx="3"/>
+          <rect id="d08" class="door" x="72" y="296" width="56" height="8" rx="3"/>
+          <rect id="zr0" class="zone off" x="48" y="312" width="34" height="22" rx="6"/>
+          <rect id="zr1" class="zone off" x="84" y="316" width="32" height="22" rx="6"/>
+          <rect id="zr2" class="zone off" x="118" y="312" width="34" height="22" rx="6"/>
+          <text class="lbl" x="100" y="58" data-i18n="car.front"></text>
+          <text class="lbl" x="100" y="290" data-i18n="car.rear"></text>
+        </svg>
+        <p class="muted small legend"><span class="sw z0"></span><span data-i18n="car.legend.very_close"></span> <span class="sw z3"></span><span data-i18n="car.legend.close"></span> <span class="sw z5"></span><span data-i18n="car.legend.far"></span> <span class="sw door-open"></span><span data-i18n="car.legend.open"></span></p>
+        <dl class="kv" id="kv-car"></dl>
+      </div>
+      <div class="card">
+        <h2><svg class="ic g-park" aria-hidden="true"><use href="#i-park"/></svg><span data-i18n="park.title"></span> <span class="tag warn" id="park-stale" hidden data-i18n="park.stale"></span></h2>
+        <dl class="kv" id="kv-park"></dl>
+        <label for="vol-range"><span data-i18n="park.volume_label"></span> <b id="vol-val">—</b></label>
+        <input id="vol-range" class="range" type="range" min="0" max="80" step="1" value="0">
+        <div class="toolbar">
+          <button class="btn ghost small" id="btn-test" type="button" data-i18n="park.test_beep"></button>
+        </div>
+        <p class="muted small" data-i18n="park.volume_note"></p>
+      </div>
+      <div class="card">
+        <h2><svg class="ic g-radio" aria-hidden="true"><use href="#i-radio"/></svg><span data-i18n="radio.title"></span></h2>
+        <dl class="kv" id="kv-radio-dash"></dl>
+      </div>
+      <div class="card">
+        <h2><svg class="ic g-can" aria-hidden="true"><use href="#i-bus"/></svg><span data-i18n="can.bus_title"></span></h2>
+        <dl class="kv" id="kv-can"></dl>
+        <div id="cantx-box" hidden>
+          <p class="msg warn" data-i18n="cantx.warning"></p>
+          <div class="toolbar">
+            <button class="btn danger small" id="btn-cantx-on" type="button" data-i18n="cantx.arm"></button>
+            <button class="btn ghost small" id="btn-cantx-off" type="button" data-i18n="cantx.disarm"></button>
+          </div>
+          <p class="muted small" id="cantx-info">—</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CAN ===== -->
+  <section id="tab-can" class="tabpane" hidden>
+    <div class="card">
+      <div class="toolbar">
+        <input id="can-filter" class="hex wide" data-i18n-placeholder="can.filter_placeholder" maxlength="3" data-i18n-aria="can.filter_aria" spellcheck="false">
+        <button class="btn" id="btn-can-pause" type="button"></button>
+        <button class="btn" id="btn-rec" type="button"></button>
+        <button class="btn" id="btn-rec-save" type="button" disabled data-i18n="can.rec.save"></button>
+        <button class="btn ghost" id="btn-trace-dl" type="button" data-i18n="can.trace_dl"></button>
+        <label class="check"><input type="checkbox" id="mask-vin" checked> <span data-i18n="can.mask_vin"></span></label>
+      </div>
+      <p class="muted small"><span id="rec-info"></span> <span data-i18n="can.table_hint"></span> <span id="can-overflow"></span></p>
+    </div>
+    <div class="grid g2 can-pair">
+      <div class="card scroll-x">
+        <h2><svg class="ic g-can" aria-hidden="true"><use href="#i-list"/></svg><span data-i18n="can.table_title"></span></h2>
+        <table class="can">
+          <thead><tr><th data-i18n="can.col.id"></th><th data-i18n="can.col.name"></th><th class="num" data-i18n="can.col.period"></th><th class="num" data-i18n="can.col.count"></th><th class="num" data-i18n="can.col.age"></th><th data-i18n="can.col.data"></th></tr></thead>
+          <tbody id="can-table"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h2><svg class="ic g-can" aria-hidden="true"><use href="#i-pulse"/></svg><span data-i18n="can.live_title"></span></h2>
+        <div id="trace-view" class="mono-view"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Radio ===== -->
+  <section id="tab-radio" class="tabpane" hidden>
+    <div class="grid g3">
+      <div class="card"><h2><svg class="ic g-radio" aria-hidden="true"><use href="#i-radio"/></svg><span data-i18n="radio.from_title"></span></h2><dl class="kv" id="kv-radio"></dl></div>
+      <div class="card"><h2><svg class="ic g-radio" aria-hidden="true"><use href="#i-link"/></svg><span data-i18n="link.title"></span></h2><dl class="kv" id="kv-link"></dl></div>
+      <div class="card">
+        <h2><svg class="ic g-radio" aria-hidden="true"><use href="#i-key"/></svg><span data-i18n="radio.keytest.title"></span></h2>
+        <p class="muted small" data-i18n="radio.keytest.hint"></p>
+        <p class="msg warn" id="key-mode-hint" data-i18n="radio.keytest.mode_hint"></p>
+        <div class="toolbar">
+          <input id="key-code" class="hex" maxlength="2" data-i18n-placeholder="keymap.code_placeholder" data-i18n-aria="radio.keytest.code_aria" spellcheck="false">
+          <button class="btn" id="btn-key" type="button" data-i18n="radio.keytest.press_release"></button>
+          <button class="btn ghost" id="btn-kd" type="button" data-i18n="radio.keytest.press"></button>
+          <button class="btn ghost" id="btn-ku" type="button" data-i18n="radio.keytest.release"></button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2><svg class="ic g-radio" aria-hidden="true"><use href="#i-swap"/></svg><span data-i18n="keymap.title"></span> <span class="tag warn" id="map-dirty" hidden data-i18n="keymap.dirty"></span></h2>
+      <p class="muted small" data-i18n="keymap.hint"></p>
+      <div class="learn">
+        <span><span data-i18n="keymap.last_pressed"></span> <b id="last-key">—</b></span>
+        <button class="btn ghost small" id="btn-learn" type="button" disabled data-i18n="keymap.learn"></button>
+      </div>
+      <div id="map-rows" class="maprows"></div>
+      <div class="toolbar">
+        <button class="btn" id="btn-map-add" type="button" data-i18n="keymap.add"></button>
+        <button class="btn primary" id="btn-map-save" type="button" data-i18n="keymap.save"></button>
+        <button class="btn ghost" id="btn-map-reload" type="button" data-i18n="keymap.revert"></button>
+        <button class="btn ghost" id="btn-map-reset" type="button" data-i18n="keymap.builtin"></button>
+      </div>
+      <dl class="kv">
+        <dt data-i18n="keymap.on_device"></dt><dd id="map-current" class="mono">—</dd>
+        <dt data-i18n="keymap.defaults"></dt><dd id="map-defaults" class="mono">—</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ===== Console ===== -->
+  <section id="tab-konsola" class="tabpane" hidden>
+    <div class="card console">
+      <div class="toolbar">
+        <input id="log-filter" class="wide" data-i18n-placeholder="console.filter_placeholder" data-i18n-aria="console.filter_aria">
+        <button class="btn ghost" id="btn-log-clear" type="button" data-i18n="console.clear"></button>
+      </div>
+      <div id="log-view" class="mono-view tall"></div>
+      <form id="cmd-form" class="toolbar" autocomplete="off">
+        <input id="cmd-line" class="mono wide" maxlength="127" data-i18n-placeholder="console.cmd_placeholder" data-i18n-aria="console.cmd_aria" spellcheck="false" autocapitalize="off">
+        <button class="btn primary" type="submit" data-i18n="console.send"></button>
+      </form>
+      <div class="toolbar">
+        <button class="btn ghost small" type="button" data-cmd="stat">stat</button>
+        <button class="btn ghost small" type="button" data-cmd="radio">radio</button>
+        <button class="btn ghost small" type="button" data-cmd="test">test</button>
+        <button class="btn ghost small" type="button" data-cmd="keys" data-i18n-title="console.keys_title" data-i18n="console.keys_label"></button>
+        <button class="btn ghost small" type="button" data-cmd="ver">ver</button>
+        <button class="btn ghost small" type="button" data-cmd="map">map</button>
+      </div>
+      <p class="muted small" data-i18n="console.note"></p>
+    </div>
+  </section>
+
+  <!-- ===== System ===== -->
+  <section id="tab-system" class="tabpane" hidden>
+    <div class="grid g3">
+      <div class="card"><h2><svg class="ic g-sys" aria-hidden="true"><use href="#i-chip"/></svg><span data-i18n="sys.device_title"></span></h2><dl class="kv" id="kv-sys"></dl></div>
+      <div class="card"><h2><svg class="ic g-sys" aria-hidden="true"><use href="#i-gauge"/></svg><span data-i18n="load.title"></span></h2><dl class="kv" id="kv-load"></dl></div>
+      <div class="card"><h2><svg class="ic g-net" aria-hidden="true"><use href="#i-wifi"/></svg><span data-i18n="wifi.title"></span></h2><dl class="kv" id="kv-wifi"></dl></div>
+    </div>
+    <div class="grid g2">
+      <form class="card" id="sta-form" autocomplete="off">
+        <h2><svg class="ic g-net" aria-hidden="true"><use href="#i-home"/></svg><span data-i18n="sta.title"></span></h2>
+        <p class="msg warn" data-i18n="sta.warning"></p>
+        <label for="sta-ssid" data-i18n="sta.ssid_label"></label>
+        <input id="sta-ssid" maxlength="64" autocomplete="off" spellcheck="false">
+        <label for="sta-pass" data-i18n="sta.pass_label"></label>
+        <input id="sta-pass" type="password" maxlength="64" autocomplete="new-password">
+        <div class="toolbar push">
+          <button class="btn primary" type="submit" data-i18n="sta.save"></button>
+          <button class="btn ghost" id="btn-sta-forget" type="button" data-i18n="sta.forget"></button>
+        </div>
+        <p id="sta-msg" class="msg"></p>
+      </form>
+      <form class="card" id="pw-form" autocomplete="off">
+        <h2><svg class="ic g-net" aria-hidden="true"><use href="#i-lock"/></svg><span data-i18n="pw.title"></span></h2>
+        <label for="pw-old" data-i18n="pw.old"></label>
+        <input id="pw-old" type="password" autocomplete="current-password" required>
+        <label for="pw-new" data-i18n="pw.new"></label>
+        <input id="pw-new" type="password" maxlength="63" autocomplete="new-password" required>
+        <label for="pw-new2" data-i18n="pw.new2"></label>
+        <input id="pw-new2" type="password" maxlength="63" autocomplete="new-password" required>
+        <div class="toolbar push"><button class="btn primary" type="submit" data-i18n="pw.submit"></button></div>
+        <p id="pw-msg" class="msg"></p>
+      </form>
+    </div>
+    <div class="card">
+      <h2><svg class="ic g-fw" aria-hidden="true"><use href="#i-save"/></svg><span data-i18n="sys.backup.title"></span></h2>
+      <p class="muted small" data-i18n="sys.backup.note"></p>
+      <input id="set-file" type="file" accept=".json,application/json" hidden>
+      <div class="toolbar push">
+        <button class="btn ghost" id="btn-set-export" type="button" data-i18n="sys.backup.export"></button>
+        <button class="btn ghost" id="btn-set-import" type="button" data-i18n="sys.backup.import"></button>
+      </div>
+      <p id="set-msg" class="msg"></p>
+    </div>
+    <div class="card">
+      <h2><svg class="ic g-fw" aria-hidden="true"><use href="#i-up"/></svg><span data-i18n="ota.title"></span></h2>
+      <div id="ota-state"></div>
+      <ol class="steps">
+        <li class="step" id="ota-s1">
+          <h3 data-i18n="ota.s1.title"></h3>
+          <p class="small" data-i18n="ota.s1.help"></p>
+          <ul class="small tips"><li data-i18n="ota.s1.own"></li><li data-i18n="ota.s1.release"></li><li data-i18n="ota.s1.not"></li></ul>
+          <label for="ota-file" data-i18n="ota.file_label"></label>
+          <input id="ota-file" type="file" accept=".bin,application/octet-stream">
+        </li>
+        <li class="step" id="ota-s2">
+          <h3 data-i18n="ota.s2.title"></h3>
+          <p class="muted small" id="ota-s2-empty" data-i18n="ota.s2.empty"></p>
+          <div id="ota-file-info" class="fileinfo"></div>
+          <div id="ota-acks"></div>
+        </li>
+        <li class="step" id="ota-s3">
+          <h3 data-i18n="ota.s3.title"></h3>
+          <p class="msg warn" data-i18n="ota.warning"></p>
+          <p class="muted small" data-i18n="ota.confirm_note"></p>
+          <div class="toolbar"><button class="btn primary" id="btn-ota" type="button" disabled data-i18n="ota.upload"></button></div>
+          <div id="ota-bar" class="bar" hidden><div id="ota-bar-fill"></div></div>
+          <p id="ota-msg" class="msg"></p>
+          <p id="ota-help" class="small" hidden data-i18n="ota.fail_help"></p>
+        </li>
+      </ol>
+      <h3 data-i18n="ota.rb.section"></h3>
+      <p class="small" data-i18n="ota.rb.about"></p>
+      <div class="toolbar">
+        <button class="btn ghost" id="btn-rollback" type="button" disabled data-i18n="ota.rollback"></button>
+        <button class="btn ghost" id="btn-ota-refresh" type="button" data-i18n="ota.refresh"></button>
+        <button class="btn danger" id="btn-restart" type="button" data-i18n="ota.restart"></button>
+      </div>
+    </div>
+    <div class="card toolbar end session">
+      <div class="langpick inline">
+        <select id="sys-lang" class="lang-select"></select>
+        <label for="sys-lang" data-i18n="lang.label"></label>
+      </div>
+      <button class="btn ghost" id="btn-logout" type="button" data-i18n="app.logout"></button>
+    </div>
+    <p class="muted small lang-note" id="lang-note" hidden data-i18n="lang.machine_note"></p>
+  </section>
+</main>
+
+<nav class="tabbar" role="tablist"><div class="tabs-in">
+  <button type="button" data-tab="pulpit" role="tab"><svg class="ti" aria-hidden="true"><use href="#i-dash"/></svg><span data-i18n="nav.dashboard"></span></button>
+  <button type="button" data-tab="can" role="tab"><svg class="ti" aria-hidden="true"><use href="#i-bus"/></svg><span data-i18n="nav.can"></span></button>
+  <button type="button" data-tab="radio" role="tab"><svg class="ti" aria-hidden="true"><use href="#i-radio"/></svg><span data-i18n="nav.radio"></span></button>
+  <button type="button" data-tab="konsola" role="tab"><svg class="ti" aria-hidden="true"><use href="#i-term"/></svg><span data-i18n="nav.console"></span></button>
+  <button type="button" data-tab="system" role="tab"><svg class="ti" aria-hidden="true"><use href="#i-chip"/></svg><span data-i18n="nav.system"></span></button>
+</div></nav>
+
+<div id="modal" class="modal" hidden>
+  <div class="card dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <h2 id="modal-title"></h2>
+    <div id="modal-text"></div>
+    <div class="toolbar end">
+      <button class="btn ghost" id="modal-cancel" type="button" data-i18n="modal.cancel"></button>
+      <button class="btn primary" id="modal-ok" type="button" data-i18n="modal.ok"></button>
+    </div>
+  </div>
+</div>
+<div id="toast" class="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>

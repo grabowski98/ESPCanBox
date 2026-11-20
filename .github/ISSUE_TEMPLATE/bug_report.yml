@@ -1,0 +1,82 @@
+name: Bug report
+description: Something in the firmware, the web panel, the tools or the documentation does not work as described.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for the report. This is a hobby project: there is no promise of an answer or a fix within any time.
+
+        **Before you post:** remove passwords (the line `[wifi] password:`), Wi-Fi names, serial numbers and the VIN.
+        Clean recordings with `python -I tools/sanitize_capture.py IN.log OUT.log`.
+        A security problem? Do not describe it here: see SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Firmware version and build
+      description: The output of the console command `ver`, or the version shown in the panel (System tab).
+      placeholder: "2.0.0-beta.1, built ..."
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Build environment
+      options:
+        - listen
+        - decoder
+        - listen_wifi
+        - decoder_wifi
+        - decoder_tx_wifi
+        - listen_generic_wifi
+        - my own (platformio_override.ini)
+        - not the firmware (tools, documentation)
+    validations:
+      required: true
+  - type: input
+    id: setup
+    attributes:
+      label: Car, radio and board
+      description: Car model and year, car profile, radio protocol, board (for example the prototype v1).
+      placeholder: "Peugeot 508 SW 2015, psa_aee2010, XP, prototype v1"
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where did it happen?
+      options:
+        - on the desk (USB only)
+        - on the bench with CAN or 12 V
+        - in the car
+        - on the PC (host tests, mock device, tools)
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Flash listen_wifi
+        2. Type `stat` on the console
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: console
+    attributes:
+      label: Console output
+      description: Output of `stat` and the lines around the problem. Remove the `[wifi] password:` line.
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I removed passwords, Wi-Fi names, serial numbers and the VIN from everything above.
+          required: true
+        - label: If I attach a recording, I ran `tools/sanitize_capture.py` on it.

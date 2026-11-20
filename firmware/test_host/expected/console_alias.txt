@@ -1,0 +1,19 @@
+### console_alias
+--- vset and its old name ust ---
+OK    ust on 02 = vset on 02 (MASK_ON 02)
+OK    ust off 0F = vset off 0F (MASK_OFF 0F)
+OK    extra spaces: the same for both names
+OK    bare ust = bare vset (NONE: settings table)
+OK    malformed ust: BAD like vset
+OK    ustx, vsetust, UST: not a command
+OK    who may: the same rights for ust and vset
+--- console line assembly ---
+OK    line 'stat' ends at CR
+OK    line 'vol 50' (7 characters fit)
+OK    CR LF: 'stat', an empty line, 'vol 50'
+OK    after an overlong line the next line is whole
+OK    an overlong line is reported once and never handed over cut off
+OK    a line of exactly cap - 1 characters is accepted
+OK    cap characters: too long
+console_alias: 14 checks, 0 errors
+### code=0

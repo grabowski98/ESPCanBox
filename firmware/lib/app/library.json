@@ -1,0 +1,8 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "Glue between the car profile and the radio protocol: Decoder and the CAN -> XP encoders. No hardware, no Arduino framework header.",
+  "authors": [{ "name": "grabowski98" }],
+  "frameworks": "*",
+  "platforms": "*"
+}

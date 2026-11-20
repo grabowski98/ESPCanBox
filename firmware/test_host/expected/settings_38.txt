@@ -1,0 +1,60 @@
+### settings_38
+OK    S1 _190551 75,233 s: DATA[1..5] = 02 E0 A9 98 40 (with the radio bit mask)
+OK    S2 _191045 391,846 s: DATA[1..5] = 02 E0 A9 98 40 (with the radio bit mask)
+OK    S3 _191045 412,925 s (reverse): DATA[1..5] = 02 E0 A9 18 40 (with the radio bit mask)
+OK    S4 _191045 562,912 s (parking assist): DATA[1..5] = 02 F0 A9 98 40 (with the radio bit mask)
+OK    S5 _191045 746,416 s (3E1 = 80): DATA[1..5] = 02 E0 A9 D8 40 (with the radio bit mask)
+OK    S6 _191045 746,436 s: DATA[1..5] = 02 E0 A9 58 40 (with the radio bit mask)
+OK    S7 no frames: zeros only: DATA[1..5] = 00 00 00 00 00 (all bits)
+OK    S8 state of 17.11.2026 -> 02 90 A9 B8 40: DATA[1..5] = 02 90 A9 B8 40 (all bits)
+OK    3C: without frame 361 nothing
+OK    3C: 361 with length 3 nothing
+OK    V1: 361 = A0 66 C8 0A 00 00 -> 3C = 9E 80 (measured)
+OK    V2: 361 = A0 60 C8 0A 00 00 -> 3C = 9E 00 (rule, not measured)
+OK    3C: all bits of 361 -> FF C0
+OK    3C: 361 zeros only -> 00 00
+OK    260 with length 6 as the first: the state stays zero
+OK    state of 11.11: 02 E0 A9 98 40
+OK    260 with length 6 does not change the state
+OK    227 with length 2 does not change the state
+OK    3E1 with length 3 does not change the state
+OK    217 with length 7 does not change the state
+OK    Start/Stop: 3E1 80 -> 1, 00 and C0 unchanged, 40 -> 0
+OK    DATA[1] bits 4 and 3 (boot, traction control) = 0
+OK    language and units outside the table: the previous ones stay (Polish, L/100 km)
+OK    units: km/L -> 0, MPG -> 2; language code 1 not in the table: Polish stays
+OK    fields off, wiper, fatigue, sound 3, driver door only: 86 00 07 88 40
+OK    simulation: ACC on after frame 0F6
+OK    start without 260: the first 38 = 04 00 00 00 00 00
+OK    227, 3E1, 217 before the first 260: no new 38 (still zeros, like the box)
+OK    after 227, 3E1, 217, 260 (state 17.11): one new 38 = 04 02 90 A9 B8 40
+OK    the same 260 once more: no new 38
+OK    81 01 before 361: one 38, no 3C
+OK    the first 361: one 3C = 9E 80
+OK    the same 361 once more: no new 3C
+OK    81 01: pair 38 + 3C (in this order, gap 10 ms), current content
+OK    81 00 and 81 without data: nothing
+OK    260 with length 6: no new 38, state unchanged
+OK    260 5.7 = 0: one 38 with DATA[2] bit 4 = 0
+OK    driver door: 38 = 84 + the same settings states
+OK    90 71: frame 71 and one 38 and one 3C (3C here too: a deviation from the box)
+OK    without ACC: 81 01 sends nothing; after ACC is on, one 38 and one 3C
+
+40 checks, 0 errors
+### code=0
+### settings_38 can_20261111_190551.log can_20261111_190817.log can_20261111_191045.log
+can_20261111_190551.log: box frame 38 matching 5, different 0, before the first 260 2; frame 3C matching 5, different 0, before the first 361 0
+  radio commands 81 01: 4; after them pair 38 + 3C: 4, 38 alone (before 361): 0, without ACC: 0, none: 0
+can_20261111_190817.log: box frame 38 matching 7, different 0, before the first 260 0; frame 3C matching 4, different 0, before the first 361 0
+  radio commands 81 01: 4; after them pair 38 + 3C: 4, 38 alone (before 361): 0, without ACC: 0, none: 0
+can_20261111_191045.log: box frame 38 matching 26, different 0, before the first 260 0; frame 3C matching 0, different 0, before the first 361 0
+  radio commands 81 01: 0; after them pair 38 + 3C: 0, 38 alone (before 361): 0, without ACC: 0, none: 0
+OK    all captures opened
+OK    frame 38: 38 of 38 match the box (radio bit mask 9E F8 FE FF F7)
+OK    frame 3C: 9 of 9 match the box
+OK    after every 81 01 with ACC pair 38 + 3C: 8 of 8 (without ACC 0)
+OK    three captures of 11.11: 38 of 38 frames 38
+OK    three captures of 11.11: 9 of 9 frames 3C
+
+6 checks, 0 errors
+### code=0

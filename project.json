@@ -1,0 +1,11 @@
+{
+  "_comment": "Single source of the project identity. Edit only with tools/set_project_name.py, which also rewrites firmware/include/project_identity.h and the IDENT constant in firmware/web/app.js. fw_product, fwid_magic and nvs_namespace are compatibility values: changing them blocks Wi-Fi updates from older images and starts with empty settings.",
+  "project_name": "ESPCanBox",
+  "slug": "espcanbox",
+  "fw_product": "espcanbox",
+  "fwid_magic": "ESPC-FWID",
+  "ap_ssid_prefix": "ESPCanBox-",
+  "mdns_host": "espcanbox",
+  "nvs_namespace": "espcanbox",
+  "web_session_key": "espcanboxpw"
+}

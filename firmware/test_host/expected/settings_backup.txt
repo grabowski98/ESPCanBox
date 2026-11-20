@@ -1,0 +1,72 @@
+### settings_backup
+OK    lang: pl well formed
+OK    lang: pt-BR well formed
+OK    lang: 8 characters well formed
+OK    lang: 9 characters refused
+OK    lang: 1 character refused
+OK    lang: empty refused
+OK    lang: nullptr refused
+OK    lang: starts with a digit refused
+OK    lang: ends with '-' refused
+OK    lang: space refused
+OK    lang: quote refused
+OK    list: pl is built in
+OK    list: first item
+OK    list: last item
+OK    list: fr is not built in
+OK    list: part of an item does not match
+OK    list: two items do not match
+OK    list: case matters (file names are lower case)
+OK    list: empty list (build without the panel)
+OK    list: no list
+OK    list: one item
+OK    parse: full export
+OK    parse: null = back to the default, spaces allowed
+OK    parse: empty table is a value, not null
+OK    parse: empty object = nothing changes
+OK    parse: vol 100
+OK    parse: vol 0 accepted here (the caller applies the stored minimum)
+OK    parse: table of 95 characters fits
+OK    parse: table of 96 characters refused
+OK    refuse: empty text
+OK    refuse: array
+OK    refuse: no closing brace
+OK    refuse: text after the object
+OK    refuse: comma before the brace
+OK    refuse: negative number
+OK    refuse: fraction
+OK    refuse: nested object
+OK    refuse: unterminated string
+OK    refuse: format version 2
+OK    refuse: version as a string
+OK    refuse: password field (never in a backup)
+OK    refuse: transmit arming field
+OK    refuse: long unknown field name
+OK    refuse: duplicate field
+OK    refuse: duplicate version
+OK    refuse: vol 101
+OK    refuse: vol with 4 digits
+OK    refuse: vol as a string
+OK    refuse: vol as a boolean
+OK    refuse: lang too short
+OK    refuse: lang too long
+OK    refuse: lang as a number
+OK    refuse: backslash in a string
+OK    refuse: control character in a string
+OK    refuse: net as a number
+OK    refuse: lan null
+OK    refuse: keys as an array
+OK    parse: reads only 'len' bytes
+OK    parse: nullptr
+error words: ok syntax version unknown_key duplicate bad_value
+OK    format: nothing stored
+export empty: {"v":1,"lang":null,"vol":null,"keys":null,"net":true,"lan":false}
+OK    format: values
+export: {"v":1,"lang":"pl","vol":55,"keys":"9F=9B;21=1F","net":true,"lan":true}
+OK    format: export parses back
+OK    format: longest text fits in TEXT_MAX
+longest export: 164 characters (TEXT_MAX 176)
+OK    format: too small buffer = false
+OK    format: no buffer = false
+settings_backup: 65 checks, 0 failures
+### code=0

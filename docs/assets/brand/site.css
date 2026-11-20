@@ -1,0 +1,49 @@
+/* Colours of the documentation site, taken from the logo (docs/en/contributing/brand.md).
+   Used by mkdocs.yml (extra_css) with "primary: custom" and "accent: custom".
+
+   Contrast (WCAG 2 ratio, checked by calculation):
+     header: ink #283020 on glass #B2C246            7.0 : 1
+     light scheme: links #4E5C0E on white            7.3 : 1   (glass on white is only 2.0 : 1, so it is not used for text)
+     light scheme: hover #5F7010 on white            5.6 : 1
+     dark scheme: links #B2C246 on #1E2129           8.2 : 1
+     dark scheme: hover #D3DE85 on #1E2129          11.2 : 1 */
+:root > * {
+  --md-primary-fg-color: #B2C246;
+  --md-primary-fg-color--light: #C3D06A;
+  --md-primary-fg-color--dark: #A6B640;
+  --md-primary-bg-color: #283020;
+  --md-primary-bg-color--light: rgba(40, 48, 32, 0.72);
+}
+[data-md-color-scheme="default"] {
+  --md-typeset-a-color: #4E5C0E;
+  --md-accent-fg-color: #5F7010;
+  --md-accent-fg-color--transparent: rgba(95, 112, 16, 0.1);
+}
+[data-md-color-scheme="slate"] {
+  --md-typeset-a-color: #B2C246;
+  --md-accent-fg-color: #D3DE85;
+  --md-accent-fg-color--transparent: rgba(211, 222, 133, 0.1);
+}
+/* The icon is drawn on a 16 x 16 grid: 32 px keeps it sharp (whole multiple of the grid). */
+.md-header__button.md-logo img { width: 32px; height: 32px; image-rendering: pixelated; }
+
+/* Logo on a page: the SVG master, shown at a whole dot pitch so every dot is drawn the same.
+   The drawing is 3952 units wide and the pitch is 60 units: width = 3952 / 60 x pitch.
+   8 px pitch = 526.93 px (wide view), 5 px pitch = 329.33 px (phone). */
+.md-typeset img[src$="logo-transparent.svg"] { width: 526.93px; max-width: 100%; height: auto; }
+@media screen and (max-width: 36em) {
+  .md-typeset img[src$="logo-transparent.svg"] { width: 329.33px; }
+}
+
+/* Screenshots of the panel are links to the full-size file. The two phone screenshots stand side
+   by side instead of one under the other. */
+.md-typeset img[src*="/screenshots/panel-phone-"] { width: 48%; max-width: 320px; vertical-align: top; }
+
+/* Search field in the header (wide view): a lighter field instead of the darker default, so the
+   placeholder and the icon keep the ink colour.
+     placeholder and icon: ink #283020 on the field (white 30 % over glass, #C9D47D)   8.5 : 1 */
+@media screen and (min-width: 60em) {
+  .md-search__input { background-color: rgba(255, 255, 255, 0.3); }
+  .md-search__input:hover { background-color: rgba(255, 255, 255, 0.45); }
+  .md-search__input::placeholder { color: var(--md-primary-bg-color); }
+}

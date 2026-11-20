@@ -1,0 +1,72 @@
+### radio_stub test_host/synthetic/example_car.log can_20261111_191045.log
+--- example + stub radio
+   5710 doors open=0x40 side swap=1
+   5760 trip 1 a=3A b=0123 c=0000 (first call)
+   5810 doors open=0x48 side swap=1
+   5910 doors open=0x4C side swap=1
+   6010 doors open=0x00 side swap=1
+example: steering=0 trip=2 temp=0 eco=0 climate=0 car_state=4 present=0
+--- psa_aee2010 + stub radio
+ 331890 trip 1 a=11 b=004C c=005B (first call)
+ 331892 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=7/7 temp=45/45 half degrees
+ 335600 doors open=0x00 side swap=1
+ 335600 setting parking_sensors known=1 value=0
+ 335600 setting blind_spot known=1 value=1
+ 335630 economy mode 1
+ 335636 setting instrument_colour known=1 value=1
+ 335640 items the car has: rear_wiper_reverse=1 ambient_light=0 follow_me_home=1 welcome_lighting=1 daytime_lights=0 welcome_function=0 door_unlock_all=1 unassigned_1=1 unassigned_2=1 unassigned_3=0
+ 335700 outside temperature 12 half degrees
+ 335900 settings valid=1
+ 335900 setting parking_assist known=1 value=0
+ 335900 setting rear_wiper_reverse known=1 value=0
+ 335900 setting ambient_light known=1 value=7
+ 335900 setting follow_me_home known=1 value=2
+ 335900 setting welcome_lighting known=1 value=2
+ 335900 setting daytime_lights known=1 value=1
+ 335900 setting sound known=1 value=0
+ 335900 setting welcome_function known=1 value=0
+ 335900 setting door_unlock_all known=1 value=1
+ 335900 setting language known=1 value=8
+ 335900 setting fuel_units known=1 value=1
+ 335900 setting fatigue_detection known=1 value=0
+ 336040 setting stop_start known=1 value=0
+ 391802 economy mode 0
+ 412921 setting blind_spot known=1 value=0
+ 420271 setting blind_spot known=1 value=1
+ 424171 setting blind_spot known=1 value=0
+ 440921 setting blind_spot known=1 value=1
+ 470372 setting blind_spot known=1 value=0
+ 473672 setting blind_spot known=1 value=1
+ 495572 setting blind_spot known=1 value=0
+ 497632 setting blind_spot known=1 value=1
+ 502326 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=7/7 temp=46/45 half degrees
+ 504325 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=7/7 temp=45/45 half degrees
+ 508324 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=7/7 temp=45/46 half degrees
+ 510823 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=7/7 temp=45/45 half degrees
+ 562902 setting parking_assist known=1 value=1
+ 567902 setting parking_assist known=1 value=0
+ 627702 outside temperature 13 half degrees
+ 635702 outside temperature 12 half degrees
+ 672259 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=6/7 temp=45/45 half degrees
+ 673759 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=2/7 temp=45/45 half degrees
+ 674758 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=8/7 temp=45/45 half degrees
+ 676258 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=8/6 temp=45/45 half degrees
+ 677258 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=8/2 temp=45/45 half degrees
+ 678757 climate ac=1 recirc=0 demist=0 rear=0 fan=0 air=8/8 temp=45/45 half degrees
+ 679803 climate ac=1 recirc=0 demist=0 rear=1 fan=0 air=8/8 temp=45/45 half degrees
+ 680681 climate ac=1 recirc=1 demist=0 rear=1 fan=0 air=8/8 temp=45/45 half degrees
+ 682031 climate ac=1 recirc=1 demist=0 rear=1 fan=4 air=8/8 temp=45/45 half degrees
+ 684230 climate ac=1 recirc=0 demist=1 rear=1 fan=0 air=0/0 temp=45/45 half degrees
+ 685429 climate ac=1 recirc=0 demist=0 rear=1 fan=0 air=8/8 temp=0/0 half degrees
+ 687754 climate ac=1 recirc=0 demist=0 rear=1 fan=0 air=8/8 temp=45/45 half degrees
+ 690252 climate ac=0 recirc=0 demist=0 rear=1 fan=0 air=8/8 temp=45/45 half degrees
+ 691303 climate ac=0 recirc=0 demist=0 rear=0 fan=0 air=8/8 temp=45/45 half degrees
+ 691704 outside temperature 13 half degrees
+ 707703 outside temperature 12 half degrees
+ 746385 setting stop_start known=1 value=1
+ 746427 setting blind_spot known=1 value=0
+ 755703 outside temperature 13 half degrees
+ 795703 outside temperature 12 half degrees
+psa_aee2010: steering=4092 trip=1385 temp=941 eco=4725 climate=1878 car_state=9246 present=922
+the stub radio got the car data as neutral values from both profiles
+### code=0

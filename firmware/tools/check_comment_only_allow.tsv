@@ -1,0 +1,39 @@
+# HISTORICAL: record of the one-off move from the author's private tree to this repository. No script
+# or CI uses it; kept so the stage can be followed. Names in it are the names of that time.
+# Pinned code changes made on purpose before stage E2a (E0: captures and fixture paths; E1: project
+# identity in project.json / include/project_identity.h, CXX in run_host_tests.sh) and in stage E2b
+# (English environment, file and identifier names from tools/rename_map.tsv, UTF-8 test data as escapes).
+# For stage E3 the base is the tree after E2, so these pins are not needed there.
+# Format: path TAB mode (code|strings) TAB sha256 of the reduced stream of the new file TAB reason.
+# A pinned file passes only while its reduced stream keeps exactly this hash (tools/check_comment_only.py).
+lib/core/fw_ident.h	code	f27d649840b81489e0f21f1fc2dbd63f66a2d7847f48df064dc0a741350ef524	E0/E1 identity, fixture and capture paths (18.11.2026)
+platformio.ini	code	b777564bd8a68c143d82a2148364d480fce00d82569c571ad8ebf948625f7e4f	E0/E1 identity, fixture and capture paths; E2b renames, tools/rename_map.tsv (18.11.2026)
+src/config.h	code	52dbdd7ee7427e07af5c11abfca6e6e8c99ce75842b91bb5a925e220c1418335	E0/E1 identity, fixture and capture paths (18.11.2026)
+src/main.cpp	code	f76c37e046cacbd90554f7739079dd89e383d19795909ff8579a35f5e189bad9	E0/E1 identity, fixture and capture paths (18.11.2026)
+src/settings.cpp	code	55a151509f4512f8f82e6b1ed89839a561e22caa7910250af6014b32a1dd744d	E0/E1 identity, fixture and capture paths (18.11.2026)
+src/version.h	code	bb0917c2be5f4f2d867c10eecf196edeff6d028d01ca910f5b7e96f80ba2c257	E0/E1 identity, fixture and capture paths (18.11.2026)
+test_host/net_util.cpp	code	c1b0abe6185780ecaf7cf2a727ddc3d07aa02a268c3b4e3db2a5379ca7cee1d5	E0/E1 identity, fixture and capture paths; E2b renames, tools/rename_map.tsv (18.11.2026)
+tools/embed_web.py	code	16e75431bf98683a9cced80a1f513fed6d6a411e44ecea87648db4aefaefd077	E0/E1 identity, fixture and capture paths (18.11.2026)
+tools/mock_device.py	code	a198a042658d67cfb3120cc59de9384cc14b1da03b3d0cd8fe2fa14f4c9af7f2	E0/E1 identity, fixture and capture paths; E2b renames, tools/rename_map.tsv (18.11.2026)
+tools/record.py	code	431a4051112e926a49a31afcc4334928050bbe6fbcbe328acc8739171edcadf1	E0/E1 identity, fixture and capture paths; E2b renames, tools/rename_map.tsv (18.11.2026)
+tools/run_host_tests.sh	code	b80d0f838a90389aa2d19b43feb7521eef07dfe34a338d90138372218bd6d102	E0/E1 identity, fixture and capture paths; E2b renames, tools/rename_map.tsv (18.11.2026)
+web/app.js	code	a7c0e2e9f9f590b71b9db6e92a1317458fcaf1a9db1dda636a60bf293f906a9f	E0/E1 identity, fixture and capture paths (18.11.2026)
+lib/core/fw_ident.h	strings	e53ac7efbfd892833806da6dfa3cd88820410101a8b813cd43831e7f6bda8399	E0/E1 identity, fixture and capture paths (18.11.2026)
+platformio.ini	strings	b777564bd8a68c143d82a2148364d480fce00d82569c571ad8ebf948625f7e4f	E0/E1 identity, fixture and capture paths; E2b renames, tools/rename_map.tsv (18.11.2026)
+src/config.h	strings	cb53219b8d7fe2c46da04ba8ac300c399bffc1e7507f9b5b2ae97aab460e5304	E0/E1 identity, fixture and capture paths (18.11.2026)
+src/main.cpp	strings	500bf6438879a83fa0730c78f359effab1c2b461acc5c7af45316920306b1aeb	E0/E1 identity, fixture and capture paths (18.11.2026)
+src/settings.cpp	strings	450a9e39241e59f0deaf9035faefd87e25f9f0171b0463a3c7231d8cc7d2694a	E0/E1 identity, fixture and capture paths (18.11.2026)
+src/version.h	strings	31e427a02a7e89753e5f3c55401e75909d37fac18c859bb9823d6478e4edba2f	E0/E1 identity, fixture and capture paths (18.11.2026)
+test_host/net_util.cpp	strings	0e56dde7d5269f34aeae9299fbf00b784a6197abe2802b2240f3f406589efaea	E0/E1 identity, fixture and capture paths (18.11.2026)
+tools/embed_web.py	strings	5fc492f947a4e09d05dfcdf5835cca36d9047988119c8572cb623c444d55a1b3	E0/E1 identity, fixture and capture paths (18.11.2026)
+tools/mock_device.py	strings	89a074a17868feca2819aa8ba754a41b0d157312d33836043ddb07c4343bd4d4	E0/E1 identity, fixture and capture paths (18.11.2026)
+tools/record.py	strings	932f2095f068a5f4458f13cc05caf04888918e5b52bf7de6e2aba6b09700cad9	E0/E1 identity, fixture and capture paths (18.11.2026)
+tools/run_host_tests.sh	strings	38beedb1d5666a97d3ff74e40ce2c53c822f6196fa21b2fc86418b11682be0fd	E0/E1 identity, fixture and capture paths; E2b renames, tools/rename_map.tsv (18.11.2026)
+web/app.js	strings	3f1c5df43ed43afd5c0a3ea260ba75958b60c7b0ebc5754eceed9ed935d9a889	E0/E1 identity, fixture and capture paths (18.11.2026)
+src/can_tx/can_tx_port.cpp	code	2b4b2effd635581e0dae285fcf41918bd664bf9189c4c27163983de7a9810739	E2b renames, tools/rename_map.tsv (18.11.2026)
+test_host/golden_stream.cpp	code	d72bd7b77f4ec3bbc0f8ea2dc913595c9963b621f9fa5ef36c7c71ff185160e1	E2b renames, tools/rename_map.tsv (18.11.2026)
+test_host/settings_15b.cpp	code	b8e21bcc0eb3ae0b883d78b06d872ba26344b5c9aea11c0542ad9bd10074ede7	E2b renames, tools/rename_map.tsv (18.11.2026)
+tools/check_no_can_tx.sh	code	9b84b3bfcc0e17b4149b89174b30df8827485e506745699a9c4566d10627ef65	E2b renames, tools/rename_map.tsv (18.11.2026)
+test_host/golden_stream.cpp	strings	83ac6c25e99e0c0f32d998dcf06472b0f96042089bca44ae107f243d838b4cda	E2b renames, tools/rename_map.tsv (18.11.2026)
+test_host/settings_15b.cpp	strings	74270b27cf50df5af37abbe18e6de42ec9d127a3e7ae2780eefd0a0f227ed39e	E2b renames, tools/rename_map.tsv (18.11.2026)
+tools/check_no_can_tx.sh	strings	eccf30b9d220c39d351fc41c1154fe5695f2bda700c5dcc7be76c53cd06158f9	E2b renames, tools/rename_map.tsv (18.11.2026)

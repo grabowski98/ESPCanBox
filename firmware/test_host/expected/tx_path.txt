@@ -1,0 +1,76 @@
+### tx_path
+--- program without hardware and a disarmed program ---
+      [vset] radio: 80 01 01 parking assist = 1: REFUSED (no CAN transmit in this build)
+OK    without attachCanTx: like the four old environments (the same line, nobody touches the port)
+      [vset] radio: 80 01 01 parking assist = 1: REFUSED (transmit disarmed)
+      [vset] radio: 80 01 01 parking assist = 1: REFUSED (transmit disarmed)
+OK    hardware present, but not armed: REFUSED (transmit disarmed), transmitter never enabled
+OK    counters: 2 command refusals, 2 gate refusals, no frame
+--- armed: 80 01 01, ack, accepted by BSI ---
+OK    after attachCanTx(port, true): gate ready
+      [vset] 15B 00 34 97 BA D5 40 00 00 sent (acked after 5 ms)
+      [vset] parking assist = 1: ACCEPTED by BSI after 380 ms
+OK    one 15B frame = 00 34 97 BA D5 40 00 00 went to the port (like the box, measured 11.11.2026)
+OK    lines: 15B sent (acked 5 ms after the request, counted in loop passes), ACCEPTED by BSI after 380 ms
+OK    data for the panel: accepted, tookMs = 380, frame remembered; gate: sent 1, acked 1
+OK    transmitter on once, 4 ms in total
+      [vset] parking assist = 1: unchanged (the car already has this state), nothing sent
+OK    the same command a second time: unchanged, nothing sent
+      [vset] 15B 00 34 97 BA 55 40 00 00 sent (acked after 5 ms)
+      [vset] parking assist = 0: ACCEPTED by BSI after 180 ms
+OK    command set 01 00: frame 00 34 97 BA 55 40 00 00, ACCEPTED
+      [vset] 260 at startup=A4 34 97 BA 55 40 00 changed bits (bytes 2-6)=00 00 00 00 00
+OK    vset: difference of 260 against the startup = zero after enabling and disabling
+OK    invariants: 15B / 8 bytes only, transmitter at most 20 ms and only in the window
+--- BSI does not accept; no ack; latch ---
+      [vset] 15B 00 34 97 BA D5 40 00 00 sent (acked after 5 ms)
+      [vset] parking assist = 1: NOT ACCEPTED by BSI (260 unchanged after 1305 ms)
+OK    260 unchanged: NOT ACCEPTED after 1305 ms, one frame (no repeats), no latch
+OK    invariants
+      [vset] 15B 00 34 97 BA D5 40 00 00 NOT ACKED (after 5 ms)
+      [vset] parking assist = 1: frame 15B not acked on the bus, car state unchanged
+      [vset] 15B 00 34 97 BA D5 40 00 00 NOT ACKED (after 5 ms)
+      [vset] parking assist = 1: frame 15B not acked on the bus, car state unchanged
+      [cantx] FAULT: 3 failed sends, transmit locked until "cantx reset"
+      [vset] 15B 00 34 97 BA D5 40 00 00 NOT ACKED (after 5 ms)
+      [vset] parking assist = 1: frame 15B not acked on the bus, car state unchanged
+OK    3 frames without an ack: line [cantx] FAULT, latch, transmitter off
+      [vset] radio: 80 01 01 parking assist = 1: REFUSED (transmit locked after a fault)
+OK    after the latch: REFUSED, nothing sent
+OK    after cantx reset: the next command sends a frame
+OK    invariants
+--- foreign bits of 260 changed together with the requested one ---
+      [vset] 15B 00 34 97 BA D5 40 00 00 sent (acked after 5 ms)
+      [vset] parking assist = 1: ACCEPTED, but other bits of 260 changed too (00 00 10 00 00): transmit locked
+      [cantx] FAULT: foreign bits of 260 changed, transmit locked until "cantx reset"
+OK    ACCEPTED, but other bits of 260 changed too (00 00 10 00 00): latch
+OK    invariants
+--- mask, groups D and E, gate conditions ---
+      [vset] radio: 80 02 01 rear wiper in reverse = 1: REFUSED (disabled in mask)
+      [vset] radio: 80 0A 01 fuel units = 1: REFUSED (fixed refusal)
+      [vset] radio: 80 0D 01 Start/Stop = 1: no known frame
+      [vset] radio: 80 05 01 radar switch = 1: REFUSED (disabled in mask)
+      [vset] radio: 80 0F 01 door opening = 1: REFUSED (disabled in mask)
+OK    02 and 0F (mask), 0A (group D), 0D (no known frame), 05 (1A9 button disabled in mask): five refusals, transmitter never enabled
+      [vset] 15B 00 34 97 BA 75 40 00 00 sent (acked after 5 ms)
+      [vset] rear wiper in reverse = 1: ACCEPTED by BSI after 500 ms
+OK    after vset on 02: 80 02 01 gives frame 00 34 97 BA 75 40 00 00 (one field: bit 5.5)
+      [vset] radio: 80 01 01 parking assist = 1: REFUSED (flash write in progress)
+      [vset] radio: 80 01 01 parking assist = 1: REFUSED (flash write in progress)
+      [vset] radio: 80 01 01 parking assist = 1: REFUSED (no ignition)
+OK    firmware update, pending settings write, ignition off: three refusals, nothing sent
+OK    ignition 88 (engine off): frame sent
+OK    invariants
+--- disarming and forceClose meanwhile ---
+OK    cantx off in the window: transmitter off at once, nothing sent, then refusals
+OK    invariants
+OK    forceClose during a send: transmitter off
+OK    after forceClose no further frames, invariants
+--- frame limit and a long run ---
+OK    40 commands in 60 s: after 10 commands 10 frames, in total 10 frames (limit 10 per minute), longest on 4 ms
+OK    every frame: ID 15B, 8 bytes, bytes 1, 7, 8 = 00; invariants
+--- climate: radio 8A sends nothing on CAN ---
+OK    8A 01-0C: nothing sent, transmitter never enabled
+OK    80 01 01 still sends 15B; invariants
+tx_path: 33 checks, 0 errors
+### code=0

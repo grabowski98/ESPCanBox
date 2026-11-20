@@ -1,0 +1,59 @@
+### net_policy
+OK    car awake: Wi-Fi on, no hold
+OK    the user switch turns Wi-Fi off
+OK    ACC alone = car awake
+OK    computer on USB = Wi-Fi on
+OK    USB unplugged on a quiet bus without a client: Wi-Fi off
+OK    standby: going quiet with an active client holds
+OK    standby: 59.999 s after a request still holds
+OK    standby: 60 s after a request the standby ends
+OK    standby: an ended standby does not come back without the car waking up
+OK    standby: an active client holds up to 10 min, then the end
+OK    standby: after the car wakes up a new standby
+OK    standby with millis wrapping: going quiet with an active client holds
+OK    standby with millis wrapping: 59.999 s after a request still holds
+OK    standby with millis wrapping: 60 s after a request the standby ends
+OK    standby with millis wrapping: an ended standby does not come back without the car waking up
+OK    standby with millis wrapping: an active client holds up to 10 min, then the end
+OK    standby with millis wrapping: after the car wakes up a new standby
+OK    start on a quiet bus with a client: standby
+OK    start: the client holds 60 s
+OK    start: after 60 s without requests the end
+OK    start: in total at most 10 min from the first update()
+OK    start on a quiet bus without a client: Wi-Fi for 60 s (a client has time to ask)
+OK    start without a client: still in the 60 s window
+OK    start without a client: after 60 s Wi-Fi off
+OK    start, client since 5 s: Wi-Fi on for more than 60 s up to 10 min
+OK    start, client since 5 s: after 10 min Wi-Fi off
+OK    after a new program is confirmed the client holds Wi-Fi (quiet bus)
+OK    lastClientMs = nowMs + 5 counts as age 0
+OK    then the usual 60 s from that timestamp
+OK    clientSeen == false: the timestamp does not count
+OK    voltage above the threshold: standby
+OK    voltage below the threshold: end of standby
+OK    voltage not measured: no threshold
+OK    voltage NaN while measuring: end of standby
+OK    voltage equal to the threshold: standby
+OK    car awake: low voltage does not turn Wi-Fi off
+OK    otaActive: holds and Wi-Fi on
+OK    otaActive with enabled == false: holds, Wi-Fi off
+OK    uploadBusy: Wi-Fi on also with enabled == false
+OK    upload finished: the switch works
+OK    otaActive released: holdAwake == false in the same call
+OK    otaActive holds regardless of the 10 min limit
+OK    after otaActive without a client: the end
+OK    home network: no pulse at once (the start makes the first connection)
+OK    home network: tries every 30 s
+OK    home network: with a client on our network every 5 min
+OK    home network: never with the engine running
+OK    home network: after the engine stops the first try after 30 s
+OK    home network: no tries when connected / no network / Wi-Fi off / uploading
+OK    home network with millis wrapping: no pulse at once (the start makes the first connection)
+OK    home network with millis wrapping: tries every 30 s
+OK    home network with millis wrapping: with a client on our network every 5 min
+OK    home network with millis wrapping: never with the engine running
+OK    home network with millis wrapping: after the engine stops the first try after 30 s
+OK    home network with millis wrapping: no tries when connected / no network / Wi-Fi off / uploading
+
+ALL OK
+### code=0

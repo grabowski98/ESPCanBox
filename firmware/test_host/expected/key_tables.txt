@@ -1,0 +1,39 @@
+### key_tables
+profile psa_aee2010: 22 key rows, 2 knobs, bit rate 125000
+ok   key row count equals the old table
+ok   row  0: 21F byte 0 mask 0C value 08 -> key  1 -> XP 14 (old 14)
+ok   row  1: 21F byte 0 mask 0C value 04 -> key  2 -> XP 15 (old 15)
+ok   row  2: 21F byte 0 mask 0C value 0C -> key  3 -> XP 16 (old 16)
+ok   row  3: 21F byte 0 mask 02 value 02 -> key  4 -> XP 30 (old 30)
+ok   row  4: 21F byte 0 mask 01 value 01 -> key  5 -> XP 50 (old 50)
+ok   row  5: 21F byte 2 mask 80 value 80 -> key  6 -> XP 07 (old 07)
+ok   row  6: 0A2 byte 1 mask 04 value 04 -> key  7 -> XP 21 (old 21)
+ok   row  7: 221 byte 0 mask 01 value 01 -> key  8 -> XP 23 (old 23)
+ok   row  8: 122 byte 1 mask 80 value 80 -> key  9 -> XP 9E (old 9E)
+ok   row  9: 122 byte 1 mask 20 value 20 -> key 10 -> XP A0 (old A0)
+ok   row 10: 122 byte 1 mask 01 value 01 -> key 11 -> XP 97 (old 97)
+ok   row 11: 122 byte 2 mask 40 value 40 -> key 12 -> XP 9C (old 9C)
+ok   row 12: 122 byte 2 mask 80 value 80 -> key 13 -> XP 98 (old 98)
+ok   row 13: 122 byte 1 mask 08 value 08 -> key 14 -> XP 9F (old 9F)
+ok   row 14: 122 byte 1 mask 02 value 02 -> key 15 -> XP 99 (old 99)
+ok   row 15: 122 byte 1 mask 10 value 10 -> key 16 -> XP 9B (old 9B)
+ok   row 16: 122 byte 1 mask 40 value 40 -> key 17 -> XP A4 (old A4)
+ok   row 17: 122 byte 2 mask 20 value 20 -> key 18 -> XP 9D (old 9D)
+ok   row 18: 122 byte 1 mask 04 value 04 -> key 19 -> XP A1 (old A1)
+ok   row 19: 122 byte 0 mask 01 value 01 -> key 20 -> XP A3 (old A3)
+ok   row 20: 122 byte 0 mask 02 value 02 -> key 21 -> XP 22 (old 22)
+ok   row 21: 036 byte 6 mask 0F value 02 -> key 22 -> XP 16 (old 16)
+ok   knob count equals the old rules
+ok   knob 0: 21F byte 1 -> up XP 18, down XP 17 (old 18 / 17)
+ok   knob 1: 122 byte 6 -> up XP 81, down XP 82 (old 81 / 82)
+XP codes for 26 of 26 logical keys
+ok   every logical key has an XP code
+ok   KeyId::NONE has no code
+ok   radio xp: key table and 38400 baud
+ok   radio none: no key codes, no UART
+ok   profile generic: no keys, empty txAllow, no decoders, no 12 V outputs
+ok   profile generic: no default key remaps
+ok   profile psa_aee2010: default remaps TEL (9F) -> 9B, SOURCE (21) -> 1F
+ok   profile psa_aee2010: txAllow starts with 15B, 8 bytes (details: profile_tables)
+key tables identical
+### code=0

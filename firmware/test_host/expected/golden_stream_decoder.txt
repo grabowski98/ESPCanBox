@@ -1,0 +1,54 @@
+### golden_stream --decoder can_20261111_190551.log --box-report .build_host/golden_box_report.txt
+can_20261111_190551: steps 86024, stalls 0, CAN frames 4535 (dropped 0), bytes from the radio 807
+  from the radio: frames 39 (with a command number < 80: 0), bad checksum 8, bad length 0, truncated 0
+  to the radio: frames 79: 21=5 29=11 32=4 33=6 34=6 35=6 36=5 38=10 3C=9 3E=5 44=6 71=4 EA=2
+  outputs: 8 lines, console: 3 lines
+### code=0
+### golden_stream --decoder can_20261111_190817.log --box-report .build_host/golden_box_report.txt
+can_20261111_190817: steps 242303, stalls 0, CAN frames 30040 (dropped 0), bytes from the radio 1631
+  from the radio: frames 169 (with a command number < 80: 0), bad checksum 5, bad length 0, truncated 0
+  to the radio: frames 148: 20=45 21=5 29=38 32=4 33=5 34=5 35=5 36=5 38=11 3C=9 3E=5 44=5 71=4 EA=2
+  outputs: 10 lines, console: 48 lines
+### code=0
+### golden_stream --decoder can_20261111_191045.log --box-report .build_host/golden_box_report.txt
+can_20261111_191045: steps 482169, stalls 0, CAN frames 98344 (dropped 0), bytes from the radio 5345
+  from the radio: frames 515 (with a command number < 80: 0), bad checksum 0, bad length 0, truncated 0
+  to the radio: frames 578: 20=50 21=19 29=360 32=109 33=1 34=2 35=2 36=5 38=14 3C=1 3E=11 44=2 EA=2
+  outputs: 194 lines, console: 141 lines
+### code=0
+### golden_stream --decoder can_20261110_190421.log 
+can_20261110_190421: steps 861381, stalls 0, CAN frames 186700 (dropped 0), bytes from the radio 0
+  from the radio: frames 0 (with a command number < 80: 0), bad checksum 0, bad length 0, truncated 0
+  to the radio: frames 390: 20=78 21=35 29=180 32=37 33=1 34=8 35=2 36=1 38=38 3C=1 3E=5 44=2 EA=2
+  outputs: 66 lines, console: 135 lines
+### code=0
+### golden_stream --decoder centralka_can_20261117_184411.log 
+centralka_can_20261117_184411: steps 166970, stalls 0, CAN frames 1732 (dropped 0), bytes from the radio 0
+  from the radio: frames 0 (with a command number < 80: 0), bad checksum 0, bad length 0, truncated 0
+  to the radio: frames 16: 21=1 29=1 33=1 34=1 35=1 36=1 38=3 3C=1 3E=1 44=1 EA=4
+  outputs: 20 lines, console: 5 lines
+### code=0
+### golden_stream --decoder can_20261111_191045.log --stall 10,50
+can_20261111_191045.stall_10_50: steps 479769, stalls 48, CAN frames 98344 (dropped 0), bytes from the radio 5345
+  from the radio: frames 515 (with a command number < 80: 0), bad checksum 0, bad length 0, truncated 0
+  to the radio: frames 578: 20=50 21=19 29=360 32=109 33=1 34=2 35=2 36=5 38=14 3C=1 3E=11 44=2 EA=2
+  outputs: 194 lines, console: 141 lines
+### code=0
+### golden_stream --decoder can_20261111_191045.log --stall 10,500
+can_20261111_191045.stall_10_500: steps 458169, stalls 48, CAN frames 98344 (dropped 0), bytes from the radio 5345
+  from the radio: frames 515 (with a command number < 80: 0), bad checksum 0, bad length 0, truncated 0
+  to the radio: frames 565: 20=49 21=19 29=349 32=108 33=1 34=2 35=2 36=5 38=14 3C=1 3E=11 44=2 EA=2
+  outputs: 190 lines, console: 140 lines
+### code=0
+### golden_stream --decoder can_20261111_191045.log --drop 0E1
+can_20261111_191045.drop_0E1: steps 482169, stalls 0, CAN frames 95994 (dropped 2350), bytes from the radio 5345
+  from the radio: frames 515 (with a command number < 80: 0), bad checksum 0, bad length 0, truncated 0
+  to the radio: frames 576: 20=50 21=19 29=360 32=107 33=1 34=2 35=2 36=5 38=14 3C=1 3E=11 44=2 EA=2
+  outputs: 194 lines, console: 137 lines
+### code=0
+### golden_stream --decoder can_20261111_191045.log --drop 0F6
+can_20261111_191045.drop_0F6: steps 482169, stalls 0, CAN frames 97874 (dropped 470), bytes from the radio 5345
+  from the radio: frames 515 (with a command number < 80: 0), bad checksum 0, bad length 0, truncated 0
+  to the radio: frames 578: 20=50 21=19 29=360 32=109 33=1 34=2 35=2 36=5 38=14 3C=1 3E=11 44=2 EA=2
+  outputs: 220 lines, console: 141 lines
+### code=0

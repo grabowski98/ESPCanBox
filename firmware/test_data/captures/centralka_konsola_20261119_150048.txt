@@ -1,0 +1,406 @@
+# centralka-508, nagranie tools/nagraj.py; czas w sekundach od startu urzadzenia; start 2026-11-19 15:00:48
+(0.327) [park] tyl=6 przod=6 dzwiek=0 tyl odstep=0x3F strefy tyl 777 przod 777
+(83.584) [wifi] urzadzenia w sieci centralki: 1
+(131.800) [auto] acc=1
+(131.807) [park] tyl=2 przod=2 dzwiek=0 tyl odstep=0x3F strefy tyl 777 przod 777
+(133.422) [od radia] A6 1A 0B 13 0E 38
+(133.426) [od radia] 81 01
+(133.428) [od radia] 90 71 00
+(133.432) [od radia] C0 01 01 00 00 00 00 00 00
+(133.436) [od radia] C4 03
+(133.437) [od radia] CA 00
+(134.426) [od radia] 81 01
+(134.428) [od radia] 90 71 00
+(134.436) [od radia] C4 03
+(134.438) [od radia] CA 00
+(135.434) [od radia] 81 01
+(135.437) [od radia] 90 71 00
+(135.444) [od radia] C4 03
+(135.446) [od radia] CA 00
+(136.443) [od radia] 81 01
+(136.447) [od radia] 90 71 00
+(136.454) [od radia] C4 03
+(136.455) [od radia] CA 00
+(138.763) [cantx] zbudowane=1 uzbrojone=1 po_restarcie=1 kontroler=NORMAL maska=0x0000B2E6
+(138.764) [cantx] stan=gotowe wyslane=0 potwierdzone=0 nieudane=0 odmowy=0 tec=0 rec=0 blad=brak
+(138.764) [cantx] kontroler: bledy magistrali=30 arbitraz=0 bez potwierdzenia=0 bus-off=0 powroty=0 licznik okna=0
+(155.438) [od radia] wypisywanie=0
+(171.886) [od radia] wypisywanie=1
+(173.638) [od radia] wypisywanie=0
+(175.379) [od radia] wypisywanie=1
+(178.687) [od radia] A6 1A 0B 13 0E 39
+(195.308) [cantx] ROZBROJONE od razu
+(195.308) [cantx] do restartu kontroler zostaje w trybie NORMAL z zamknietym nadajnikiem
+(238.103) [od radia] A6 1A 0B 13 0E 3A
+(251.215) [wifi] urzadzenia w sieci centralki: 0
+(265.236) [wifi] urzadzenia w sieci centralki: 1
+(266.238) [wifi] urzadzenia w sieci centralki: 0
+(298.506) [od radia] A6 1A 0B 13 0E 3B
+(355.373) [wifi] urzadzenia w sieci centralki: 1
+(358.952) [od radia] A6 1A 0B 13 0F 00
+(362.252) [cantx] ROZBROJONE od razu
+(362.252) [cantx] do restartu kontroler zostaje w trybie NORMAL z zamknietym nadajnikiem
+(365.651) [cantx] ROZBROJONE od razu
+(365.651) [cantx] do restartu kontroler zostaje w trybie NORMAL z zamknietym nadajnikiem
+(377.470) [od radia] wypisywanie=0
+(385.279) [od radia] wypisywanie=1
+(393.962) [cantx] zbudowane=1 uzbrojone=0 po_restarcie=0 kontroler=NORMAL maska=0x0000B2E6
+(393.962) [cantx] stan=rozbrojone wyslane=0 potwierdzone=0 nieudane=0 odmowy=0 tec=0 rec=0 blad=brak
+(393.962) [cantx] kontroler: bledy magistrali=30 arbitraz=0 bez potwierdzenia=0 bus-off=0 powroty=0 licznik okna=0
+(418.344) [od radia] A6 1A 0B 13 0F 01
+(419.568) [od radia] C0 0C 30 00 00 00 00 00 00
+# ZNACZNIK 1 (443.364) zegar komputera 15:01:24: zaplon off
+(445.146) [park] tyl=6 przod=6 dzwiek=0 tyl odstep=0x3F strefy tyl 777 przod 777
+(447.992) [auto] acc=0
+(449.591) [od radia] 81 00
+(449.592) [od radia] 90 71 00
+(449.597) [od radia] 81 00
+(449.598) [od radia] 90 71 00
+(450.521) [od radia] 81 00
+(450.522) [od radia] 90 71 00
+(451.524) [od radia] 81 00
+(451.525) [od radia] 90 71 00
+# ZNACZNIK 2 (486.350) zegar komputera 15:02:08: zaplon on
+(487.681) [auto] acc=1
+(487.684) [park] tyl=2 przod=2 dzwiek=0 tyl odstep=0x3F strefy tyl 777 przod 777
+(488.609) [od radia] A6 1A 0B 13 0F 02
+(488.615) [od radia] 81 01
+(488.619) [od radia] 90 71 00
+(488.627) [od radia] C4 03
+(488.627) [od radia] CA 00
+(489.629) [od radia] 81 01
+(489.630) [od radia] 90 71 00
+(489.638) [od radia] C4 03
+(489.641) [od radia] CA 00
+(489.704) [od radia] C0 01 01 00 00 00 00 00 00
+(490.646) [od radia] 81 01
+(490.649) [od radia] 90 71 00
+(490.657) [od radia] C4 03
+(490.657) [od radia] CA 00
+(491.653) [od radia] 81 01
+(491.655) [od radia] 90 71 00
+(491.662) [od radia] C4 03
+(491.663) [od radia] CA 00
+# ZNACZNIK 3 (519.570) zegar komputera 15:02:41: bt polacz
+(529.251) [od radia] CB 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+(529.260) [od radia] CB 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+(529.263) [od radia] C0 0C 30 00 00 00 00 00 00
+(538.970) [od radia] A6 1A 0B 13 0F 03
+(561.687) [od radia] CB 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+(561.696) [od radia] CB 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+(561.709) [od radia] CB 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+(561.720) [od radia] CB 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+# ZNACZNIK 4 (577.619) zegar komputera 15:03:39: dzwonie
+(579.574) [od radia] C0 05 40 00 00 00 00 00 00
+(580.779) [od radia] C4 0E
+(598.291) [od radia] A6 1A 0B 13 0F 04
+# ZNACZNIK 5 (603.205) zegar komputera 15:04:04: rozlaczam
+(605.507) [od radia] C0 0C 30 00 00 00 00 00 00
+(606.706) [od radia] C4 03
+(658.621) [od radia] A6 1A 0B 13 0F 05
+(695.165) [od radia] C0 05 40 00 00 00 00 00 00
+(696.368) [od radia] C4 0E
+# ZNACZNIK 6 (701.248) zegar komputera 15:05:42: odbieram
+# ZNACZNIK 7 (718.558) zegar komputera 15:06:00: rozlaczam
+(718.975) [od radia] A6 1A 0B 13 0F 06
+(720.634) [od radia] C0 0C 30 00 00 00 00 00 00
+(721.834) [od radia] C4 03
+# ZNACZNIK 8 (727.368) zegar komputera 15:06:08: bt rozlacz
+# ZNACZNIK 9 (729.658) zegar komputera 15:06:11: (bez opisu)
+(734.257) [od radia] CB 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+(734.266) [od radia] CB 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+(735.918) [od radia] C0 01 01 00 00 00 00 00 00
+# ZNACZNIK 10 (741.478) zegar komputera 15:06:23: radio nastepna stacja
+(742.937) [od radia] C2 01 5F 23 02
+(743.002) [od radia] C2 01 64 23 02
+(743.067) [od radia] C2 01 69 23 02
+(743.132) [od radia] C2 01 6E 23 02
+(743.198) [od radia] C2 01 73 23 02
+(743.265) [od radia] C2 01 78 23 02
+(743.333) [od radia] C2 01 7D 23 02
+(743.403) [od radia] C2 01 82 23 02
+(743.467) [od radia] C2 01 87 23 02
+(743.534) [od radia] C2 01 8C 23 02
+(743.598) [od radia] C2 01 91 23 02
+(743.665) [od radia] C2 01 96 23 02
+(743.733) [od radia] C2 01 9B 23 02
+(743.799) [od radia] C2 01 A0 23 02
+(743.865) [od radia] C2 01 A5 23 02
+(743.932) [od radia] C2 01 AA 23 02
+(743.999) [od radia] C2 01 AF 23 02
+(744.065) [od radia] C2 01 B4 23 02
+(744.132) [od radia] C2 01 B9 23 02
+(744.195) [od radia] C2 01 BE 23 02
+(746.358) [od radia] C2 01 F0 23 04
+(747.404) [od radia] C2 01 0E 24 05
+# ZNACZNIK 11 (754.830) zegar komputera 15:06:36: radio poprzednia stacja
+(758.035) [od radia] C2 01 09 24 05
+(758.107) [od radia] C2 01 04 24 05
+(758.171) [od radia] C2 01 FF 23 05
+(758.238) [od radia] C2 01 FA 23 05
+(758.311) [od radia] C2 01 F5 23 05
+(758.376) [od radia] C2 01 F0 23 05
+(759.541) [od radia] C2 01 BE 23 03
+# ZNACZNIK 12 (770.878) zegar komputera 15:06:52: auto
+(778.411) [od radia] A6 1A 0B 13 0F 07
+# ZNACZNIK 13 (780.444) zegar komputera 15:07:01: a/c
+# ZNACZNIK 14 (787.270) zegar komputera 15:07:08: max a/c
+# ZNACZNIK 15 (795.345) zegar komputera 15:07:16: temperatura lewa +
+# ZNACZNIK 16 (804.112) zegar komputera 15:07:25: temperatura lewa -
+# ZNACZNIK 17 (812.078) zegar komputera 15:07:33: nawiew na twarz
+# ZNACZNIK 18 (822.918) zegar komputera 15:07:44: nawiew na nogi
+# ZNACZNIK 19 (828.038) zegar komputera 15:07:49: nawiew od dolu do gory
+(838.831) [od radia] A6 1A 0B 13 0F 08
+# ZNACZNIK 20 (840.939) zegar komputera 15:08:02: nawiew na twarz prawy
+# ZNACZNIK 21 (847.098) zegar komputera 15:08:08: nawiew na nogi prawy
+# ZNACZNIK 22 (854.268) zegar komputera 15:08:15: nawiew od dolu do gory prawy
+# ZNACZNIK 23 (859.733) zegar komputera 15:08:21: nawiew na szybe
+# ZNACZNIK 24 (871.859) zegar komputera 15:08:33: sila nawiewu +
+# ZNACZNIK 25 (878.298) zegar komputera 15:08:39: sila nawiewu -
+# ZNACZNIK 26 (885.018) zegar komputera 15:08:46: obieg zamkniety
+# ZNACZNIK 27 (890.259) zegar komputera 15:08:51: podgrzewanie szyby
+# ZNACZNIK 28 (895.732) zegar komputera 15:08:57: mono klima
+(898.250) [od radia] A6 1A 0B 13 0F 09
+# ZNACZNIK 29 (918.859) zegar komputera 15:09:20: [uwaga właściciela usunięta] klikalem to fizycznie przyciskami zamiast na ekranie
+(922.942) [od radia] C0 0C 30 00 00 00 00 00 00
+(930.445) [od radia] 90 21 00 00 00
+# ZNACZNIK 30 (938.543) zegar komputera 15:09:40: nawiew +
+(939.338) [klima] radio: 8A 04 01 temperatura lewa plus (bez dzialania)
+(939.339) [od radia] 8A 04 01
+# ZNACZNIK 31 (946.004) zegar komputera 15:09:47: zle
+# ZNACZNIK 32 (950.204) zegar komputera 15:09:51: zaczynam jeszcze raz
+# ZNACZNIK 33 (957.569) zegar komputera 15:09:58: temperatura lewa +
+(958.097) [klima] radio: 8A 04 01 temperatura lewa plus (bez dzialania)
+(958.098) [od radia] 8A 04 01
+(958.660) [od radia] A6 1A 0B 13 0F 0A
+# ZNACZNIK 34 (965.082) zegar komputera 15:10:06: temperatura lewa -
+(966.190) [klima] radio: 8A 04 02 temperatura lewa minus (bez dzialania)
+(966.191) [od radia] 8A 04 02
+# ZNACZNIK 35 (973.731) zegar komputera 15:10:15: temperatura prawa +
+(974.730) [klima] radio: 8A 05 01 temperatura prawa plus (bez dzialania)
+(974.731) [od radia] 8A 05 01
+# ZNACZNIK 36 (979.102) zegar komputera 15:10:20: temeperatura prawa -
+(980.007) [klima] radio: 8A 05 02 temperatura prawa minus (bez dzialania)
+(980.008) [od radia] 8A 05 02
+# ZNACZNIK 37 (984.302) zegar komputera 15:10:25: nawiew na nogi
+(985.252) [klima] radio: 8A 08 00 nawiew na nogi = 0 (bez dzialania)
+(985.253) [od radia] 8A 08 00
+(985.595) [klima] radio: 8A 08 00 nawiew na nogi = 0 (bez dzialania)
+(985.595) [od radia] 8A 08 00
+(986.052) [klima] radio: 8A 08 00 nawiew na nogi = 0 (bez dzialania)
+(986.052) [od radia] 8A 08 00
+(986.516) [klima] radio: 8A 08 00 nawiew na nogi = 0 (bez dzialania)
+(986.517) [od radia] 8A 08 00
+# ZNACZNIK 38 (990.318) zegar komputera 15:10:31: nawiew na twarz
+(991.541) [klima] radio: 8A 06 00 nawiew na wprost = 0 (bez dzialania)
+(991.541) [od radia] 8A 06 00
+# ZNACZNIK 39 (995.480) zegar komputera 15:10:36: nawiew na szybe
+(996.450) [klima] radio: 8A 07 00 nawiew na szybe = 0 (bez dzialania)
+(996.451) [od radia] 8A 07 00
+(996.674) [klima] radio: 8A 07 00 nawiew na szybe = 0 (bez dzialania)
+(996.674) [od radia] 8A 07 00
+# ZNACZNIK 40 (999.653) zegar komputera 15:10:41: ac
+(1000.685) [klima] radio: 8A 02 01 A/C = 1 (bez dzialania)
+(1000.685) [od radia] 8A 02 01
+# ZNACZNIK 41 (1001.939) zegar komputera 15:10:43: auto
+(1002.871) [klima] radio: 8A 01 01 AUTO = 1 (bez dzialania)
+(1002.872) [od radia] 8A 01 01
+# ZNACZNIK 42 (1004.701) zegar komputera 15:10:46: max ac
+(1005.565) [klima] radio: 8A 03 01 MAX A/C = 1 (bez dzialania)
+(1005.566) [od radia] 8A 03 01
+# ZNACZNIK 43 (1007.067) zegar komputera 15:10:48: mono
+(1007.743) [klima] radio: 8A 0B 00 MONO = 0 (bez dzialania)
+(1007.744) [od radia] 8A 0B 00
+# ZNACZNIK 44 (1011.803) zegar komputera 15:10:53: wiatrak
+(1012.730) [klima] radio: 8A 09 02 poziom intensywnosci = 2 (bez dzialania)
+(1012.731) [od radia] 8A 09 02
+(1018.099) [od radia] A6 1A 0B 13 0F 0B
+# ZNACZNIK 45 (1019.270) zegar komputera 15:11:00: sila nawiewu -
+(1020.195) [klima] radio: 8A 0A 02 sila nawiewu minus (bez dzialania)
+(1020.195) [od radia] 8A 0A 02
+# ZNACZNIK 46 (1024.478) zegar komputera 15:11:05: sila nawiewu +
+(1025.312) [klima] radio: 8A 0A 01 sila nawiewu plus (bez dzialania)
+(1025.312) [od radia] 8A 0A 01
+# ZNACZNIK 47 (1028.228) zegar komputera 15:11:09: wylacz wlacz
+# ZNACZNIK 48 (1029.047) zegar komputera 15:11:10: (bez opisu)
+(1038.161) [od radia] 90 17 00 00 00
+(1040.374) [dzwiek] radio: 84 06 00 dzwiek nr 6 = 0 (bez dzialania)
+(1040.374) [od radia] 84 06 00
+# ZNACZNIK 49 (1044.699) zegar komputera 15:11:26: wysokie tony
+(1046.355) [dzwiek] radio: 84 06 00 dzwiek nr 6 = 0 (bez dzialania)
+(1046.355) [od radia] 84 06 00
+# ZNACZNIK 50 (1048.622) zegar komputera 15:11:30: wysokie tony +
+(1050.620) [dzwiek] radio: 84 06 01 dzwiek nr 6 = 1 (bez dzialania)
+(1050.621) [od radia] 84 06 01
+# ZNACZNIK 51 (1052.178) zegar komputera 15:11:33: bas
+(1054.390) [dzwiek] radio: 84 05 00 dzwiek nr 5 = 0 (bez dzialania)
+(1054.391) [od radia] 84 05 00
+# ZNACZNIK 52 (1055.978) zegar komputera 15:11:37: bas +
+(1057.941) [dzwiek] radio: 84 05 01 dzwiek nr 5 = 1 (bez dzialania)
+(1057.942) [od radia] 84 05 01
+# ZNACZNIK 53 (1063.923) zegar komputera 15:11:45: tlumienie
+(1065.525) [dzwiek] radio: 84 03 00 dzwiek nr 3 = 0 (bez dzialania)
+(1065.525) [od radia] 84 03 00
+# ZNACZNIK 54 (1069.675) zegar komputera 15:11:51: tlumienie +
+(1070.757) [dzwiek] radio: 84 03 01 dzwiek nr 3 = 1 (bez dzialania)
+(1070.757) [od radia] 84 03 01
+(1073.645) [dzwiek] radio: 84 03 01 dzwiek nr 3 = 1 (bez dzialania)
+(1073.646) [od radia] 84 03 01
+# ZNACZNIK 55 (1075.828) zegar komputera 15:11:57: balans
+(1077.546) [dzwiek] radio: 84 04 00 dzwiek nr 4 = 0 (bez dzialania)
+(1077.546) [od radia] 84 04 00
+(1078.534) [od radia] A6 1A 0B 13 0F 0C
+# ZNACZNIK 56 (1079.958) zegar komputera 15:12:01: balans +
+(1082.387) [dzwiek] radio: 84 04 01 dzwiek nr 4 = 1 (bez dzialania)
+(1082.387) [od radia] 84 04 01
+# ZNACZNIK 57 (1096.021) zegar komputera 15:12:17: wybor dzwieku
+(1097.824) [dzwiek] radio: 84 09 00 dzwiek nr 9 = 0 (bez dzialania)
+(1097.825) [od radia] 84 09 00
+# ZNACZNIK 58 (1100.697) zegar komputera 15:12:22: wybor dzwieku +
+(1101.942) [dzwiek] radio: 84 09 01 dzwiek nr 9 = 1 (bez dzialania)
+(1101.942) [od radia] 84 09 01
+# ZNACZNIK 59 (1105.128) zegar komputera 15:12:26: dzwiek przestrzenny
+(1107.588) [dzwiek] radio: 84 02 00 dzwiek nr 2 = 0 (bez dzialania)
+(1107.588) [od radia] 84 02 00
+(1108.103) [dzwiek] radio: 84 02 00 dzwiek nr 2 = 0 (bez dzialania)
+(1108.103) [od radia] 84 02 00
+# ZNACZNIK 60 (1112.157) zegar komputera 15:12:33: dzwiek przestrzenny +
+(1113.801) [dzwiek] radio: 84 02 01 dzwiek nr 2 = 1 (bez dzialania)
+(1113.801) [od radia] 84 02 01
+# ZNACZNIK 61 (1119.460) zegar komputera 15:12:40: glosnosc / loudness
+(1120.618) [dzwiek] radio: 84 0A 01 dzwiek nr 10 = 1 (bez dzialania)
+(1120.619) [od radia] 84 0A 01
+(1138.961) [od radia] A6 1A 0B 13 0F 0D
+# ZNACZNIK 62 (1185.470) zegar komputera 15:13:46: nie wpisuje po kolei, stan systemu, przebieg na oleju, sterowanie klimatyzacja, ustawienia  zapamietywania predkosci, rejestr alarmow, przyciski panelu analogowego, ustawienia wzmaczniacza, wybor modelu
+# ZNACZNIK 63 (1194.938) zegar komputera 15:13:56: stan systemu
+(1198.404) [od radia] A6 1A 0B 13 0F 0E
+# ZNACZNIK 64 (1221.513) zegar komputera 15:14:22: [uwaga właściciela usunięta]; klikam wszystko po kolei, wszedlem teraz w stan systemu i lece po kolei, pozniej wyjde i dalej
+(1223.770) [ust] radio: 80 01 00 asystent parkowania = 0: ODMOWA (nadawanie rozbrojone)
+(1223.770) [od radia] 80 01 00
+(1226.141) [ust] radio: 80 0B 00 jezyk = 0: ODMOWA (odmowa stala)
+(1226.142) [od radia] 80 0B 00
+(1227.163) [ust] radio: 80 01 00 asystent parkowania = 0: ODMOWA (nadawanie rozbrojone)
+(1227.164) [od radia] 80 01 00
+(1228.345) [ust] radio: 80 02 01 wycieraczka przy cofaniu = 1: ODMOWA (nadawanie rozbrojone)
+(1228.346) [od radia] 80 02 01
+(1229.950) [ust] radio: 80 06 01 prowadz mnie do domu = 1: ODMOWA (nadawanie rozbrojone)
+(1229.951) [od radia] 80 06 01
+(1230.572) [ust] radio: 80 06 03 prowadz mnie do domu = 3: ODMOWA (nadawanie rozbrojone)
+(1230.573) [od radia] 80 06 03
+(1232.506) [ust] radio: 80 07 03 oswietlenie powitalne = 3: ODMOWA (nadawanie rozbrojone)
+(1232.506) [od radia] 80 07 03
+(1233.160) [ust] radio: 80 07 01 oswietlenie powitalne = 1: ODMOWA (nadawanie rozbrojone)
+(1233.161) [od radia] 80 07 01
+(1234.108) [ust] dzwiek = 1: bez zmiany (auto juz ma ten stan), nic nie wyslano
+(1234.109) [od radia] 80 09 01
+(1234.740) [ust] radio: 80 09 02 dzwiek = 2: ODMOWA (nadawanie rozbrojone)
+(1234.740) [od radia] 80 09 02
+(1236.046) [ust] radio: 80 0A 02 jednostki paliwa = 2: ODMOWA (odmowa stala)
+(1236.047) [od radia] 80 0A 02
+(1236.594) [ust] radio: 80 0A 00 jednostki paliwa = 0: ODMOWA (odmowa stala)
+(1236.595) [od radia] 80 0A 00
+(1237.213) [ust] radio: 80 0C 01 martwe pole = 1: ODMOWA (nadawanie rozbrojone)
+(1237.213) [od radia] 80 0C 01
+(1237.860) [ust] radio: 80 0F 00 otwarcie drzwi = 0: ODMOWA (nadawanie rozbrojone)
+(1237.860) [od radia] 80 0F 00
+(1239.569) [ust] radio: 80 10 00 kalibracja opon = 0: brak znanej ramki
+(1239.570) [od radia] 80 10 00
+(1240.404) [ust] radio: 80 0D 01 Start/Stop = 1: ODMOWA (nadawanie rozbrojone)
+(1240.405) [od radia] 80 0D 01
+(1241.054) [ust] radio: 80 05 00 przelacznik radaru = 0: ODMOWA (nadawanie rozbrojone)
+(1241.055) [od radia] 80 05 00
+(1241.554) [ust] radio: 80 14 01 kontrola trakcji = 1: brak znanej ramki
+(1241.555) [od radia] 80 14 01
+(1243.924) [ust] radio: 80 14 01 kontrola trakcji = 1: brak znanej ramki
+(1243.924) [od radia] 80 14 01
+(1244.457) [ust] radio: 80 15 01 wykrywanie zmeczenia = 1: ODMOWA (odmowa stala)
+(1244.458) [od radia] 80 15 01
+(1245.064) [ust] radio: 80 16 00 kolor zegarow = 0: brak znanej ramki
+(1245.065) [od radia] 80 16 00
+(1246.045) [ust] radio: 80 16 00 kolor zegarow = 0: brak znanej ramki
+(1246.045) [od radia] 80 16 00
+(1247.281) [ust] radio: 80 12 01 opoznienie reflektorow = 1: brak znanej ramki
+(1247.282) [od radia] 80 12 01
+(1247.899) [ust] radio: 80 12 03 opoznienie reflektorow = 3: brak znanej ramki
+(1247.899) [od radia] 80 12 03
+(1248.400) [klima] radio: 8A 0C 01 jednostka temperatury = 1 (bez dzialania)
+(1248.400) [od radia] 8A 0C 01
+(1249.804) [klima] radio: 8A 0C 01 jednostka temperatury = 1 (bez dzialania)
+(1249.805) [od radia] 8A 0C 01
+(1251.095) [ust] radio: 80 18 01 automatyczne swiatla = 1: ODMOWA (odmowa stala)
+(1251.095) [od radia] 80 18 01
+(1251.576) [ust] radio: 80 19 01 automatyczne ryglowanie = 1: brak znanej ramki
+(1251.576) [od radia] 80 19 01
+(1252.023) [ust] radio: 80 1A 01 adaptacyjne reflektory = 1: ODMOWA (odmowa stala)
+(1252.023) [od radia] 80 1A 01
+(1252.423) [ust] radio: 80 1B 01 Collision risk Activation = 1: brak znanej ramki
+(1252.423) [od radia] 80 1B 01
+(1253.123) [ust] radio: 80 1C 02 Collision risk Sensitivity = 2: brak znanej ramki
+(1253.123) [od radia] 80 1C 02
+(1254.172) [ust] radio: 80 1B 01 Collision risk Activation = 1: brak znanej ramki
+(1254.172) [od radia] 80 1B 01
+(1256.150) [ust] radio: 80 1C 01 Collision risk Sensitivity = 1: brak znanej ramki
+(1256.151) [od radia] 80 1C 01
+(1256.636) [ust] radio: 80 1D 01 Speed recommendation = 1: brak znanej ramki
+(1256.637) [od radia] 80 1D 01
+(1257.782) [ust] radio: 80 1E 01 Directional headlamps = 1: brak znanej ramki
+(1257.783) [od radia] 80 1E 01
+(1258.233) [ust] radio: 80 1F 01 door mirror folding = 1: brak znanej ramki
+(1258.234) [od radia] 80 1F 01
+(1258.701) [ust] radio: 80 03 01 odblokowanie bagaznika = 1: brak znanej ramki
+(1258.701) [od radia] 80 03 01
+(1258.843) [od radia] A6 1A 0B 13 0F 0F
+(1262.472) [ust] radio: 80 10 01 kalibracja opon = 1: brak znanej ramki
+(1262.473) [od radia] 80 10 01
+(1265.107) [od radia] 82 00 00 00 00 00 00
+(1265.109) [od radia] 90 33 00 00 00
+(1266.831) [od radia] 82 00 00 00 40 00 00
+(1267.563) [od radia] 82 00 00 00 01 00 00
+(1267.566) [od radia] 90 34 00 00 00
+(1268.262) [od radia] 82 00 00 00 41 00 00
+(1268.867) [od radia] 82 00 00 00 02 00 00
+(1268.870) [od radia] 90 35 00 00 00
+(1269.667) [od radia] 82 00 00 00 22 00 00
+(1270.511) [od radia] 82 00 00 00 01 00 00
+(1270.514) [od radia] 90 34 00 00 00
+(1272.693) [od radia] 90 3B 00 00 00
+(1273.934) [od radia] 88 40 00 00 00 00 00
+(1288.192) [od radia] 90 3B 00 00 00
+(1292.109) [od radia] 87 FC 01
+(1294.192) [od radia] 87 FD 01
+(1298.919) [od radia] 8C 02
+(1299.119) [od radia] 8C 00
+(1299.194) [od radia] 8C 01
+(1299.395) [od radia] 8C 00
+(1299.609) [od radia] 8C 04
+(1299.809) [od radia] 8C 00
+(1299.868) [od radia] 8C 03
+(1300.069) [od radia] 8C 00
+(1301.190) [od radia] 8C 06
+(1301.391) [od radia] 8C 00
+(1301.548) [od radia] 8C 07
+(1301.749) [od radia] 8C 00
+(1302.004) [od radia] 8C 05
+(1302.206) [od radia] 8C 00
+(1302.336) [od radia] 8C 08
+(1302.537) [od radia] 8C 00
+(1302.629) [od radia] 8C 09
+(1302.829) [od radia] 8C 00
+(1306.484) [od radia] 90 17 00 00 00
+(1318.239) [od radia] A6 1A 0B 13 0F 10
+# ZNACZNIK 65 (1320.698) zegar komputera 15:16:02: kalibracj acisnienia opon
+(1329.446) [ust] radio: 80 10 00 kalibracja opon = 0: brak znanej ramki
+(1329.446) [od radia] 80 10 00
+(1337.228) [auto] drzwi=0x40
+(1343.988) [auto] drzwi=0x00
+(1344.129) [auto] drzwi=0x40
+(1347.690) [auto] drzwi=0x00
+(1349.229) [auto] drzwi=0x80
+(1350.540) [auto] drzwi=0x00
+(1354.128) [auto] drzwi=0x10
+# ZNACZNIK 66 (1360.712) zegar komputera 15:16:42: (bez opisu)
+(1366.228) [auto] drzwi=0x30
+(1367.228) [auto] drzwi=0x10
+(1378.693) [od radia] A6 1A 0B 13 0F 11
+(1384.228) [auto] drzwi=0x18
+# ZNACZNIK 67 (1386.269) zegar komputera 15:17:07: (bez opisu)

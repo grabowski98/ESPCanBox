@@ -1,0 +1,28 @@
+### beeper_scale
+zone 6: 11 beeps in 10 s (1.1 per second)
+OK    zone 6 beeps
+zone 5: 15 beeps in 10 s (1.5 per second)
+OK    zone 5 beeps
+OK    zone 5 at least 1.3 times faster than 6
+zone 4: 22 beeps in 10 s (2.2 per second)
+OK    zone 4 beeps
+OK    zone 4 at least 1.3 times faster than 5
+zone 3: 32 beeps in 10 s (3.2 per second)
+OK    zone 3 beeps
+OK    zone 3 at least 1.3 times faster than 4
+zone 2: 46 beeps in 10 s (4.6 per second)
+OK    zone 2 beeps
+OK    zone 2 at least 1.3 times faster than 3
+zone 1: 67 beeps in 10 s (6.7 per second)
+OK    zone 1 beeps
+OK    zone 1 at least 1.3 times faster than 2
+OK    zone 7: silence
+OK    front inactive: silence
+OK    zone 0 without a request from the car: beeping, not a continuous tone
+OK    interval 0x00 from the car: continuous tone
+tone after the last frame: 301 ms
+OK    no frames: the tone stops after 400 ms at most
+OK    factory mode: silence without a request from the car
+
+RESULT: MATCH
+### code=0

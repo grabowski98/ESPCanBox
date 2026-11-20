@@ -1,0 +1,122 @@
+# Release images, built ONLY here in CI (a local build carries paths of the build machine).
+#
+# BEFORE THE FIRST RELEASE: the tree has never been flashed to a device. Run the bench test protocol
+# (docs/en/testing/bench-test-protocol.md) on a bench board with an image from this workflow (manual run,
+# bench_tested = false), and push a version tag only after it passed and CHANGELOG.md no longer says
+# "not yet bench-tested". Until then the images are named ...-NOT-BENCH-TESTED.
+#
+# What it does:
+#   1. tools/release_check.sh (all checks; builds the six environments with -ffile-prefix-map, so the
+#      project code in the images holds "." and "~/.platformio" instead of runner paths);
+#   2. packs ONLY the five environments without CAN transmit (listen, decoder, listen_wifi, decoder_wifi,
+#      listen_generic_wifi): the application image (for an update over Wi-Fi or esptool at 0x10000) and a
+#      merged image written at address 0 (tools/merge_image.py, for ESP Web Tools or one esptool command).
+#      decoder_tx_wifi is built only so check_no_can_tx.sh can confirm it is the one program with
+#      twai_transmit; it is never packed. Whoever wants to transmit builds it on purpose (docs, safety).
+#   3. checks dist/ (no transmit image, private data scan of the binaries) and uploads it as a workflow
+#      artifact with SHA256SUMS. Publishing a GitHub release from it is a manual step of the owner.
+#
+# Runs by hand (Actions -> Release -> Run workflow) or on a version tag v<FW_VERSION> (v<x.y.z>, or a
+# pre-release such as v2.0.0-beta.1; both match the trigger "v*.*.*") that must match FW_VERSION in
+# firmware/src/version.h. No secrets; read-only token.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bench_tested:
+        description: "The bench test protocol passed for this commit"
+        type: boolean
+        default: false
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+jobs:
+  images:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      UV_VERSION: "0.12.2"
+      PIO: uvx --from platformio==6.2.0 platformio
+      PYTHON: python
+      PYTHONDONTWRITEBYTECODE: "1"
+      RELEASE_ENVS: listen decoder listen_wifi decoder_wifi listen_generic_wifi
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        run: python -m pip install "uv==${UV_VERSION}"
+
+      - name: Version and build flags
+        env:
+          BENCH_TESTED: ${{ inputs.bench_tested }}
+        run: |
+          # x.y.z or a pre-release x.y.z-beta.N; the value goes into file names, so only these characters
+          version=$(sed -n 's/^#define FW_VERSION "\([0-9][0-9A-Za-z.-]*\)".*/\1/p' firmware/src/version.h)
+          [ -n "$version" ] || { echo "no FW_VERSION in firmware/src/version.h"; exit 1; }
+          echo "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?$' ||
+            { echo "FW_VERSION ${version} is not x.y.z or x.y.z-<pre-release>"; exit 1; }
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "tag ${GITHUB_REF_NAME} does not match FW_VERSION ${version}"
+            exit 1
+          fi
+          # A version tag is a claim that the bench test protocol passed: refuse while the changelog says otherwise.
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && grep -qi "not yet bench-tested" CHANGELOG.md; then
+            echo "CHANGELOG.md still says 'not yet bench-tested': run the bench test protocol before tagging"
+            exit 1
+          fi
+          suffix=""
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ] && [ "${BENCH_TESTED}" != "true" ]; then
+            suffix="-NOT-BENCH-TESTED"
+          fi
+          {
+            echo "FW_VERSION=${version}"
+            echo "NAME_SUFFIX=${suffix}"
+            # Replaces the runner paths in debug data and assert texts of the project code.
+            echo "PLATFORMIO_BUILD_FLAGS=-ffile-prefix-map=${GITHUB_WORKSPACE}=. -ffile-prefix-map=${HOME}/.platformio=~/.platformio"
+          } >> "$GITHUB_ENV"
+
+      - name: Build and all checks
+        run: bash tools/release_check.sh
+
+      - name: Pack images without transmit
+        working-directory: firmware
+        run: |
+          mkdir -p ../dist
+          for env in ${RELEASE_ENVS}; do
+            case "$env" in *tx*) echo "refusing transmit environment $env"; exit 1 ;; esac
+            name="${env}-${FW_VERSION}${NAME_SUFFIX}"
+            cp ".pio/build/${env}/firmware.bin" "../dist/${name}.bin"
+            ${PIO} project metadata -e "$env" --json-output < /dev/null > "../dist/meta.json"
+            python -I tools/merge_image.py ../dist/meta.json "$env" "../dist/${name}-merged.bin"
+          done
+          rm -f ../dist/meta.json
+
+      - name: Check dist
+        run: |
+          for f in dist/*; do
+            case "${f#dist/}" in *tx*) echo "a transmit image in dist/: $f"; exit 1 ;; esac
+          done
+          python -I tools/scan_private.py dist
+          (cd dist && sha256sum ./*.bin > SHA256SUMS)
+          cat dist/SHA256SUMS
+
+      - name: Upload images
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: firmware-${{ env.FW_VERSION }}${{ env.NAME_SUFFIX }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30

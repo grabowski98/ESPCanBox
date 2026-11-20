@@ -1,0 +1,45 @@
+{
+  "_comment": "Panel data for the psa_aee2010 vehicle profile (Peugeot 508 SW 2015). Names and descriptions are i18n keys: the texts live in web/i18n/<lang>.json. tools/embed_web.py inserts this file into the page as PROFILE.",
+  "id": "psa_aee2010",
+  "vin_ids": ["336", "3B6", "2B6"],
+  "frames": {
+    "036": ["LIGHTING", "psa.frame.036"],
+    "0A2": ["WHEEL_BUTTONS_2", "psa.frame.0A2"],
+    "0E1": ["PARKING_SENSORS", "psa.frame.0E1"],
+    "0F6": ["BODY_STATE", "psa.frame.0F6"],
+    "10B": ["STEERING_ANGLE", "psa.frame.10B"],
+    "122": ["PANEL_BUTTONS", "psa.frame.122"],
+    "15B": ["PERSONALISATION_REQUEST", "psa.frame.15B"],
+    "165": ["RADIO_STATUS", "psa.frame.165"],
+    "1A5": ["RADIO_VOLUME", "psa.frame.1A5"],
+    "21F": ["WHEEL_BUTTONS", "psa.frame.21F"],
+    "221": ["TRIP_COMPUTER_NOW", "psa.frame.221"],
+    "261": ["TRIP_COMPUTER_2", "psa.frame.261"],
+    "2A1": ["TRIP_COMPUTER_1", "psa.frame.2A1"],
+    "2AD": ["REAR_DEFROST", "psa.frame.2AD"],
+    "350": ["CLIMATE_STATE", "psa.frame.350"],
+    "336": ["VIN", "psa.frame.336"],
+    "3B6": ["VIN", "psa.frame.3B6"],
+    "2B6": ["VIN", "psa.frame.2B6"]
+  },
+  "car_keys": [
+    ["14", "psa.key.14"], ["15", "psa.key.15"], ["16", "psa.key.16"], ["30", "psa.key.30"], ["50", "psa.key.50"],
+    ["07", "psa.key.07"], ["17", "psa.key.17"], ["18", "psa.key.18"], ["21", "psa.key.21"], ["23", "psa.key.23"],
+    ["9E", "psa.key.9E"], ["A0", "psa.key.A0"], ["97", "psa.key.97"], ["98", "psa.key.98"], ["9C", "psa.key.9C"],
+    ["9D", "psa.key.9D"], ["9F", "psa.key.9F"], ["99", "psa.key.99"], ["9B", "psa.key.9B"], ["A4", "psa.key.A4"],
+    ["A1", "psa.key.A1"], ["A3", "psa.key.A3"], ["22", "psa.key.22"], ["81", "psa.key.81"], ["82", "psa.key.82"]
+  ],
+  "radio_fn": [
+    ["08", "xp.fn.08"], ["1F", "xp.fn.1F"], ["30", "xp.fn.30"], ["9A", "xp.fn.9A"], ["9B", "xp.fn.9B"],
+    ["A5", "xp.fn.A5"], ["A6", "xp.fn.A6"], ["B5", "xp.fn.B5"], ["B9", "xp.fn.B9"], ["BF", "xp.fn.BF"]
+  ],
+  "doors": [
+    ["40", "psa.door.driver"], ["80", "psa.door.passenger"], ["10", "psa.door.rear_left"],
+    ["20", "psa.door.rear_right"], ["08", "psa.door.boot"]
+  ],
+  "ignition": {
+    "label": "psa.kv.ignition",
+    "values": { "128": "psa.ign.off", "136": "psa.ign.on", "142": "psa.ign.engine" }
+  },
+  "settings_label": "psa.kv.settings"
+}

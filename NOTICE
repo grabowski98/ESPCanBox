@@ -1,0 +1,93 @@
+ESPCanBox (project name: project.json)
+Copyright 2026 grabowski98
+
+This product includes software developed by grabowski98 and contributors, licensed under the
+Apache License, Version 2.0 (see LICENSE). Documentation: CC BY 4.0 (see LICENSE-docs).
+Hardware design files: CERN-OHL-S-2.0 (see LICENSE-hardware). All three licences are provisional
+until the first public release.
+
+To the author's knowledge, the source tree contains no code copied from other projects.
+The items below are not part of this repository; they are listed because a compiled firmware image contains them, or because
+this project refers to them.
+
+-------------------------------------------------------------------------------
+1. Linked into every firmware image (downloaded by PlatformIO at build time)
+-------------------------------------------------------------------------------
+
+PlatformIO platform "espressif32", version 8.0.0 (pinned in firmware/platformio.ini)
+  Licence stated in the platform's own platform.json: Apache-2.0.
+
+Arduino core for ESP32 (arduino-esp32), https://github.com/espressif/arduino-esp32
+  PlatformIO package "framework-arduinoespressif32", version 4.30312.261024 (arduino-esp32
+  3.3.12, from the package's platform.txt).
+  Licence stated in the package metadata (package.json) and in the headers of the core files:
+  LGPL-2.1-or-later.
+
+ESP-IDF, https://github.com/espressif/esp-idf
+  Pre-built ESP-IDF libraries for the ESP32-S3 in the PlatformIO package
+  "framework-arduinoespressif32-esp32s3-libs", version 3.3.12, built from ESP-IDF v5.5.5
+  (from the package's versions.txt). The package metadata states LGPL-2.1-or-later for the
+  package as a whole.
+
+-------------------------------------------------------------------------------
+1a. Ready-made firmware images (.bin files)
+-------------------------------------------------------------------------------
+
+This section applies to anybody who passes on a compiled firmware image of this project
+(for example a .bin file attached to a release). It is not legal advice; it only repeats what
+the sources named here say. Check the licence texts themselves before you publish an image.
+
+- The image contains the Arduino core for ESP32 (LGPL-2.1-or-later). LGPL-2.1 asks a
+  distributor of a binary to pass on the licence text and to make it possible for the
+  recipient to rebuild or relink the program with a changed version of the library. This
+  project publishes its complete source code, the pinned versions of the platform and packages
+  (firmware/platformio.ini) and the build instructions (docs/en/quick-start/flash.md), so any
+  image can be rebuilt from the same sources. A release with images should also include, or
+  point to, the LGPL-2.1 text and the source of the exact arduino-esp32 version used
+  (https://github.com/espressif/arduino-esp32, release 3.3.12).
+- The image contains parts of ESP-IDF. ESP-IDF's own source code is under Apache-2.0; ESP-IDF
+  also includes third-party components under other licences (for example BSD, MIT and
+  Apache-2.0 components), each with its own notices. The list for the ESP-IDF version used
+  here is on Espressif's page "Copyrights and Licenses":
+  https://docs.espressif.com/projects/esp-idf/en/v5.5.5/esp32s3/COPYRIGHT.html
+  Which of these components end up in an image depends on the build; a release with images
+  should carry the notices that page asks for.
+- When the pinned platform or package versions change, update the versions in this section.
+
+-------------------------------------------------------------------------------
+2. Tools used to build or check the project (not distributed with it)
+-------------------------------------------------------------------------------
+
+PlatformIO Core, uv / uvx, Zig (C++ compiler for the host tests, through the "ziglang" Python
+package), MkDocs, Material for MkDocs, mkdocs-static-i18n, Python. Each under its own licence.
+
+-------------------------------------------------------------------------------
+3. Data sources
+-------------------------------------------------------------------------------
+
+PSA-RE, https://github.com/prototux/PSA-RE (Apache-2.0), commit 67f7581e
+  Community descriptions of PSA CAN frames. This project uses them only as "unverified"
+  descriptions, with a link and the path inside PSA-RE (for example
+  buses/AEE2010.full/LS.INFO-DIV/364.yml), next to its own measurements, which are marked
+  "measured". Its files are not copied into this repository.
+
+Most other facts about the car, the radio and the CAN boxes come from the author's own
+measurements and recordings (firmware/test_data/captures). Every protocol constant in the
+firmware has its source in radios/xp-simple-soft/provenance.md (state of 2026-11-19: 109
+constants, 108 measured, 1 design choice, none marked "source: firmware analysis / needs owner
+decision"). The constants that had no own measurement were measured in the session of
+2026-11-19 (38) or removed from the code (33: the bits of frame 364 with the climate trial, the
+language codes other than Polish, three vehicle setting numbers, the radio frame C5, one sound
+row and the Stop and Start content of frame 1A9). A few bits of the frames sent to the radio
+(listed as "unverified" in the same file) agree with the recordings but never changed in them;
+they decide only what the radio screen shows. Two other public projects (one under GPL-3.0) were
+read to understand frame 1A9; nothing was copied from them, and the 1A9 content known only from
+them (Stop and Start) is not in the firmware.
+
+-------------------------------------------------------------------------------
+4. Names
+-------------------------------------------------------------------------------
+
+Peugeot, Stellantis, Simple Soft, Raise, Junsun and FYT are names of their owners. They are used
+only to say what this project was tested with. This project is not affiliated with, endorsed by
+or connected to any of them.

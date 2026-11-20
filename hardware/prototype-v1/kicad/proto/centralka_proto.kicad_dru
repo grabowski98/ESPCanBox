@@ -1,0 +1,4 @@
+(version 1)
+(rule "prototyp: odstepy"
+  (constraint clearance (min 0.35mm))
+  (constraint track_width (min 0.5mm)))

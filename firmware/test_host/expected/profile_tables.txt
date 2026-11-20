@@ -1,0 +1,67 @@
+### profile_tables CAN_TX_EXPERIMENTAL=0
+CAN_TX_EXPERIMENTAL = 0
+profile psa_aee2010: 1 transmit rows
+  row 0: id 15B, length 8, validator yes
+OK    profile psa_aee2010: every row has a validator, length <= 8, 11-bit id, no duplicates
+profile generic: 0 transmit rows
+OK    profile generic: every row has a validator, length <= 8, 11-bit id, no duplicates
+profile example: 0 transmit rows
+OK    profile example: every row has a validator, length <= 8, 11-bit id, no duplicates
+OK    psa_aee2010: profile uses psa::TX_ALLOW, count = compile-time count (1, or 2 when experimental)
+OK    generic and example: no transmit list
+OK    psa_aee2010: default key remaps 9F->9B, 21->1F
+OK    generic and example: no default key remaps
+--- PSA AEE2010, frame 15B ---
+OK    15B 00 34 97 BA D5 40 00 00: allowed
+OK    15B FF x8 (no content check for 15B yet): allowed
+OK    15B, 7 bytes: refused (length)
+OK    29-bit 1000015B: refused (not on the list)
+OK    260: refused (not on the list)
+--- PSA AEE2010, trial frame 1A9 (two recorded contents); 364 never ---
+OK    1A9 parking sensors button: refused (not on the list)
+OK    1A9 blind spot button: refused (not on the list)
+OK    1A9 Stop and Start (never recorded): refused (not on the list)
+OK    1A9 two buttons at once: refused (not on the list)
+OK    1A9 with another bit set in byte 1: refused (not on the list)
+OK    364 idle, 4 bytes: refused (not on the list)
+OK    364 one button bit, 4 bytes: refused (not on the list)
+OK    364 sliders unavailable, 6 bytes: refused (not on the list)
+--- generic profile and no profile ---
+OK    generic: 15B: refused (not on the list)
+OK    no profile: 15B: refused (not on the list)
+profile_tables: 22 checks, 0 errors
+### code=0
+### profile_tables CAN_TX_EXPERIMENTAL=1
+CAN_TX_EXPERIMENTAL = 1
+profile psa_aee2010: 2 transmit rows
+  row 0: id 15B, length 8, validator yes
+  row 1: id 1A9, length 8, validator yes
+OK    profile psa_aee2010: every row has a validator, length <= 8, 11-bit id, no duplicates
+profile generic: 0 transmit rows
+OK    profile generic: every row has a validator, length <= 8, 11-bit id, no duplicates
+profile example: 0 transmit rows
+OK    profile example: every row has a validator, length <= 8, 11-bit id, no duplicates
+OK    psa_aee2010: profile uses psa::TX_ALLOW, count = compile-time count (1, or 2 when experimental)
+OK    generic and example: no transmit list
+OK    psa_aee2010: default key remaps 9F->9B, 21->1F
+OK    generic and example: no default key remaps
+--- PSA AEE2010, frame 15B ---
+OK    15B 00 34 97 BA D5 40 00 00: allowed
+OK    15B FF x8 (no content check for 15B yet): allowed
+OK    15B, 7 bytes: refused (length)
+OK    29-bit 1000015B: refused (not on the list)
+OK    260: refused (not on the list)
+--- PSA AEE2010, trial frame 1A9 (two recorded contents); 364 never ---
+OK    1A9 parking sensors button: allowed
+OK    1A9 blind spot button: allowed
+OK    1A9 Stop and Start (never recorded): refused (not on the list)
+OK    1A9 two buttons at once: refused (not on the list)
+OK    1A9 with another bit set in byte 1: refused (not on the list)
+OK    364 idle, 4 bytes: refused (not on the list)
+OK    364 one button bit, 4 bytes: refused (not on the list)
+OK    364 sliders unavailable, 6 bytes: refused (not on the list)
+--- generic profile and no profile ---
+OK    generic: 15B: refused (not on the list)
+OK    no profile: 15B: refused (not on the list)
+profile_tables: 22 checks, 0 errors
+### code=0

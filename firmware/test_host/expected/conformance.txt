@@ -1,0 +1,46 @@
+### conformance can_20261111_190817.log
+Box line: frames 124, bad checksum 0, bad length 0, truncated 0, bytes outside frames 5
+Radio line:  frames 169, bad checksum 5, bad length 0, truncated 0, acks 139
+From radio frames: volume 3, time 2026-11-11 19:10, settings 0, unknown commands 0
+
+KEYS: presses from the box 16, matching 16, with a difference 0, missing from us 0, extra from us 0
+
+SENSORS: box frames 0, matching 0 (100.0%), skipped frames of the initial state 4
+POWER: on: box 205867 ms, us 205831 ms (difference -36 ms)
+
+OTHER FRAMES (matching / all):
+   21: 4 / 4
+   29: 4 / 4
+   33: 4 / 4
+   34: 4 / 4
+   35: 4 / 4
+   36: 4 / 4
+   3E: 5 / 5
+   44: 4 / 4
+
+RESULT: MATCH
+### code=0
+### conformance can_20261111_191045.log
+Box line: frames 688, bad checksum 0, bad length 0, truncated 0, bytes outside frames 0
+Radio line:  frames 515, bad checksum 0, bad length 0, truncated 0, acks 661
+From radio frames: volume 3, time 2026-11-11 19:18, settings 2, unknown commands 0
+
+KEYS: presses from the box 20, matching 20, with a difference 0, missing from us 0, extra from us 0
+
+SENSORS: box frames 396, matching 394 (99.5%), skipped frames of the initial state 1
+   different: 439043 ms: box 02020105050505, us 02010105050505
+   different: 439263 ms: box 02020102050505, us 02010101050505
+POWER: off: box 749239 ms, us 749244 ms (difference 5 ms)
+
+OTHER FRAMES (matching / all):
+   21: 17 / 18
+       different: 684249 ms: box ED002D2D8000400000, us C5002D2D8000400000
+   29: 147 / 147
+   34: 1 / 1
+   35: 1 / 1
+   36: 10 / 10
+   3E: 10 / 10
+   44: 1 / 1
+
+RESULT: MATCH
+### code=0

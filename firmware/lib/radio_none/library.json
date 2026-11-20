@@ -1,0 +1,8 @@
+{
+  "name": "radio_none",
+  "version": "1.0.0",
+  "description": "Radio protocol 'none': no UART, no key codes, nothing is ever sent to a radio. No hardware, no Arduino framework header.",
+  "authors": [{ "name": "grabowski98" }],
+  "frameworks": "*",
+  "platforms": "*"
+}

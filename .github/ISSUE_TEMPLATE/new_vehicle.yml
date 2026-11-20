@@ -1,0 +1,60 @@
+name: New vehicle
+description: Share what you found on the CAN bus of a car that is not supported yet.
+labels: ["vehicle"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. Please read "Make it yours" in the documentation first and record with the `generic` profile (environment `listen_generic_wifi`), which only listens.
+
+        **Every fact needs a status:** *measured* (what you did, which recording) or *unverified* (where you read it).
+        **Clean every recording** before you attach it: `python -I tools/sanitize_capture.py IN.log OUT.log`. Your car may carry the VIN in other frames than `336`, `3B6`, `2B6`: check and add them with `--ids`.
+  - type: input
+    id: car
+    attributes:
+      label: Car
+      description: Make, model, body, year, engine. No VIN.
+      placeholder: "<make> <model>, <body>, <year>, <engine>"
+    validations:
+      required: true
+  - type: input
+    id: radio
+    attributes:
+      label: Radio and CAN box
+      description: The radio, its CAN profile setting, and the box you used before (if any).
+  - type: textarea
+    id: bus
+    attributes:
+      label: The bus at the radio
+      description: Which pins, bus speed, voltages of CANH and CANL to ground with ignition on, how you measured them.
+      placeholder: |
+        Pins: ...
+        Speed: 125 kbit/s (measured: frames received without errors)
+        CANH ... V, CANL ... V (measured: multimeter, ignition on)
+    validations:
+      required: true
+  - type: textarea
+    id: signals
+    attributes:
+      label: Signals you found
+      description: One line per signal - frame ID, byte.bit, values, status and how you confirmed it. Bytes count from 1.
+      placeholder: |
+        reverse gear: 0F6 8.7, 1 = engaged (measured: reverse engaged 3 times, recording drive1_clean.log)
+    validations:
+      required: true
+  - type: textarea
+    id: recordings
+    attributes:
+      label: Recordings
+      description: Attach cleaned recordings (zip them if needed) and say what happened at each `#` marker.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: Every recording I attach was cleaned with `tools/sanitize_capture.py`.
+          required: true
+        - label: Nothing in this issue comes from decompiled apps or box firmware.
+          required: true
+        - label: I agree that this information is published under CC BY 4.0 (documentation licence of the project).
+          required: true

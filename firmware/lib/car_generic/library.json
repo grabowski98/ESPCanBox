@@ -1,0 +1,8 @@
+{
+  "name": "car_generic",
+  "version": "1.0.0",
+  "description": "Car profile for an unknown car: listen only. Decodes nothing, has no buttons, an empty transmit allow list and never drives the 12 V outputs. Starting point for another car. No hardware, no Arduino framework header.",
+  "authors": [{ "name": "grabowski98" }],
+  "frameworks": "*",
+  "platforms": "*"
+}

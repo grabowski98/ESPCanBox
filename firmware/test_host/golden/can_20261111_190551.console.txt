@@ -1,0 +1,3 @@
+13498 [park] rear=6 front=6 sound=0 rear interval=0x3F zones rear 777 front 777
+74197 [car] acc=1
+97699 [car] acc=0

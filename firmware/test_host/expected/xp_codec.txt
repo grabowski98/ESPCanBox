@@ -1,0 +1,47 @@
+### xp_codec
+OK    encode EA 01 0A = 2E EA 02 01 0A 08
+OK    checksum EA 02 01 0A = 08
+OK    encode without data: 2E 71 00 8E
+OK    encode: buffer 1 byte too small = 0
+OK    encode: buffer exactly for the frame = 6
+OK    encode: buffer 0 = 0
+OK    encode: 40 data bytes = 44
+OK    encode: 41 data bytes = 0
+OK    encode: length 255 = 0
+OK    makeFrame: 60 bytes cut to 40
+OK    makeFrame: without data
+OK    there and back: lengths 0..40
+OK    there and back: commands 00..FF with data 2E FF F3
+OK    256 frames, bytes FF / F3 in the data are not acks
+OK    bad checksum: frame rejected, counter 1
+OK    corrupted data byte: rejected
+OK    after a bad checksum the next good frame goes through
+OK    length 41: rejected at once
+OK    length 255: rejected at once
+OK    after a bad length the next frame goes through
+OK    length 40: accepted
+OK    truncated, a new frame after 31 ms: timeout 1, the new frame accepted
+OK    gap of exactly 30 ms: frame completed
+OK    gap of 31 ms: the rest of the frame rejected
+OK    the rest of the truncated frame counted as bytes outside frames
+OK    time wrapping through zero in the middle of a frame (21 ms): no timeout
+OK    time wrapping through zero, gap of 32 ms: timeout
+OK    timeout set to 5 ms: a gap of 6 ms cuts
+OK    a minute of silence between frames: no timeout
+OK    text on the line: only bytes outside frames
+OK    after garbage a frame goes through
+OK    zeros on the line: bytes outside frames
+OK    false header 2E: a frame goes through after 31 ms
+OK    FF frame F3 FF frame F3: 2 frames, 4 acks
+OK    counters: frames 2, acks 4, no errors
+OK    FF and F3 outside a frame = ACK
+OK    another byte outside a frame = NONE
+OK    reset() in the middle of a frame: the next goes through
+OK    RadioRxClock: loop stalled 50 ms, rest of the frame already buffered: frame accepted
+OK    the same bytes with the loop time: the frame was taken for cut off (the reviewed defect)
+OK    RadioRxClock: buffer empty for 40 ms in the middle of a frame: still a timeout
+OK    RadioRxClock: 30 ms seen empty across the counter wrap: frame accepted
+checks: 42, errors: 0
+
+RESULT: MATCH
+### code=0

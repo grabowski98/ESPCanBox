@@ -1,0 +1,41 @@
+### net_rings
+OK    log: empty after startup
+OK    log: reading an empty one
+OK    log: empty lines skipped
+OK    log: 10 lines, next == head
+OK    log: text without end of line, line time
+OK    log: reading from cursor 7
+OK    log: cursor from the future = head
+OK    log: entry limit, next < head
+OK    log: text byte budget, a line is not split
+OK    log: a line that does not fit at all -> nothing, cursor unchanged
+OK    log: line > 200 cut
+OK    log: clear does not reset the numbering
+OK    log: the ring keeps as many whole lines as fit
+OK    log: dropped = lines that fell out
+OK    log: reading after an overflow from the oldest
+OK    log: the oldest kept line is correct
+OK    log: 3000 lines of different length, wrapping, continuous numbers
+OK    trace: empty
+OK    trace: 100 frames, next == head
+OK    trace: frame content, bytes past the length zeroed
+OK    trace: max limit, next < head
+OK    trace: the ID filter moves the cursor over other frames
+OK    trace: a filter without hits goes to head
+OK    trace: cursor from the future = head
+OK    trace: length cut to 8, ID 11 bits
+OK    trace: oldest after an overflow
+OK    trace: dropped and reading from the oldest
+OK    trace: the next read without losses
+OK    trace: a client lagging behind loses only what fell out
+OK    trace: a cursor from before the wrap is treated as old
+OK    table: sorted by ascending ID
+OK    table: counter, time, interval, data
+OK    table: one frame -> interval 0
+OK    table: length and bytes past the length
+OK    table: 128 IDs, still sorted
+OK    table: frames of extra IDs count overflow
+OK    table: clear
+
+ALL OK
+### code=0

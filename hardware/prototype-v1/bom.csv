@@ -1,0 +1,30 @@
+references,qty,value,footprint,typical part,function,notes
+M1 M2,2,ESP32-S3 dev board (2x 1x22 socket),PinSocket_1x22_P2.54mm_Vertical,"ESP32-S3 dev board with ESP32-S3-WROOM-1-N16R8, row spacing 22.86 mm (Waveshare ESP32-S3-DEV-KIT-N16R8 used)",processor,plugged into two 1x22 female headers; the board's own 3.3 V regulator supplies the CAN module
+M3,1,CAN transceiver module (1x7 socket),PinSocket_1x07_P2.54mm_Vertical,Adafruit CAN Pal (TJA1051T/3),CAN transceiver,pin order from the bottom: 1 CANL 2 CANH 3 SLNT 4 TX 5 RX 6 GND 7 VCC (3.3 V); terminator switch OFF
+M4,1,I2S amplifier module (1x7 socket),PinSocket_1x07_P2.54mm_Vertical,MAX98357A module,sound (parking tone),pin order from the top: 1 LRC 2 BCLK 3 DIN 4 GAIN 5 SD 6 GND 7 VIN (5 V); speaker 4-8 ohm 2-3 W on the module terminal
+U1,1,TSR 1-2450,Converter_DCDC_TRACO_TSR-1_THT,Traco TSR 1-2450 (6.5-36 V in / 5 V 1 A out),12 V to 5 V,any 5 V / 1 A switching module with the 7805 pinout should fit (not tested)
+F1,1,PTC 1.1 A / 30 V,Fuse_1812_4532Metric,polymer resettable fuse 1812,input fuse,min. 30 V rating
+F2 F3 F4,3,PTC 0.5 A / 30 V,Fuse_1812_4532Metric,polymer resettable fuse 1812,fuses of the 12 V outputs,min. 30 V rating
+D1 D3,2,SS34,D_SMA,SS34 (alternatives SS36 / B340A / SS24),D1 reverse polarity; D3 separates the converter from USB 5 V,
+D2,1,SMBJ18A,D_SMB,SMBJ18A (alternative SMAJ18A / P6SMB18A),input surge clamp (after F1),mandatory before connecting to a car; cathode band to +12 V
+D5 D7 D9,3,Zener 12 V,D_DO-35_P7.62mm,"12 V 0.5 W Zener, through hole (BZX85C12 in DO-41 fits after drilling 1.0 mm)",gate protection of Q2/Q4/Q6,optional on the bench; recommended in the car; cathode to +12 V
+D6 D8 D10,3,SS14,D_SMA,SS14 / SS24 / 1N4148W,output clamp diodes,
+Q1 Q3 Q5,3,BC847A,SOT-23,BC847 / BC817 / MMBT3904,output drivers (NPN),
+Q2 Q4 Q6,3,AO3407,SOT-23,AO3407A (-30 V; gate +/-20 V),high-side switches ACC / ILL / REV (P-MOSFET),not AO3401A (gate only +/-12 V)
+C1,1,100 uF / 35 V,CP_Elec_8x10,"electrolytic, low ESR, 105 C, 8x10 mm",input reservoir,min. 35 V in the car; 10 mm tall: the board needs 12 mm standoffs
+C2,1,100 nF / 50 V,C_0805,ceramic X7R,input decoupling,min. 25 V
+C3 C5 C6 C10,4,10 uF,CP_EIA-3528-21,tantalum 10 uF 10 V (or ceramic),decoupling 5 V / 3.3 V,
+C4,1,470 uF / 16 V,CP_Elec_8x10,"electrolytic, 8x10 mm",5 V reservoir (amplifier peaks and Wi-Fi),
+C7 C8,2,100 nF,C_0805,ceramic,decoupling / ADC filter,
+R1,1,470k,R_0805,,battery voltage divider (top),470k / 100k: 16 V -> 2.8 V
+R2,1,100k,R_0805,,battery voltage divider (bottom),
+R3,1,10k,R_0805,,SLNT pull-up to 3.3 V,keeps the CAN module silent after reset
+R6 R10 R14 R18,4,10k,R_0805,,gate-source resistors / pull-ups,
+R7 R9 R11 R13 R15 R17,6,4k7,R_0805,,base and collector resistors of the output stages,
+R8 R12 R16,3,100k,R_0805,,base pull-downs (outputs off after reset),
+R23,1,1k,R_0805,,UART transmit line to the radio,
+R24,1,4k7,R_0805,,UART receive line from the radio,safe with a 5 V level
+J5,1,4-way screw terminal 5.08 mm,TerminalBlock_1x04_P5.08mm,2x KF301-2P side by side,"CANH, CANL, GND, +12V (from the top)",
+J4,1,5 wire pads (no part),-,,"wires to the radio harness: radio RX, radio TX, ACC, ILL, REV (from the top)",1.2 mm holes; a 2x8 socket from an old CAN box is wired with short leads
+JP1,1,2-pin jumper,PinHeader_1x02_P2.54mm,wire bridge or header,TX line to the CAN module,leave OPEN for a listen-only build (see STATUS.md)
+H1 H2 H3,3,M3 holes,MountingHole_3.2mm_M3,M3 x 6-8 mm screws,mounting,

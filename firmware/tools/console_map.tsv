@@ -1,0 +1,1613 @@
+# HISTORICAL: record of the one-off move from the author's private tree to this repository. No script
+# or CI uses it; kept so the stage can be followed. Names in it are the names of that time.
+# Console and API texts, Polish -> English (stage E3). Applied by tools/apply_console_map.py to the
+# string literals in lib/ src/ test_host/ tools/*.py and to the host test references
+# (test_host/expected, golden, golden_060). Proof: python -I tools/apply_console_map.py --check --base <tree before E3>.
+# Format: kind TAB polish TAB english [TAB path]. Kinds: lit, frag, out, file, manual (see the tool).
+# Kept on purpose: the step marker "# KROK" of the captures in test_data/captures (data recorded in the car),
+# the old Polish console command names as aliases (ust, klima, wifi haslo, wifi nowehaslo) and the product
+# name values (centralka-508 and friends, include/project_identity.h) until the name decision.
+# lib/core/can_tx_gate.cpp: txStateName (JSON "state"), txRefuseName, txFaultName
+lit	brak	none
+lit	rozbrojone	disarmed
+lit	gotowe	ready
+lit	otwieranie	opening
+lit	wysylka	sending
+lit	przerwa	cooldown
+lit	blad	fault
+lit	program bez nadawania	no CAN transmit in this build
+lit	nadawanie rozbrojone	transmit disarmed
+lit	nadawanie zablokowane po bledzie	transmit locked after a fault
+lit	ramka spoza listy	frame not on the list
+lit	zla dlugosc ramki	wrong frame length
+lit	trwa poprzednia wysylka	previous send in progress
+lit	limit liczby ramek	frame count limit
+lit	brak zaplonu	no ignition
+lit	cisza na magistrali	bus is quiet
+lit	trwa zapis pamieci	flash write in progress
+lit	kontroler CAN niegotowy	CAN controller not ready
+lit	3 nieudane wysylki	3 failed sends
+lit	licznik bledow nadawania	transmit error counter
+lit	przekroczone okno nadajnika	transmitter window exceeded
+lit	zdarzenie kontrolera	controller event
+lit	zmiana obcych bitow 260	foreign bits of 260 changed
+lit	blokada z zewnatrz	external lock
+# lib/core/decoder.cpp
+lit	[park] tyl=%u przod=%u dzwiek=%u %s odstep=0x%02X strefy tyl %u%u%u przod %u%u%u\n	[park] rear=%u front=%u sound=%u %s interval=0x%02X zones rear %u%u%u front %u%u%u\n
+lit	przod	front
+lit	tyl	rear
+lit	[auto] drzwi=0x%02X\n	[car] doors=0x%02X\n
+lit	[auto] wsteczny=%u\n	[car] reverse=%u\n
+lit	[ust] %03X %02X %02X %02X %02X %02X %02X %02X %02X wyslana (potwierdzona po %u ms)\n	[vset] %03X %02X %02X %02X %02X %02X %02X %02X %02X sent (acked after %u ms)\n
+lit	[ust] %03X %02X %02X %02X %02X %02X %02X %02X %02X NIEPOTWIERDZONA (po %u ms)\n	[vset] %03X %02X %02X %02X %02X %02X %02X %02X %02X NOT ACKED (after %u ms)\n
+lit	[cantx] BLAD: %s, nadawanie zablokowane do \"cantx reset\"\n	[cantx] FAULT: %s, transmit locked until \"cantx reset\"\n
+lit	nieznane ustawienie	unknown setting
+lit	brak znanej ramki	no known frame
+lit	ramka znana (1A9), nadawanie zablokowane do pomiaru	known frame (1A9), transmit blocked until measured
+lit	ODMOWA (program bez nadawania)	REFUSED (no CAN transmit in this build)
+lit	[ust] %s = %u: PRZYJETE przez BSI po %u ms\n	[vset] %s = %u: ACCEPTED by BSI after %u ms\n
+lit	[ust] %s = %u: NIEPRZYJETE przez BSI (%s bez zmiany po %u ms)\n	[vset] %s = %u: NOT ACCEPTED by BSI (%s unchanged after %u ms)\n
+lit	stan	state
+lit	[ust] %s = %u: bez zmiany (auto juz ma ten stan), nic nie wyslano\n	[vset] %s = %u: unchanged (the car already has this state), nothing sent\n
+lit	[ust] %s = %u: ramka %03X niepotwierdzona na magistrali, stan auta bez zmiany\n	[vset] %s = %u: frame %03X not acked on the bus, car state unchanged\n
+lit	[ust] %s = %u: %s, ale zmienily sie tez inne bity 260 (%02X %02X %02X %02X %02X): nadawanie zablokowane\n	[vset] %s = %u: %s, but other bits of 260 changed too (%02X %02X %02X %02X %02X): transmit locked\n
+lit	PRZYJETE	ACCEPTED
+lit	NIEPRZYJETE	NOT ACCEPTED
+lit	[ust] radio: 80 %02X %02X %s = %u: ODMOWA (%s)\n	[vset] radio: 80 %02X %02X %s = %u: REFUSED (%s)\n
+lit	odmowa	refused
+lit	brak_ramki	no_frame
+lit	zablokowane	blocked
+lit	bez_zmiany	unchanged
+lit	przyjete	accepted
+lit	nieprzyjete	not_accepted
+lit	blad_wysylki	tx_failed
+lit	skutek_uboczny	side_effect
+lit	[klima] 364 odmowa bramy: %s\n	[climate] 364 gate refusal: %s\n
+lit	[klima] auto BEZ REAKCJI: ramka 350 bez zmiany po 2 s\n	[climate] car DID NOT REACT: frame 350 unchanged after 2 s\n
+lit	[klima] auto ZAREAGOWALO: 350 %02X %02X %02X %02X %02X %02X %02X -> %02X %02X %02X %02X %02X %02X %02X\n	[climate] car REACTED: 350 %02X %02X %02X %02X %02X %02X %02X -> %02X %02X %02X %02X %02X %02X %02X\n
+lit	[klima] 364 00 00 1E 78 E0 00 co 1 s: pierwsza ramka potwierdzona\n	[climate] 364 00 00 1E 78 E0 00 every 1 s: first frame acked\n
+lit	[klima] 364 okresowa NIEPOTWIERDZONA (potwierdzonych dotad: %lu)\n	[climate] 364 periodic NOT ACKED (acked so far: %lu)\n
+lit	[klima] 364 %s: brama zajeta ponad 2 s, rezygnuje\n	[climate] 364 %s: gate busy over 2 s, giving up\n
+lit	nacisniecie	press
+lit	puszczenie	release
+lit	[klima] 364 %02X %02X %02X %s %s: %s po %u ms\n	[climate] 364 %02X %02X %02X %s %s: %s after %u ms\n
+lit	potwierdzona	acked
+lit	NIEPOTWIERDZONA	NOT ACKED
+lit	[klima] radio: 8A %02X %02X %s: proba ramka 364 %02X %02X %02X 00\n	[climate] radio: 8A %02X %02X %s: trial frame 364 %02X %02X %02X 00\n
+lit	[klima] radio: 8A %02X %02X nieznane nr %u = %u (bez dzialania)\n	[climate] radio: 8A %02X %02X unknown no. %u = %u (no action)\n
+lit	[dzwiek] radio: 84 %02X %02X nieznane nr %u = %u (bez dzialania)\n	[sound] radio: 84 %02X %02X unknown no. %u = %u (no action)\n
+lit	[key] kod=%02X stan=%u (pominiete)\n	[key] code=%02X state=%u (skipped)\n
+lit	[key] kod=%02X stan=%u -> do radia %02X stan=%u\n	[key] code=%02X state=%u -> to radio %02X state=%u\n
+lit	[auto] acc=%u\n	[car] acc=%u\n
+lit	[ust] 260=%s wiek=%lu ms, 361=%s, maska=0x%08lX, program bez nadawania\n	[vset] 260=%s age=%lu ms, 361=%s, mask=0x%08lX, no CAN transmit in this build\n
+lit	[ust] 260=%s wiek=%lu ms, 361=%s, maska=0x%08lX, nadawanie 15B: %s\n	[vset] 260=%s age=%lu ms, 361=%s, mask=0x%08lX, transmit 15B: %s\n
+lit	[ust] 260 przy starcie=brak\n	[vset] 260 at startup=none\n
+lit	[ust] 260 przy starcie=%s zmienione bity (bajty 2-6)=%02X %02X %02X %02X %02X\n	[vset] 260 at startup=%s changed bits (bytes 2-6)=%02X %02X %02X %02X %02X\n
+lit	[cantx] stan=%s wyslane=%lu potwierdzone=%lu nieudane=%lu odmowy=%lu tec=%u rec=%u blad=%s\n	[cantx] state=%s sent=%lu acked=%lu failed=%lu refused=%lu tec=%u rec=%u fault=%s\n
+lit	BLAD	FAIL
+lit	[stat] can-tx=%s wyslane=%lu potwierdzone=%lu nieudane=%lu odmowy=%lu\n	[stat] can-tx=%s sent=%lu acked=%lu failed=%lu refused=%lu\n
+lit	wlaczona	enabled
+lit	wylaczona	disabled
+lit	[ust] %02X %-26s stan=%s podstawa=%s maska=%s logika=%s\n	[vset] %02X %-26s state=%s basis=%s mask=%s logic=%s\n
+# lib/core/frame_trace.cpp, fw_ident.cpp
+lit	CAPACITY musi byc potega dwojki	CAPACITY must be a power of two
+lit	FwIdent musi miec 72 bajty	FwIdent must be 72 bytes
+lit	uklad FwIdent: mode 68, net 69, canTx 70	FwIdent layout: mode 68, net 69, canTx 70
+# lib/core/radio_commands.cpp: names of radio commands 8A and 84
+lit	temperatura lewa	temperature left
+lit	temperatura prawa	temperature right
+lit	nawiew na wprost	air to face
+lit	nawiew na szybe	air to windscreen
+lit	nawiew na nogi	air to feet
+lit	poziom intensywnosci	intensity level
+lit	sila nawiewu	fan speed
+lit	jednostka temperatury	temperature unit
+lit	dzwiek nr 1	sound no. 1
+lit	dzwiek nr 2	sound no. 2
+lit	dzwiek nr 3	sound no. 3
+lit	dzwiek nr 4	sound no. 4
+lit	dzwiek nr 5	sound no. 5
+lit	dzwiek nr 6	sound no. 6
+lit	dzwiek nr 9	sound no. 9
+lit	dzwiek nr 10	sound no. 10
+# lib/core/settings_changer.cpp: changeResultName
+lit	bez zmiany (auto juz ma ten stan)	unchanged (the car already has this state)
+lit	ramka niepotwierdzona	frame not acked
+lit	ODMOWA	REFUSED
+lit	zmienily sie inne bity 260: nadawanie zablokowane	other bits of 260 changed: transmit locked
+# lib/core/vehicle_settings.cpp: TABLE (names, basis) and refuseName
+lit	asystent parkowania	parking assist
+lit	pomiar	measured
+lit	wycieraczka przy cofaniu	rear wiper in reverse
+lit	stan 17.11	state 17.11
+lit	odblokowanie bagaznika	boot unlocking
+lit	brak ramki	no frame
+lit	kod+opis	code+description
+lit	przelacznik radaru	radar switch
+lit	ramka 1A9	frame 1A9
+lit	prowadz mnie do domu	follow me home
+lit	oswietlenie powitalne	welcome lighting
+lit	swiatla dzienne	daytime running lights
+lit	dzwiek	sound
+lit	jednostki paliwa	fuel units
+lit	jezyk	language
+lit	martwe pole	blind spot
+lit	funkcja powitania	welcome function
+lit	otwarcie drzwi	door opening
+lit	kalibracja opon	tyre calibration
+lit	opoznienie reflektorow	headlamp delay
+lit	kontrola trakcji	traction control
+lit	wykrywanie zmeczenia	fatigue detection
+lit	kolor zegarow	dial colour
+lit	automatyczne swiatla	automatic lights
+lit	tylko opis	description only
+lit	automatyczne ryglowanie	automatic locking
+lit	adaptacyjne reflektory	adaptive headlamps
+lit	nieznany numer	unknown number
+lit	przycisk w ramce 1A9	button in frame 1A9
+lit	brak swiezej ramki stanu	no fresh state frame
+lit	odmowa stala	fixed refusal
+lit	wylaczona w masce	disabled in mask
+lit	wartosc poza zakresem	value out of range
+lit	brak ramki 361	no frame 361
+lit	funkcji brak w aucie	function missing in the car
+lit	brak ramki 260	no frame 260
+lit	stara ramka 260	stale frame 260
+lit	zla dlugosc 260	wrong length 260
+lit	260 w stanie spoza zapisow	260 in a state not seen in captures
+# src/can_bus.cpp, config.h, console.cpp, radio_uart.cpp, settings*, sleep_ctrl.cpp, version.h, can_tx_port.cpp
+lit	zatrzymany	stopped
+lit	pracuje	running
+lit	powrot po bus-off	recovering from bus-off
+lit	brak odczytu	no reading
+lit	Nieznana wartosc CAN_TX_MODE	Unknown value of CAN_TX_MODE
+lit	Nadawanie CAN tylko w trybie dekodera	CAN transmit only in decoder mode
+lit	# idf: zgubione linie: %lu\n	# idf: lost lines: %lu\n
+lit	[od radia] %02X	[radio_rx] %02X
+lit	alfabet hasla musi miec 32 znaki	password alphabet must have 32 characters
+lit	dlugosc losowanego hasla poza dozwolonym zakresem	random password length out of the allowed range
+lit	[sen] siec nie zatrzymala sie, zasypiam mimo to	[sleep] network did not stop, sleeping anyway
+lit	FW_PRODUCT za dlugie	FW_PRODUCT too long
+lit	FW_VERSION za dlugie	FW_VERSION too long
+lit	dekoder	decoder
+lit	obok	listen
+lit	src/can_tx/ wolno kompilowac tylko w srodowisku z CAN_TX_MODE = CAN_TX_SETTINGS (decoder_tx_wifi)	src/can_tx/ may be compiled only in an environment with CAN_TX_MODE = CAN_TX_SETTINGS (decoder_tx_wifi)
+lit	can_tx_okno	can_tx_window
+# src/console_cmds.cpp
+lit	[stat] tryb=%s can=%s audio=%s radio=%s\n	[stat] mode=%s can=%s audio=%s radio=%s\n
+lit	DEKODER	DECODER
+lit	obok skrzynki	alongside the box
+lit	[stat] rx=%lu zgubione=%lu bledy=%lu magistrala=%s glosnosc=%u%%	[stat] rx=%lu lost=%lu errors=%lu bus=%s volume=%u%%
+lit	aktywna	active
+lit	cisza	quiet
+lit	 zasilanie=%.2fV (za dioda)	 supply=%.2fV (after the diode)
+lit	 zasilanie=brak 12V (%.2fV)	 supply=no 12V (%.2fV)
+lit	[stat] zaplon=%u (0x%02X) acc=%u wsteczny=%u swiatla=%u\n	[stat] ignition=%u (0x%02X) acc=%u reverse=%u lights=%u\n
+lit	[radio] nadawanie=%s odebrane ramki=%lu potwierdzenia=%lu zla suma=%lu urwane=%lu smieci=%lu\n	[radio] transmit=%s received frames=%lu acks=%lu bad checksum=%lu truncated=%lu garbage=%lu\n
+lit	TAK	YES
+lit	nie	no
+lit	[radio] wyslane ramki=%lu wstrzymane=%lu zgubione w kolejce=%lu zgubione przyciski=%lu\n	[radio] sent frames=%lu held back=%lu lost in queue=%lu lost keys=%lu\n
+lit	[radio] odrzucone bez ACC=%lu brak miejsca na ramke stanu=%lu\n	[radio] dropped without ACC=%lu no slot for a state frame=%lu\n
+lit	[radio] radio jeszcze sie nie odezwalo	[radio] the radio has not spoken yet
+lit	[radio] wlaczone=%u glosnosc=%u%s	[radio] on=%u volume=%u%s
+lit	 (wyciszone)	 (muted)
+lit	 czas=20%02u-%02u-%02u %02u:%02u	 time=20%02u-%02u-%02u %02u:%02u
+lit	 zrodlo=%02X %02X\n	 source=%02X %02X\n
+lit	[radio] ustawienia: %lu (ostatnie nr %u = %u), klimatyzacja: %lu (ostatnie nr %u = %u), nieznane: %lu\n	[radio] settings: %lu (last no. %u = %u), climate: %lu (last no. %u = %u), unknown: %lu\n
+lit	[ver] %s %s %s, zbudowany %s\n	[ver] %s %s %s, built %s\n
+lit	[key] zamiana %02X -> %02X\n	[key] swap %02X -> %02X\n
+lit	[key] zapis tabeli odlozony: auto potrzebuje centralki	[key] table write deferred: the car needs the device
+lit	[key] zapis tabeli nieudany	[key] table write failed
+lit	[cantx] odlozony zapis rozbrojenia: %s\n	[cantx] deferred disarm write: %s\n
+lit	wykonany	done
+lit	NIEUDANY	FAILED
+lit	[audio] odlozony zapis glosnosci %u%%: %s\n	[audio] deferred volume write %u%%: %s\n
+lit	[key] odlozony zapis tabeli: %s\n	[key] deferred table write: %s\n
+lit	[cantx] zbudowane=1 uzbrojone=%u po_restarcie=%u kontroler=%s maska=0x%08lX\n	[cantx] built=1 armed=%u after_restart=%u controller=%s mask=0x%08lX\n
+lit	nasluch	listen
+lit	[cantx] kontroler: bledy magistrali=%lu arbitraz=%lu bez potwierdzenia=%lu bus-off=%lu powroty=%lu 	[cantx] controller: bus errors=%lu arbitration=%lu no ack=%lu bus-off=%lu recoveries=%lu 
+lit	licznik okna=%lu\n	window counter=%lu\n
+lit	[cantx] zbudowane=0: program bez nadawania (CAN tylko nasluch)	[cantx] built=0: no CAN transmit in this build (CAN listen only)
+lit	[cantx] zly zapis. Polecenia: cantx | cantx on | cantx off | cantx reset | ust on NN | ust off NN | set NN VV	[cantx] bad syntax. Commands: cantx | cantx on | cantx off | cantx reset | vset on NN | vset off NN | set NN VV
+lit	[cantx] ODMOWA: ten program nie umie nadawac na CAN	[cantx] REFUSED: this program cannot transmit on CAN
+lit	[cantx] ODMOWA: z panelu tylko przez wlasna siec centralki (nie przez siec domowa)	[cantx] REFUSED: from the panel only through the device's own network (not the home network)
+lit	[cantx] ODMOWA: to polecenie tylko z USB	[cantx] REFUSED: this command is USB only
+lit	[cantx] pominiete: auto potrzebuje centralki (wsteczny / czujniki), sprobuj za chwile	[cantx] skipped: the car needs the device (reverse / sensors), try again shortly
+lit	[cantx] zapis uzbrojenia NIEUDANY, nic sie nie zmienilo	[cantx] arm write FAILED, nothing changed
+lit	[cantx] uzbrojenie zapisane. Zacznie dzialac PO RESTARCIE centralki (teraz uzbrojone=%u). 	[cantx] arming stored. Takes effect AFTER A RESTART of the device (now armed=%u). 
+lit	Wgranie innego programu rozbraja.\n	Flashing another program disarms.\n
+lit	[cantx] ROZBROJONE od razu%s\n	[cantx] DISARMED immediately%s\n
+lit	; zapis do pamieci NIEUDANY (po restarcie moze wrocic)	; flash write FAILED (it may come back after a restart)
+lit	[cantx] do restartu kontroler zostaje w trybie NORMAL z zamknietym nadajnikiem	[cantx] until a restart the controller stays in NORMAL mode with the transmitter closed
+lit	[cantx] zatrzask zdjety	[cantx] latch cleared
+lit	[ust] pozycji %02X nie ma w tabeli\n	[vset] item %02X is not in the table\n
+lit	[ust] pozycji %02X nie da sie wlaczyc: odmowa stala w programie (brak pomiaru albo ramki)\n	[vset] item %02X cannot be enabled: fixed refusal in the program (no measurement or no frame)\n
+lit	[ust] pominiete: auto potrzebuje centralki (wsteczny / czujniki), sprobuj za chwile	[vset] skipped: the car needs the device (reverse / sensors), try again shortly
+lit	[ust] zapis maski NIEUDANY, nic sie nie zmienilo	[vset] mask write FAILED, nothing changed
+lit	[ust] pozycja %02X (%s) %s, maska=0x%08lX\n	[vset] item %02X (%s) %s, mask=0x%08lX\n
+lit	WLACZONA	ENABLED
+lit	[ust] polecenie set %02X %02X (jak komenda radia 80 %02X %02X)\n	[vset] command set %02X %02X (like radio command 80 %02X %02X)\n
+lit	[www] pominiete: auto potrzebuje centralki	[www] skipped: the car needs the device
+lit	[audio] glosnosc=%u%%\n	[audio] volume=%u%%\n
+lit	[audio] zapis glosnosci odlozony: auto potrzebuje centralki	[audio] volume write deferred: the car needs the device
+lit	[audio] zapis glosnosci nieudany	[audio] volume write failed
+lit	[audio] glosnosc=%u%% (ponizej %d%% tylko do restartu)\n	[audio] volume=%u%% (below %d%% only until restart)\n
+lit	[key] proba kodu %02X%s\n	[key] trial code %02X%s\n
+lit	: nie wyslano (tryb obok)	: not sent (listen mode)
+lit	[key] recznie kod=%02X stan=%u%s\n	[key] manual code=%02X state=%u%s\n
+lit	[key] tabela zamian pelna	[key] swap table full
+lit	[auto] zamiana stron drzwi=%u; do restartu\n	[car] door side swap=%u; until restart\n
+lit	# zrzut ramek CAN=%u\n	# CAN frame dump=%u\n
+lit	[od radia] wypisywanie=%u\n	[radio_rx] printing=%u\n
+lit	[klima] ten program nie umie nadawac na CAN	[climate] this program cannot transmit on CAN
+lit	[klima] ODMOWA: z panelu tylko przez wlasna siec centralki	[climate] REFUSED: from the panel only through the device's own network
+lit	[klima] zapis: klima t NN VV (szesnastkowo, np. klima t 04 01)	[climate] syntax: climate t NN VV (hexadecimal, e.g. climate t 04 01)
+lit	[klima] polecenia: klima | klima on | klima 6 | klima p | klima off | klima t NN VV	[climate] commands: climate | climate on | climate 6 | climate p | climate off | climate t NN VV
+lit	[klima] proba ramki 364: wylaczona	[climate] trial frame 364: disabled
+lit	[klima] proba ramki 364: WLACZONA, 6 bajtow 00 00 1E 78 E0 00 NADAWANA CO 1 s (do restartu centralki)	[climate] trial frame 364: ENABLED, 6 bytes 00 00 1E 78 E0 00 SENT EVERY 1 s (until the device restarts)
+lit	[klima] proba ramki 364: WLACZONA, ramka %u bajtow (do restartu centralki)\n	[climate] trial frame 364: ENABLED, frame %u bytes (until the device restarts)\n
+lit	[key] wypisywanie=%u\n	[key] printing=%u\n
+lit	Nieznane polecenie: %s\n	Unknown command: %s\n
+lit	Polecenia: stat | radio | ver | ust | cantx | vol 0-100 | test | keys | key/kd/ku KOD | map Z NA | map reset	Commands: stat | radio | ver | vset | cantx | vol 0-100 | test | keys | key/kd/ku CODE | map FROM TO | map reset
+lit	 | doorswap | rxlog | dump%s | ramka np. 0E1#B0F000FCFC1EC200\n	 | doorswap | rxlog | dump%s | frame e.g. 0E1#B0F000FCFC1EC200\n
+lit	[key] bledna tabela z panelu	[key] bad table from the panel
+# src/main.cpp
+lit	wybudzenie z magistrali	wake-up from the bus
+lit	wlaczenie zasilania	power on
+lit	restart programowy (polecenie, aktualizacja)	software restart (command, update)
+lit	AWARIA programu (panic)	program CRASH (panic)
+lit	AWARIA: zadzialal straznik (watchdog)	CRASH: the watchdog fired
+lit	spadek napiecia zasilania	supply voltage drop (brownout)
+lit	reset z USB (wgrywanie / otwarcie portu)	reset from USB (flashing / port opened)
+lit	. CAN 125 kbit/s, NADAWANIE 15B: zbudowane, uzbrojone=%u. Tryb: %s.\n	. CAN 125 kbit/s, TRANSMIT 15B: built, armed=%u. Mode: %s.\n
+lit	DEKODER (wysyla do radia, steruje ACC)	DECODER (sends to the radio, drives ACC)
+lit	obok skrzynki (nic nie wysyla)	alongside the box (sends nothing)
+lit	# kontroler CAN: %s\n	# CAN controller: %s\n
+lit	TYLKO NASLUCH (nadawanie rozbrojone)	LISTEN ONLY (transmit disarmed)
+lit	NORMAL, nadajnik zamkniety poza oknem jednej ramki 15B	NORMAL, transmitter closed outside the window of one 15B frame
+lit	# BLAD: licznik okna nadajnika nie powstal, nadawanie zostaje rozbrojone	# ERROR: the transmitter window timer was not created, transmit stays disarmed
+lit	. CAN 125 kbit/s TYLKO NASLUCH. Tryb: %s.\n	. CAN 125 kbit/s LISTEN ONLY. Mode: %s.\n
+lit	# uzbrojenie nadawania CAN zapisane przez inny program: skasowane	# CAN transmit arming stored by another program: cleared
+lit	# wersja: %s %s, zbudowany %s, siec=%s, glosnosc=%u%%\n	# version: %s %s, built %s, network=%s, volume=%u%%\n
+lit	tak	yes
+lit	# ustawienia niedostepne (NVS): wartosci domyslne, zmiany nie beda zapamietane	# settings unavailable (NVS): defaults, changes will not be stored
+lit	# zapisana tabela zamian przyciskow bledna: obowiazuja wpisy stale	# stored key swap table is invalid: the fixed entries apply
+lit	[can] kontroler: stan=%s tec=%u rec=%u\n	[can] controller: state=%s tec=%u rec=%u\n
+# src/net/api_handlers.cpp, diag_types.h, http_server.cpp
+lit	# %.*s %.*s %s; czas w sekundach od startu urzadzenia\n	# %.*s %.*s %s; time in seconds since the device started\n
+lit	# zgubiono %lu ramek\n	# lost %lu frames\n
+lit	# zamaskowano\n	# masked\n
+lit	[www] odmowa: polecenie nadawania CAN spoza wlasnej sieci centralki	[www] refused: CAN transmit command from outside the device's own network
+lit	[www] zmiana hasla urzadzenia zlecona z panelu	[www] device password change requested from the panel
+lit	[www] restart zlecony z panelu	[www] restart requested from the panel
+lit	linia konsoli nie miesci sie w NetRequest::text	a console line does not fit in NetRequest::text
+lit	tabela przyciskow nie miesci sie w NetRequest::text	the key table does not fit in NetRequest::text
+lit	nazwa sieci nie miesci sie w NetRequest::text	a network name does not fit in NetRequest::text
+lit	haslo nie miesci sie w NetRequest::text	a password does not fit in NetRequest::text
+lit	[www] zbyt wolne zapytanie: rozlaczono	[www] request too slow: disconnected
+lit	[www] bledne logowanie z %u.%u.%u.%u	[www] failed login from %u.%u.%u.%u
+lit	[www] bledne logowanie	[www] failed login
+# src/net/net.cpp
+lit	[wifi] uwaga: straznik petli glownej nie wlaczony	[wifi] warning: the main loop watchdog is not enabled
+lit	[wifi] siec nie wystartowala: wezel diagnostyczny	[wifi] network did not start: diagnostic hub
+lit	[wifi] siec nie wystartowala: zadanie Wi-Fi	[wifi] network did not start: Wi-Fi task
+lit	[wifi] siec wstrzymana po restartach awaryjnych; wifi on wlacza ponownie	[wifi] network held after crash restarts; wifi on enables it again
+lit	[wifi] trwa wgrywanie programu, zmiana po jego zakonczeniu	[wifi] firmware upload in progress, the change follows when it ends
+lit	[wifi] bledna wartosc, nic nie zapisano	[wifi] bad value, nothing stored
+lit	[wifi] zapis ustawien nieudany	[wifi] settings write failed
+lit	[wifi] z panelu: zapisano siec domowa	[wifi] from the panel: home network stored
+lit	[wifi] z panelu: zapomniano siec domowa	[wifi] from the panel: home network forgotten
+lit	[wifi] z panelu: zmieniono haslo urzadzenia	[wifi] from the panel: device password changed
+lit	[ota] wgrywanie programu: start; odbior CAN moze miec przerwy (rx=%lu zgubione=%lu 	[ota] firmware upload: start; CAN reception may have gaps (rx=%lu lost=%lu 
+lit	przepelnienie=%lu)\n	overflow=%lu)\n
+lit	[ota] wgrywanie programu: koniec; CAN start rx=%lu zgubione=%lu przepelnienie=%lu, 	[ota] firmware upload: end; CAN start rx=%lu lost=%lu overflow=%lu, 
+lit	koniec rx=%lu zgubione=%lu przepelnienie=%lu\n	end rx=%lu lost=%lu overflow=%lu\n
+lit	[wifi] zapomniano siec domowa	[wifi] home network forgotten
+lit	[wifi] uzycie: wifi sta <nazwa>|<haslo> (nazwa 1..32, haslo 8..64 znaki) albo wifi sta off	[wifi] usage: wifi sta <name>|<password> (name 1..32, password 8..64 characters) or wifi sta off
+lit	[wifi] siec domowa: nazwa 1..32 znaki, haslo 8..64 znaki (sieci otwarte nie sa obslugiwane)	[wifi] home network: name 1..32 characters, password 8..64 characters (open networks are not supported)
+lit	[wifi] zapisano siec domowa	[wifi] home network stored
+lit	[wifi] nie udalo sie zapisac nowego hasla; obowiazuje stare	[wifi] could not store the new password; the old one stays
+lit	[wifi] zapis ustawien nieudany; obowiazuje stare haslo	[wifi] settings write failed; the old password stays
+lit	[wifi] stare haslo przestaje dzialac na wszystkich urzadzeniach	[wifi] the old password stops working on all devices
+lit	[wifi] nowe haslo pokaze polecenie: wifi haslo	[wifi] the new password is shown by the command: wifi showpass
+lit	[wifi] tylko z konsoli USB	[wifi] USB console only
+lit	[wifi] siec nie wystartowala przy tym uruchomieniu	[wifi] the network did not start at this boot
+lit	[wifi] wylaczone poleceniem wifi off	[wifi] disabled by the command wifi off
+lit	[wifi] haslo: 10..63 znaki drukowalne, bez spacji	[wifi] password: 10..63 printable characters, no spaces
+lit	[wifi] zapisano nowe haslo urzadzenia; siec startuje od nowa	[wifi] new device password stored; the network restarts
+lit	[wifi] zmiany z sieci domowej: dozwolone	[wifi] changes from the home network: allowed
+lit	[wifi] zmiany z sieci domowej: zablokowane	[wifi] changes from the home network: blocked
+lit	[wifi] wlaczone	[wifi] enabled
+lit	[wifi] wylaczone (pamietane po restarcie); wifi on wlacza	[wifi] disabled (kept after a restart); wifi on enables
+lit	[wifi] polecenia: wifi | wifi haslo | wifi pass <haslo> | wifi sta <nazwa>|<haslo> | 	[wifi] commands: wifi | wifi showpass | wifi pass <password> | wifi sta <name>|<password> | 
+lit	wifi sta off | wifi lan on|off | wifi on | wifi off | wifi nowehaslo	wifi sta off | wifi lan on|off | wifi on | wifi off | wifi newpass
+lit	 | wifi [haslo|pass|sta|lan|on|off|nowehaslo]	 | wifi [showpass|pass|sta|lan|on|off|newpass]
+# src/net/ota.cpp
+lit	[ota] sterowniki albo siec nie wstaly, cofam program\n	[ota] drivers or network did not come up, rolling back\n
+lit	[ota] cofniecie niemozliwe (%s), zostaje biezacy program\n	[ota] rollback impossible (%s), keeping the current program\n
+lit	[ota] zmiana trybu: potwierdzono od razu, bez automatycznego cofniecia\n	[ota] mode change: confirmed at once, no automatic rollback\n
+lit	[ota] zmiana trybu: potwierdzenie nieudane (%s), zwykle odliczanie\n	[ota] mode change: confirmation failed (%s), normal countdown\n
+lit	[ota] nowy program potwierdzony\n	[ota] new program confirmed\n
+lit	[ota] potwierdzenie nieudane: %s\n	[ota] confirmation failed: %s\n
+lit	[ota] siec nie wstala, cofam program\n	[ota] the network did not come up, rolling back\n
+lit	[ota] cofniecie niemozliwe (%s), potwierdzam biezacy program\n	[ota] rollback impossible (%s), confirming the current program\n
+lit	[ota] cofniecie nieudane: %s\n	[ota] rollback failed: %s\n
+lit	[ota] cofniecie do poprzedniego programu, restart\n	[ota] rolling back to the previous program, restart\n
+lit	[ota] cofniecie zlecone z panelu	[ota] rollback requested from the panel
+lit	[ota] odrzucono: %s%s%s	[ota] rejected: %s%s%s
+lit	[ota] przerwano: %s, odebrano %lu bajtow	[ota] aborted: %s, received %lu bytes
+lit	[ota] start, %lu bajtow	[ota] start, %lu bytes
+lit	zatrzymanie serwera	server stop
+lit	odbior	receive
+lit	not_centralka	wrong_product
+lit	[ota] przyjeto %lu bajtow, wersja %.*s, restart za %lu ms	[ota] accepted %lu bytes, version %.*s, restart in %lu ms
+# src/net/wifi_mgr.cpp
+lit	serwer stop	server stop
+lit	siec domowa	home network
+lit	haslo	password
+lit	radio (haslo)	radio (password)
+lit	siec wlasna	own network
+lit	moc radia	radio power
+lit	tryb AP	AP mode
+lit	serwer	server
+lit	wylaczone	off
+lit	uruchamianie	starting
+lit	dziala	running
+lit	zatrzymywanie	stopping
+lit	start nieudany	start failed
+lit	[wifi] wylosowano haslo urzadzenia; pokaze je: wifi haslo	[wifi] device password generated; the command wifi showpass shows it
+lit	[wifi] nie udalo sie zapisac hasla urzadzenia	[wifi] could not store the device password
+lit	[wifi] krok %s trwal %u ms\n	[wifi] step %s took %u ms\n
+lit	[wifi] start nieudany %u razy, siec wylaczona do restartu\n	[wifi] start failed %u times, network off until restart\n
+lit	[wifi] start nieudany (krok: %s), kolejna proba za %lu s\n	[wifi] start failed (step: %s), next try in %lu s\n
+lit	[wifi] siec %s dziala: http://%u.%u.%u.%u (http://%s.local)\n	[wifi] network %s running: http://%u.%u.%u.%u (http://%s.local)\n
+lit	[wifi] wylaczone	[wifi] disabled
+lit	[wifi] polaczono z siecia domowa: http://%u.%u.%u.%u\n	[wifi] connected to the home network: http://%u.%u.%u.%u\n
+lit	[wifi] rozlaczono z siecia domowa (kod %u)\n	[wifi] disconnected from the home network (code %u)\n
+lit	[wifi] urzadzenia w sieci centralki: %u\n	[wifi] stations on the device network: %u\n
+lit	[wifi] stan: %s\n	[wifi] state: %s\n
+lit	[wifi] siec centralki: %s, adres http://%u.%u.%u.%u	[wifi] device network: %s, address http://%u.%u.%u.%u
+lit	, kanal %u, urzadzenia %u	, channel %u, stations %u
+lit	[wifi] siec domowa: brak	[wifi] home network: none
+lit	[wifi] siec domowa: %s, polaczono, http://%u.%u.%u.%u, sygnal %d dBm\n	[wifi] home network: %s, connected, http://%u.%u.%u.%u, signal %d dBm\n
+lit	[wifi] siec domowa: %s, niepolaczono (ostatni kod %u)\n	[wifi] home network: %s, not connected (last code %u)\n
+lit	[wifi] nazwa: http://%s.local\n	[wifi] name: http://%s.local\n
+lit	[wifi] zmiany z sieci domowej: %s\n	[wifi] changes from the home network: %s\n
+lit	dozwolone (wifi lan on)	allowed (wifi lan on)
+lit	zablokowane (wifi lan off)	blocked (wifi lan off)
+lit	[wifi] start nieudany %u razy; wifi on probuje ponownie\n	[wifi] start failed %u times; wifi on tries again\n
+lit	[wifi] najdluzszy krok: %u ms, zapas stosu: %u B\n	[wifi] longest step: %u ms, stack headroom: %u B\n
+lit	[wifi] haslo: polecenie wifi haslo	[wifi] password: command wifi showpass
+lit	[wifi] haslo: %s\n	[wifi] password: %s\n
+lit	[wifi] haslo: (jeszcze nie wylosowane)	[wifi] password: (not generated yet)
+lit	[www] rejestracja %s nieudana: %s	[www] registration %s failed: %s
+# test_host: shared check() and summary lines
+lit	WYNIK: ZGODNE	RESULT: MATCH
+lit	WYNIK: BLEDY	RESULT: ERRORS
+lit	\nWSZYSTKO OK\n	\nALL OK\n
+lit	\nBLEDOW: %d\n	\nERRORS: %d\n
+lit	nie moge otworzyc %s\n	cannot open %s\n
+lit	BLAD  nie moge otworzyc %s\n	FAIL  cannot open %s\n
+lit	nie moge zapisac %s\n	cannot write %s\n
+# test_host/beeper_scale.cpp
+lit	strefa %d: %d pikniec w 10 s (%.1f na sekunde)\n	zone %d: %d beeps in 10 s (%.1f per second)\n
+lit	strefa %d pika	zone %d beeps
+lit	strefa %d co najmniej 1,3 raza szybsza niz %d	zone %d at least 1.3 times faster than %d
+lit	strefa 7: cisza	zone 7: silence
+lit	przod nieaktywny: cisza	front inactive: silence
+lit	strefa 0 bez zadania auta: pikanie, nie ton ciagly	zone 0 without a request from the car: beeping, not a continuous tone
+lit	odstep 0x00 z auta: ton ciagly	interval 0x00 from the car: continuous tone
+lit	ton po ostatniej ramce: %ld ms\n	tone after the last frame: %ld ms\n
+lit	brak ramek: ton gasnie najpozniej po 400 ms	no frames: the tone stops after 400 ms at most
+lit	tryb fabryczny: cisza bez zadania auta	factory mode: silence without a request from the car
+# test_host/can_tx_arm.cpp
+lit	--- uzbrojenie zwiazane z napisem kompilacji ---\n	--- arming tied to the build string ---\n
+lit	ten sam napis: uzbrojone	same string: armed
+lit	inny czas kompilacji (1 s): rozbrojone	different build time (1 s): disarmed
+lit	napis krotszy i dluzszy o znak: rozbrojone	string one character shorter and longer: disarmed
+lit	brak zapisu, pusty napis, brak napisu programu: rozbrojone	nothing stored, empty string, no program string: disarmed
+lit	zapis \"1\", \"on\", \"true\" (nie napis kompilacji): rozbrojone	record \"1\", \"on\", \"true\" (not the build string): disarmed
+lit	napis bez zera na koncu w 24 bajtach: rozbrojone	string without a terminating zero in 24 bytes: disarmed
+lit	najdluzszy poprawny napis (23 znaki): uzbrojone	longest valid string (23 characters): armed
+lit	roznica wielkosci litery: rozbrojone	letter case differs: disarmed
+lit	--- rozbior polecen ---\n	--- command parsing ---\n
+lit	cantx z bledem (onn, 1, on 1, sam odstep): BAD, nie uzbrojenie	malformed cantx (onn, 1, on 1, only a space): BAD, not arming
+lit	cantxon, CANTX ON, xcantx on, pusta linia: nie sa poleceniem	cantxon, CANTX ON, xcantx on, empty line: not a command
+lit	ust	vset
+lit	samo ust (tabela ustawien): NONE	bare vset (settings table): NONE
+lit	ust on 02	vset on 02
+lit	ust off 0F	vset off 0F
+lit	ust on 9	vset on 9
+lit	ust on 0f	vset on 0f
+lit	ust on 02, ust off 0F, ust on 9, ust on 0f (numer szesnastkowo)	vset on 02, vset off 0F, vset on 9, vset on 0f (number in hexadecimal)
+lit	ust on	vset on
+lit	ust on 123	vset on 123
+lit	ust on 0G	vset on 0G
+lit	ust onn 02	vset onn 02
+lit	ust 02	vset 02
+lit	ust on 02 03	vset on 02 03
+lit	ust off	vset off
+lit	ust on bez numeru, 123, 0G, onn, bez on/off, dwa numery: BAD	vset on without a number, 123, 0G, onn, without on/off, two numbers: BAD
+lit	set bez wartosci, z trzema liczbami, 100, 1x: BAD	set without a value, with three numbers, 100, 1x: BAD
+lit	ustaw	vsetx
+lit	settings, stat, ramka 15B#..., ustaw: nie sa poleceniem	settings, stat, frame 15B#..., vsetx: not a command
+lit	--- kto moze co ---\n	--- who may do what ---\n
+lit	USB: stan, uzbrojenie, rozbrojenie, reset, maska, set	USB: state, arming, disarming, reset, mask, set
+lit	panel we wlasnej sieci centralki: stan, uzbrojenie, rozbrojenie, maska; reset i set NIE	panel on the device's own network: state, arming, disarming, mask; reset and set NOT
+lit	panel przez siec domowa: wylacznie odczyt stanu (1 polecenie z 9)	panel through the home network: only reading the state (1 command of 9)
+lit	NONE i BAD: nigdy	NONE and BAD: never
+lit	polecenia zmieniajace stan: 6 (on, off, reset, ust on, ust off, set)	commands that change the state: 6 (on, off, reset, vset on, vset off, set)
+lit	--- maska pozycji ---\n	--- item mask ---\n
+lit	pozycje, ktore da sie wlaczyc: maska 0x%08lX (01, 02, 05, 06, 07, 08, 09, 0C, 0D, 0F)	items that can be enabled: mask 0x%08lX (01, 02, 05, 06, 07, 08, 09, 0C, 0D, 0F)
+lit	maska domyslna = sama pozycja 01	default mask = item 01 only
+lit	ust on 02: maska 0x06; ust off 01: maska 0x04	vset on 02: mask 0x06; vset off 01: mask 0x04
+lit	wlaczenie juz wlaczonej: bez zmiany	enabling an enabled item: unchanged
+lit	13 pozycji grup D i E (04, 0E, 15, 18, 1A, 0A, 0B, 10, 03, 14, 16, 19, 1F): NOT_SENDABLE	13 items of groups D and E (04, 0E, 15, 18, 1A, 0A, 0B, 10, 03, 14, 16, 19, 1F): NOT_SENDABLE
+lit	numery spoza tabeli (11, 00, FF): UNKNOWN_ID	numbers outside the table (11, 00, FF): UNKNOWN_ID
+lit	maska z pamieci: bity pozycji niewysylalnych sa kasowane (FFFFFFFF -> same wysylalne)	mask from flash: bits of items that cannot be sent are cleared (FFFFFFFF -> sendable only)
+lit	kazda z 7 pozycji: wlaczenie i wylaczenie zmienia tylko jej bit	each of the 7 items: enabling and disabling changes only its bit
+lit	can_tx_arm: %d sprawdzen, %d bledow\n	can_tx_arm: %d checks, %d errors\n
+# test_host/can_tx_gate.cpp
+lit	--- brak sprzetu i stan rozbrojony ---\n	--- no hardware and the disarmed state ---\n
+lit	port = nullptr: NOT_BUILT na zawsze, zadanie odrzucone, nic nie wolane	port = nullptr: NOT_BUILT forever, request refused, nothing called
+lit	rozbrojona: zadanie odrzucone, nadajnik ani razu wlaczony	disarmed: request refused, transmitter never enabled
+lit	uzbrojenie -> IDLE, rozbrojenie -> DISARMED	arming -> IDLE, disarming -> DISARMED
+lit	--- lista dozwolonych ramek ---\n	--- list of allowed frames ---\n
+lit	ID spoza listy (15A, 15C, 1A9, 364, 260, 1E5, 000, 7FF, 95B, 1000015B): odmowa, nadajnik wylaczony	IDs not on the list (15A, 15C, 1A9, 364, 260, 1E5, 000, 7FF, 95B, 1000015B): refused, transmitter off
+lit	15B o dlugosci 0-7 i 9: odmowa	15B with length 0-7 and 9: refused
+lit	niezmiennik nadajnika	transmitter invariant
+lit	--- zwykla wysylka ---\n	--- normal send ---\n
+lit	zadanie przyjete: OPENING, nadajnik wlaczony, ramka jeszcze nie poszla	request accepted: OPENING, transmitter on, frame not sent yet
+lit	po 1 ms jeszcze OPENING, po 2 ms: SENDING, do portu poszla ta sama ramka 15B	after 1 ms still OPENING, after 2 ms: SENDING, the same 15B frame went to the port
+lit	drugie zadanie w trakcie: BUSY	second request meanwhile: BUSY
+lit	potwierdzenie po 2 ms: wynik ACKED, COOLDOWN, nadajnik wlaczony lacznie 4 ms	ack after 2 ms: result ACKED, COOLDOWN, transmitter on for 4 ms in total
+lit	wynik oddawany jeden raz	result handed out once
+lit	przerwa: po 499 ms jeszcze BUSY, po 500 ms IDLE	cooldown: after 499 ms still BUSY, after 500 ms IDLE
+lit	po przerwie nastepne zadanie przyjete	after the cooldown the next request is accepted
+lit	liczniki: wyslane 1, potwierdzone 1, odmowy 2	counters: sent 1, acked 1, refused 2
+lit	%s: 10 ramek przyjetych, 11. RATE, przed uplywem 60 s RATE, po 60 s od pierwszej OK	%s: 10 frames accepted, 11th RATE, before 60 s RATE, 60 s after the first OK
+lit	--- warunki dopuszczenia, kazdy osobno ---\n	--- admission conditions, each on its own ---\n
+lit	brak swiezej 0F6 z zaplonem: IGNITION	no fresh 0F6 with ignition: IGNITION
+lit	cisza na magistrali: BUS_QUIET	bus is quiet: BUS_QUIET
+lit	zapis flash albo aktualizacja: FLASH_BUSY	flash write or update: FLASH_BUSY
+lit	czeka zapis ustawien: FLASH_BUSY	settings write pending: FLASH_BUSY
+lit	po ustaniu warunkow: przyjete (odmowy nie zatrzaskuja)	after the conditions clear: accepted (refusals do not latch)
+lit	REC = 5: odmowa czasowa CONTROLLER bez zatrzasku; REC = 0: przyjete	REC = 5: temporary refusal CONTROLLER without a latch; REC = 0: accepted
+lit	REC = 130, kontroler zatrzymany, powrot po bus-off: CONTROLLER bez zatrzasku	REC = 130, controller stopped, recovering from bus-off: CONTROLLER without a latch
+lit	blad magistrali 50 ms temu: CONTROLLER; po 100 ms od bledu: przyjete	bus error 50 ms ago: CONTROLLER; 100 ms after the error: accepted
+lit	TEC = 32: zatrzask FAULT	TEC = 32: latch FAULT
+lit	bus-off: zatrzask FAULT	bus-off: latch FAULT
+lit	--- arbitraz ---\n	--- arbitration ---\n
+lit	przegrany arbitraz 2 razy, potem ACK: 3 proby w jednym oknie, wynik ACKED	arbitration lost 2 times, then ACK: 3 tries in one window, result ACKED
+lit	arbitraz przegrany 3 razy: FAILED po 3 probach; 4 takie wysylki z rzedu nie zatrzaskuja	arbitration lost 3 times: FAILED after 3 tries; 4 such sends in a row do not latch
+lit	--- zatrzask FAULT ---\n	--- FAULT latch ---\n
+lit	2 nieudane, potem udana: bez zatrzasku	2 failed, then a good one: no latch
+lit	3 nieudane z rzedu: FAULT	3 failed in a row: FAULT
+lit	FAULT trzyma (5 s pozniej dalej odmowa, nadajnik nie wlaczany)	FAULT holds (5 s later still refused, transmitter not enabled)
+lit	clearFault: IDLE, nastepna wysylka dziala	clearFault: IDLE, the next send works
+lit	poll() = 4 (zdarzenie kontrolera): FAULT od razu	poll() = 4 (controller event): FAULT at once
+lit	brak wyniku: po 20 ms nadajnik wylaczony, wynik TIMEOUT, FAULT	no result: after 20 ms transmitter off, result TIMEOUT, FAULT
+lit	port nie przyjal ramki: FAILED, nadajnik wylaczony	port did not take the frame: FAILED, transmitter off
+lit	latchFault z zewnatrz: w IDLE i w trakcie wysylki (nadajnik wylaczony, wynik FAILED)	latchFault from outside: in IDLE and during a send (transmitter off, result FAILED)
+lit	zatrzask w stanie rozbrojonym: po uzbrojeniu FAULT, nie IDLE	latch in the disarmed state: FAULT after arming, not IDLE
+lit	przestoj petli 30 ms w SENDING: po powrocie nadajnik wylaczony i FAULT (poza niezmiennikiem: petla stala)	loop stall 30 ms in SENDING: after it the transmitter is off and FAULT (outside the invariant: the loop stood still)
+lit	przestoj petli 30 ms w OPENING: nic nie wyslane, FAULT	loop stall 30 ms in OPENING: nothing sent, FAULT
+lit	--- zapis flash w trakcie okna i forceClose ---\n	--- flash write during the window and forceClose ---\n
+lit	flashBusy w OPENING: nic nie wyslane, FAILED, COOLDOWN	flashBusy in OPENING: nothing sent, FAILED, COOLDOWN
+lit	flashBusy w SENDING: nadajnik wylaczony, FAILED, COOLDOWN	flashBusy in SENDING: transmitter off, FAILED, COOLDOWN
+lit	forceClose w NOT_BUILT, DISARMED, IDLE: stan bez zmiany, nadajnik wylaczony	forceClose in NOT_BUILT, DISARMED, IDLE: state unchanged, transmitter off
+lit	forceClose w OPENING: nadajnik wylaczony, nic nie wyslane, wynik FAILED	forceClose in OPENING: transmitter off, nothing sent, result FAILED
+lit	po forceClose brama wraca do IDLE po przerwie	after forceClose the gate returns to IDLE after the cooldown
+lit	forceClose w SENDING: nadajnik wylaczony, wynik FAILED	forceClose in SENDING: transmitter off, result FAILED
+lit	forceClose w COOLDOWN i FAULT: stan bez zmiany, nadajnik wylaczony	forceClose in COOLDOWN and FAULT: state unchanged, transmitter off
+lit	%s: %lu krokow po 1 ms, przyjete zadania %u, wlaczen nadajnika %u, najdluzsze %lu ms, zlamania niezmiennika %u	%s: %lu steps of 1 ms, accepted requests %u, transmitter enables %u, longest %lu ms, invariant violations %u
+lit	--- limit 10 ramek na minute ---\n	--- limit of 10 frames per minute ---\n
+lit	start 1 s	start 1 s
+lit	przejscie licznika milisekund przez zero w trakcie	millisecond counter wraps through zero meanwhile
+lit	--- niezmiennik w dlugim przebiegu losowym ---\n	--- invariant in a long random run ---\n
+lit	z przejsciem licznika przez zero	with the counter wrapping through zero
+lit	can_tx_gate: %d sprawdzen, %d bledow\n	can_tx_gate: %d checks, %d errors\n
+# test_host/car_state.cpp
+lit	  %s: ramek %u, ostatnia	  %s: frames %u, last
+lit	 brak\n	 none\n
+lit	 (dlugosc %u)\n	 (length %u)\n
+lit	zapis %s: ramek %u, ostatnia w %lu ms\n	record %s: frames %u, last at %lu ms\n
+lit	  zaplon=0x%02X wsteczny=%u drzwi znane=%u (pierwszy raz przy ramce nr %ld)\n	  ignition=0x%02X reverse=%u doors known=%u (first time at frame no. %ld)\n
+lit	  roznice wzgledem koderow: zaplon/wsteczny %u, czas 0F6 %u, drzwi %u, ruch na magistrali %u\n	  differences from the encoders: ignition/reverse %u, time 0F6 %u, doors %u, bus traffic %u\n
+lit	zapis zawiera ramki	the capture contains frames
+lit	0F6: CarModel = decodeBodyState po kazdej ramce zapisu	0F6: CarModel = decodeBodyState after every frame of the capture
+lit	haveDoors: CarModel = DoorEncoder po kazdej ramce zapisu	haveDoors: CarModel = DoorEncoder after every frame of the capture
+lit	msAnyFrame = czas kazdej ramki zapisu	msAnyFrame = time of every frame of the capture
+lit	poczatek: niczego nie bylo	start: nothing has arrived
+lit	poczatek: fresh() = falsz	start: fresh() = false
+lit	poczatek: zaplon 0, wsteczny 0	start: ignition 0, reverse 0
+lit	0F6: tresc i czas	0F6: content and time
+lit	0F6: zaplon 8E, wsteczny 1	0F6: ignition 8E, reverse 1
+lit	0F6: bajt temperatury 5C	0F6: temperature byte 5C
+lit	0F6 nie rusza innych ramek	0F6 does not touch other frames
+lit	036: tresc i czas	036: content and time
+lit	260: tresc i czas (7 bajtow)	260: content and time (7 bytes)
+lit	361: tresc i czas (6 bajtow)	361: content and time (6 bytes)
+lit	227: tresc i czas (5 bajtow)	227: content and time (5 bytes)
+lit	3E1: tresc i czas (5 bajtow)	3E1: content and time (5 bytes)
+lit	217: tresc i czas	217: content and time
+lit	pozniejsze ramki nie ruszyly wczesniejszych	later frames did not touch earlier ones
+lit	msAnyFrame = czas ostatniej ramki	msAnyFrame = time of the last frame
+lit	260: nowa tresc zastepuje stara	260: new content replaces the old one
+lit	10B: tylko msAnyFrame	10B: msAnyFrame only
+lit	0F6 z 7 bajtami przed pierwsza pelna: stan pusty	0F6 with 7 bytes before the first complete one: empty state
+lit	0F6 za krotka liczy sie jako ruch na magistrali	a too short 0F6 counts as bus traffic
+lit	0F6 za krotka po pelnej: tresc, czas, zaplon bez zmian	a too short 0F6 after a complete one: content, time, ignition unchanged
+lit	0F6 za krotka nie odswieza wieku ramki	a too short 0F6 does not refresh the frame age
+lit	260 z 6 bajtami: len = 6, bajt 7 wyzerowany	260 with 6 bytes: len = 6, byte 7 zeroed
+lit	361 z 3 bajtami: len = 3	361 with 3 bytes: len = 3
+lit	227 pusta: len = 0	227 empty: len = 0
+lit	217 z dlugoscia 200: przycieta do 8	217 with length 200: cut to 8
+lit	ramka z dlugoscia 200 nie ruszyla sasiednich pol	a frame with length 200 did not touch the neighbouring fields
+lit	fromBus=0 jako pierwsza: brak ruchu na magistrali	fromBus=0 as the first: no bus traffic
+lit	fromBus=0: tresc ramki zapisana	fromBus=0: frame content stored
+lit	fromBus=0 po ramce z magistrali: msAnyFrame bez zmian	fromBus=0 after a frame from the bus: msAnyFrame unchanged
+lit	fromBus=0: 0F6 zapisana, zaplon 88	fromBus=0: 0F6 stored, ignition 88
+lit	fresh: wiek 0	fresh: age 0
+lit	fresh: wiek 255 ms przed przejsciem	fresh: age 255 ms before the wrap
+lit	fresh: wiek 272 ms po przejsciu przez zero	fresh: age 272 ms after wrapping through zero
+lit	fresh: wiek 1499 ms po przejsciu	fresh: age 1499 ms after the wrap
+lit	fresh: wiek 1500 ms = juz stara	fresh: age 1500 ms = already stale
+lit	fresh: wiek 65 s = stara	fresh: age 65 s = stale
+lit	fresh: ramki nie bylo = falsz	fresh: no frame = false
+lit	fresh: limit 0 = zawsze falsz	fresh: limit 0 = always false
+lit	1A1 z komunikatem o drzwiach przed kontrolka: jeszcze nie	1A1 with a door message before the warning lamp: not yet
+lit	128 za krotka: nie	128 too short: no
+lit	128 kontrolka swieci, brak komunikatu: nie	128 lamp lit, no message: no
+lit	1A1 inny komunikat: nie	1A1 another message: no
+lit	1A1 za krotka: nie	1A1 too short: no
+lit	1A1 z komunikatem przy swiecacej kontrolce: tak	1A1 with a message while the lamp is lit: yes
+lit	128 kontrolka zgaszona: drzwi znane (zamkniete)	128 lamp off: doors known (closed)
+lit	sprawdzen: %d, bledow: %d\n	checks: %d, errors: %d\n
+# test_host/conformance.cpp
+lit	uzycie: conformance <zapis.log>\n	usage: conformance <capture.log>\n
+lit	 ms: skrzynka 	 ms: box 
+lit	, my 	, us 
+lit	%ld ms: kod %02X, skrzynka: trzymany x%d puszczony=%d, my: x%d puszczony=%d	%ld ms: code %02X, box: held x%d released=%d, us: x%d released=%d
+lit	%ld ms: kod %02X tylko u skrzynki	%ld ms: code %02X only from the box
+lit	%ld ms: kod %02X tylko u nas	%ld ms: code %02X only from us
+lit	Linia skrzynki: ramek %lu, zla suma %lu, zla dlugosc %lu, urwane %lu, bajty poza ramkami %lu\n	Box line: frames %lu, bad checksum %lu, bad length %lu, truncated %lu, bytes outside frames %lu\n
+lit	Linia radia:    ramek %lu, zla suma %lu, zla dlugosc %lu, urwane %lu, potwierdzen %lu\n	Radio line:  frames %lu, bad checksum %lu, bad length %lu, truncated %lu, acks %lu\n
+lit	Z ramek radia:  glosnosc %u%s, czas 20%02u-%02u-%02u %02u:%02u, ustawien %lu, nieznanych komend %lu\n	From radio frames: volume %u%s, time 20%02u-%02u-%02u %02u:%02u, settings %lu, unknown commands %lu\n
+lit	\nPRZYCISKI: nacisniec u skrzynki %zu, zgodnych %ld, z roznica %ld, brak u nas %ld, nadmiarowych u nas %ld\n	\nKEYS: presses from the box %zu, matching %ld, with a difference %ld, missing from us %ld, extra from us %ld\n
+lit	\nCZUJNIKI: ramek skrzynki %ld, zgodnych %ld (%.1f%%), pominietych ramek stanu poczatkowego %ld\n	\nSENSORS: box frames %ld, matching %ld (%.1f%%), skipped frames of the initial state %ld\n
+lit	   rozne: %s\n	   different: %s\n
+lit	ZASILANIE: %s: skrzynka %ld ms, my %ld ms (roznica %ld ms)\n	POWER: %s: box %ld ms, us %ld ms (difference %ld ms)\n
+lit	wlaczenie	on
+lit	wylaczenie	off
+lit	ZASILANIE: %s skrzynki w %ld ms bez odpowiednika u nas\n	POWER: %s of the box at %ld ms without a counterpart from us\n
+lit	\nPOZOSTALE RAMKI (zgodne / wszystkie):\n	\nOTHER FRAMES (matching / all):\n
+lit	       rozne: %s\n	       different: %s\n
+lit	ROZNICE	DIFFERENCES
+lit	ZGODNE	MATCH
+# test_host/custom_keys_doors.cpp
+lit	TEL wcisniety -> kod 9B stan 1	TEL pressed -> code 9B state 1
+lit	TEL puszczony -> kod 9B stan 0	TEL released -> code 9B state 0
+lit	glosnosc + bez zmian	volume + unchanged
+lit	DRIVE bez zmian	DRIVE unchanged
+lit	przycisk 21 (miedzy SRC a LIST) -> 1F (Siri)	key 21 (between SRC and LIST) -> 1F (Siri)
+lit	zamiana z konsoli 9B -> 1F	swap from the console 9B -> 1F
+lit	cofniecie zamiany	swap undone
+lit	ksiezyc 1. nacisniecie -> wcisniety	moon 1st press -> pressed
+lit	ksiezyc przytrzymanie pominiete	moon hold skipped
+lit	ksiezyc puszczenie pominiete	moon release skipped
+lit	ekran oznaczony jako wygaszony	screen marked as blanked
+lit	ksiezyc 2. nacisniecie -> puszczony	moon 2nd press -> released
+lit	ksiezyc puszczenie pominiete (2)	moon release skipped (2)
+lit	ekran oznaczony jako wlaczony	screen marked as on
+lit	zgaszenie przy wlaczonym ekranie: nic	ignition off with the screen on: nothing
+lit	zgaszenie przy wygaszonym ekranie: puszczony	ignition off with the screen blanked: released
+lit	po zgaszeniu pierwsze nacisniecie znowu wygasza	after ignition off the first press blanks again
+lit	konstruktor: tekst 9F=9B;21=1F	constructor: text 9F=9B;21=1F
+lit	konstruktor: 2 wpisy stale	constructor: 2 fixed entries
+lit	defaultEntry(0) = 9F->9B, poza zakresem used=false	defaultEntry(0) = 9F->9B, out of range used=false
+lit	male litery przyjete, tekst zastepuje cala tabele (9F juz bez zamiany)	lower case accepted, the text replaces the whole table (9F no longer swapped)
+lit	sredniki na koncu przyjety, postac kanoniczna bez niego	trailing semicolon accepted, canonical form without it
+lit	wpis XX=XX pominiety	entry XX=XX skipped
+lit	pusty tekst = tabela bez zamian	empty text = table without swaps
+lit	nullptr z dlugoscia 0 = tabela bez zamian	nullptr with length 0 = table without swaps
+lit	16 par + srednik (96 znakow) przyjete	16 pairs + semicolon (96 characters) accepted
+lit	16 wpisow: postac kanoniczna 95 znakow	16 entries: canonical form 95 characters
+lit	za maly bufor: false i pusty tekst	buffer too small: false and empty text
+lit	bufor 96 wystarcza	buffer 96 is enough
+lit	17 par odrzucone, tabela bez zmian	17 pairs rejected, table unchanged
+lit	duplikat kodu przycisku odrzucony, tabela bez zmian	duplicate key code rejected, table unchanged
+lit	duplikat z wpisem XX=XX odrzucony	duplicate with an XX=XX entry rejected
+lit	odstep po sredniku odrzucony	space after a semicolon rejected
+lit	odstepy odrzucone	spaces rejected
+lit	puste wpisy odrzucone	empty entries rejected
+lit	uciete wpisy odrzucone	cut entries rejected
+lit	zle znaki odrzucone	bad characters rejected
+lit	bajt zerowy wewnatrz odrzucony	zero byte inside rejected
+lit	czytane tylko 'len' znakow	only 'len' characters read
+lit	postac kanoniczna	canonical form
+lit	ponowne wczytanie postaci kanonicznej bez zmian	reading the canonical form again changes nothing
+lit	wczytana zamiana dziala w onEvent	a loaded swap works in onEvent
+lit	zamiana A4 w tabeli nie ma skutku (ksiezyc obslugiwany osobno)	swapping A4 in the table has no effect (moon handled separately)
+lit	parseMap nie zmienia stanu ksiezyca	parseMap does not change the moon state
+lit	ksiezyc dalej przelacza po parseMap	moon still toggles after parseMap
+lit	resetMap = stan z konstruktora	resetMap = state from the constructor
+lit	setMap dziala po resetMap	setMap works after resetMap
+lit	1A1 bez komunikatu: nic	1A1 without a message: nothing
+lit	komunikat bez kontrolki: pominiety	message without the lamp: skipped
+lit	drzwi kierowcy -> DATA[0] = 84	driver door -> DATA[0] = 84
+lit	DATA[1..5]: zera przed setSettings, potem podane bajty	DATA[1..5]: zeros before setSettings, then the given bytes
+lit	kontrolka swieci, komunikat zniknal: wskazanie zostaje	lamp lit, message gone: the indication stays
+lit	kierowcy + bagaznik -> 8C	driver + boot -> 8C
+lit	kontrolka zgasla -> wszystko zamkniete (04)	lamp off -> everything closed (04)
+lit	  %9.2f s  ramka 38 DATA[0] = %02X\n	  %9.2f s  frame 38 DATA[0] = %02X\n
+lit	zmian stanu drzwi w zapisie: %d\n	door state changes in the capture: %d\n
+# test_host/golden_stream.cpp
+lit	uzycie: golden_stream <zapis.log> <katalog> [--decoder] [--bez 38,3C] [--przestoj N,M] [--zgub ID]	usage: golden_stream <capture.log> <directory> [--decoder] [--without 38,3C] [--stall N,M] [--drop ID]
+lit	 [--raport-skrzynka plik]\n	 [--box-report file]\n
+lit	bledne --przestoj (N sekund, M ms, M < N*1000)\n	bad --stall (N seconds, M ms, M < N*1000)\n
+lit	.przestoj_%u_%u	.stall_%u_%u
+lit	.zgub_%03lX	.drop_%03lX
+lit	--bez przyjmuje tylko 38,3C\n	--without accepts only 38,3C\n
+lit	nieznany parametr: %s\n	unknown parameter: %s\n
+lit	zapis bez ramek: %s\n	capture without frames: %s\n
+# (the .outputs.txt names acc, ill, rev, pikanie, ton, ton_ciagly, czujniki, magistrala, zajete, silnik,
+# acc_siec stay: those files must keep their bytes)
+lit	# linie [park] zliczone, nie zapisane: %lu	# [park] lines counted, not written: %lu
+lit	%s: krokow %lu, przestojow %lu, ramek CAN %lu (wycietych %lu), bajtow od radia %lu\n	%s: steps %lu, stalls %lu, CAN frames %lu (dropped %lu), bytes from the radio %lu\n
+lit	  od radia: ramek %lu (z numerem komendy < 80: %lu), zla suma %lu, zla dlugosc %lu, urwane %lu\n	  from the radio: frames %lu (with a command number < 80: %lu), bad checksum %lu, bad length %lu, truncated %lu\n
+lit	  do radia: ramek %zu:	  to the radio: frames %zu:
+lit	\n  outputs: %zu linii, console: %zu linii%s\n	\n  outputs: %zu lines, console: %zu lines%s\n
+lit	 ([park] zliczone)	 ([park] counted)
+lit	### %s: ramek skrzynki %zu, naszych %zu, okno +-%ld ms\n	### %s: box frames %zu, ours %zu, window +-%ld ms\n
+lit	komenda  skrzynka  z_odpowiednikiem  nasze  nasze_bez_pary\n	command  box  with_counterpart  ours  ours_unpaired\n
+# test_host/loop_policy.cpp
+lit	--- odroczenie zapisu ustawien ---\n	--- deferral of settings writes ---\n
+lit	po starcie nic nie czeka	after startup nothing is pending
+lit	auto wolne: zapis od razu, nic nie czeka	car free: write at once, nothing pending
+lit	auto wolne: tabela tez od razu	car free: the table at once too
+lit	auto zajete: glosnosc odlozona	car busy: volume deferred
+lit	dalej zajete: nic do wykonania, zapis czeka	still busy: nothing to do, the write waits
+lit	1000 przebiegow przy zajetym aucie: zapis ani razu	1000 passes with the car busy: no write at all
+lit	auto wolne: zapis glosnosci do wykonania, raz	car free: volume write to do, once
+lit	drugi raz juz nic	the second time nothing
+lit	dwa razy glosnosc: czeka jeden zapis (wartosc trzyma konsola)	volume twice: one write pending (the console keeps the value)
+lit	glosnosc i tabela: czekaja oba	volume and table: both pending
+lit	po ustaniu: po jednym zapisie na przebieg (glosnosc, tabela, nic)	afterwards: one write per pass (volume, table, nothing)
+lit	map Z NA, potem map reset: zostaje samo usuniecie tabeli	map FROM TO, then map reset: only the table removal remains
+lit	map reset, potem map Z NA: zostaje sam zapis tabeli	map reset, then map FROM TO: only the table write remains
+lit	wykonany jeden zapis tabeli	one table write done
+lit	zapis glosnosci od razu kasuje czekajacy zapis glosnosci	an immediate volume write cancels the pending volume write
+lit	zapis tabeli od razu kasuje czekajace usuniecie	an immediate table write cancels the pending removal
+lit	nic nie zostalo do wykonania	nothing left to do
+lit	zajete 40 przebiegow: zapis w 41., dokladnie raz	busy for 40 passes: write in the 41st, exactly once
+lit	--- termin ze znacznikiem aktywne ---\n	--- deadline with an active flag ---\n
+lit	nieustawiony: nie trwa, takze gdy licznik minie polowe zakresu (dawniej: trwal)	not set: not running, also when the counter passes half of its range (before: running)
+lit	start: trwa 1500 ms	start: runs 1500 ms
+lit	po 1500 ms: koniec	after 1500 ms: end
+lit	poll przed terminem: znacznik zostaje	poll before the deadline: the flag stays
+lit	poll po terminie: znacznik zdjety	poll after the deadline: the flag is cleared
+lit	24,9 dnia pozniej: nie trwa (samo porownanie czasu dalo by znowu 'trwa')	24.9 days later: not running (a time comparison alone would say 'running' again)
+lit	odswiezany co 1 ms: trwa caly czas	refreshed every 1 ms: runs all the time
+lit	po ostatnim odswiezeniu trzyma 2000 ms i gasnie	after the last refresh it holds 2000 ms and ends
+lit	przejscie licznika przez zero: 1500 ms liczone poprawnie	counter wrapping through zero: 1500 ms counted correctly
+lit	loop_policy: %d sprawdzen, %d bledow\n	loop_policy: %d checks, %d errors\n
+# test_host/net_policy.cpp
+lit	auto nie spi: Wi-Fi wlaczone, bez trzymania	car awake: Wi-Fi on, no hold
+lit	wylacznik uzytkownika gasi Wi-Fi	the user switch turns Wi-Fi off
+lit	samo ACC = auto nie spi	ACC alone = car awake
+lit	komputer na USB = Wi-Fi wlaczone	computer on USB = Wi-Fi on
+lit	odlaczenie USB przy cichej magistrali bez klienta: Wi-Fi off	USB unplugged on a quiet bus without a client: Wi-Fi off
+lit	%s: zamilkniecie z aktywnym klientem trzyma	%s: going quiet with an active client holds
+lit	%s: 59,999 s od zapytania nadal trzyma	%s: 59.999 s after a request still holds
+lit	%s: 60 s od zapytania koniec czuwania	%s: 60 s after a request the standby ends
+lit	%s: zakonczone czuwanie nie wraca bez przebudzenia auta	%s: an ended standby does not come back without the car waking up
+lit	%s: aktywny klient trzyma do 10 min, potem koniec	%s: an active client holds up to 10 min, then the end
+lit	%s: po przebudzeniu auta nowe czuwanie	%s: after the car wakes up a new standby
+lit	start przy cichej magistrali z klientem: czuwanie	start on a quiet bus with a client: standby
+lit	start: klient trzyma 60 s	start: the client holds 60 s
+lit	start: po 60 s bez zapytan koniec	start: after 60 s without requests the end
+lit	start: lacznie najwyzej 10 min od pierwszego update()	start: in total at most 10 min from the first update()
+lit	start przy cichej magistrali bez klienta: Wi-Fi na 60 s (klient zdazy zapytac)	start on a quiet bus without a client: Wi-Fi for 60 s (a client has time to ask)
+lit	start bez klienta: jeszcze w oknie 60 s	start without a client: still in the 60 s window
+lit	start bez klienta: po 60 s Wi-Fi off	start without a client: after 60 s Wi-Fi off
+lit	start, klient od 5 s: Wi-Fi wlaczone ponad 60 s az do 10 min	start, client since 5 s: Wi-Fi on for more than 60 s up to 10 min
+lit	start, klient od 5 s: po 10 min Wi-Fi off	start, client since 5 s: after 10 min Wi-Fi off
+lit	po potwierdzeniu nowego programu klient trzyma Wi-Fi (cicha magistrala)	after a new program is confirmed the client holds Wi-Fi (quiet bus)
+lit	lastClientMs = nowMs + 5 liczy sie jak wiek 0	lastClientMs = nowMs + 5 counts as age 0
+lit	potem zwykle 60 s od tego znacznika	then the usual 60 s from that timestamp
+lit	clientSeen == false: znacznik czasu nie liczy sie	clientSeen == false: the timestamp does not count
+lit	napiecie powyzej progu: czuwanie	voltage above the threshold: standby
+lit	napiecie ponizej progu: koniec czuwania	voltage below the threshold: end of standby
+lit	napiecie niemierzone: progu nie ma	voltage not measured: no threshold
+lit	napiecie NaN przy pomiarze: koniec czuwania	voltage NaN while measuring: end of standby
+lit	napiecie rowne progowi: czuwanie	voltage equal to the threshold: standby
+lit	auto nie spi: niskie napiecie nie gasi Wi-Fi	car awake: low voltage does not turn Wi-Fi off
+lit	otaActive: trzyma i Wi-Fi wlaczone	otaActive: holds and Wi-Fi on
+lit	otaActive przy enabled == false: trzyma, Wi-Fi off	otaActive with enabled == false: holds, Wi-Fi off
+lit	uploadBusy: Wi-Fi wlaczone takze przy enabled == false	uploadBusy: Wi-Fi on also with enabled == false
+lit	koniec wgrywania: wylacznik dziala	upload finished: the switch works
+lit	puszczenie otaActive: holdAwake == false w tym samym wywolaniu	otaActive released: holdAwake == false in the same call
+lit	otaActive trzyma niezaleznie od limitu 10 min	otaActive holds regardless of the 10 min limit
+lit	po otaActive bez klienta: koniec	after otaActive without a client: the end
+lit	%s: brak impulsu od razu (pierwsze polaczenie robi start)	%s: no pulse at once (the start makes the first connection)
+lit	%s: proby co 30 s	%s: tries every 30 s
+lit	%s: przy kliencie w naszej sieci co 5 min	%s: with a client on our network every 5 min
+lit	%s: przy pracujacym silniku nigdy	%s: never with the engine running
+lit	%s: po zgaszeniu silnika pierwsza proba po 30 s	%s: after the engine stops the first try after 30 s
+lit	%s: bez prob gdy polaczone / brak sieci / Wi-Fi off / wgrywanie	%s: no tries when connected / no network / Wi-Fi off / uploading
+lit	czuwanie	standby
+lit	czuwanie przy zawinieciu millis	standby with millis wrapping
+lit	siec domowa przy zawinieciu millis	home network with millis wrapping
+# test_host/net_rings.cpp
+lit	linia %u\r\n	entry %u\r\n
+lit	log: pusty po starcie	log: empty after startup
+lit	log: odczyt pustego	log: reading an empty one
+lit	log: puste linie pomijane	log: empty lines skipped
+lit	log: 10 linii, next == head	log: 10 lines, next == head
+lit	linia 3	entry 3
+lit	log: tekst bez konca linii, czas linii	log: text without end of line, line time
+lit	linia 7	entry 7
+lit	log: odczyt od kursora 7	log: reading from cursor 7
+lit	log: kursor z przyszlosci = head	log: cursor from the future = head
+lit	log: limit wpisow, next < head	log: entry limit, next < head
+lit	log: budzet bajtow tekstu, linia nie dzielona	log: text byte budget, a line is not split
+lit	log: linia nie miesci sie wcale -> nic, kursor bez zmian	log: a line that does not fit at all -> nothing, cursor unchanged
+lit	log: linia > 200 obcieta	log: line > 200 cut
+lit	log: clear nie cofa numeracji	log: clear does not reset the numbering
+lit	log: pierscien trzyma tyle pelnych linii, ile sie miesci	log: the ring keeps as many whole lines as fit
+lit	log: dropped = linie, ktore wypadly	log: dropped = lines that fell out
+lit	log: odczyt po przepelnieniu od najstarszej	log: reading after an overflow from the oldest
+lit	log: najstarsza zachowana linia poprawna	log: the oldest kept line is correct
+lit	log: 3000 linii roznej dlugosci, zawijanie, ciaglosc numerow	log: 3000 lines of different length, wrapping, continuous numbers
+lit	trace: pusty	trace: empty
+lit	trace: 100 ramek, next == head	trace: 100 frames, next == head
+lit	trace: tresc ramki, bajty za dlugoscia wyzerowane	trace: frame content, bytes past the length zeroed
+lit	trace: limit max, next < head	trace: max limit, next < head
+lit	trace: filtr ID przesuwa kursor przez inne ramki	trace: the ID filter moves the cursor over other frames
+lit	trace: filtr bez trafien przechodzi do head	trace: a filter without hits goes to head
+lit	trace: kursor z przyszlosci = head	trace: cursor from the future = head
+lit	trace: dlugosc przycieta do 8, ID 11 bitow	trace: length cut to 8, ID 11 bits
+lit	trace: oldest po przepelnieniu	trace: oldest after an overflow
+lit	trace: dropped i odczyt od najstarszej	trace: dropped and reading from the oldest
+lit	trace: kolejny odczyt bez strat	trace: the next read without losses
+lit	trace: klient w tyle traci tylko to, co wypadlo	trace: a client lagging behind loses only what fell out
+lit	trace: kursor sprzed zawiniecia traktowany jak stary	trace: a cursor from before the wrap is treated as old
+lit	tabela: posortowana rosnaco wg ID	table: sorted by ascending ID
+lit	tabela: licznik, czas, odstep, dane	table: counter, time, interval, data
+lit	tabela: jedna ramka -> odstep 0	table: one frame -> interval 0
+lit	tabela: dlugosc i bajty za dlugoscia	table: length and bytes past the length
+lit	tabela: 128 ID, nadal posortowana	table: 128 IDs, still sorted
+lit	tabela: ramki nadmiarowych ID licza overflow	table: frames of extra IDs count overflow
+lit	tabela: clear	table: clear
+# test_host/net_util.cpp (test data: "haslo" -> "hello" keeps the length and the base64 sizes)
+lit	YWRtaW46aGFzbG8=	YWRtaW46aGVsbG8=
+lit	YWRtaW46aGFzbG8	YWRtaW46aGVsbG8
+lit	admin:haslo	admin:hello
+lit	haslo	hello	test_host/net_util.cpp
+lit	  basic   YWRtaW46aGFzbG8=  	  basic   YWRtaW46aGVsbG8=  
+lit	Basic YWRtaW46aGFzbG8=	Basic YWRtaW46aGVsbG8=
+lit	Bearer YWRtaW46aGFzbG8=	Bearer YWRtaW46aGVsbG8=
+lit	BasicYWRtaW46aGFzbG8=	BasicYWRtaW46aGVsbG8=
+lit	Basic YWRtaW46aGFz bG8=	Basic YWRtaW46aGVs bG8=
+lit	base64 z jednym '='	base64 with one '='
+lit	base64 bez '='	base64 without '='
+lit	base64 z '=='	base64 with '=='
+lit	base64 bez '==' (2 znaki)	base64 without '==' (2 characters)
+lit	base64 pelna grupa	base64 full group
+lit	base64 pusty tekst = 0 bajtow	base64 empty text = 0 bytes
+lit	base64 spacja = blad	base64 space = error
+lit	base64 koniec linii = blad	base64 end of line = error
+lit	base64 zle dopelnienie	base64 bad padding
+lit	base64 trzy '=' = blad	base64 three '=' = error
+lit	base64 '=' w srodku = blad	base64 '=' in the middle = error
+lit	base64 jeden znak = blad	base64 one character = error
+lit	base64 znak spoza alfabetu	base64 character outside the alphabet
+lit	base64 za maly bufor	base64 buffer too small
+lit	base64 bufor dokladnie na styk	base64 buffer exactly the right size
+lit	parseBasic admin:haslo	parseBasic admin:hello
+lit	parseBasic male litery i odstepy	parseBasic lower case and spaces
+lit	parseBasic dwukropek w hasle	parseBasic colon in the password
+lit	parseBasic pusty uzytkownik	parseBasic empty user
+lit	parseBasic inny schemat	parseBasic another scheme
+lit	parseBasic bez odstepu	parseBasic without a space
+lit	parseBasic bez dwukropka	parseBasic without a colon
+lit	parseBasic pusta wartosc	parseBasic empty value
+lit	parseBasic spacja w base64	parseBasic space in base64
+lit	parseBasic za maly bufor uzytkownika	parseBasic user buffer too small
+lit	parseBasic za maly bufor hasla	parseBasic password buffer too small
+lit	parseBasic bufory na styk	parseBasic buffers exactly the right size
+lit	parseBasic bajt zerowy	parseBasic zero byte
+lit	urlDecode male i wielkie litery	urlDecode lower and upper case
+lit	urlDecode zly %XX	urlDecode bad %XX
+lit	urlDecode uciety %X	urlDecode cut %X
+lit	urlDecode samo %	urlDecode lone %
+lit	urlDecode bajt zerowy	urlDecode zero byte
+lit	urlDecode brak miejsca na zero	urlDecode no room for the zero
+lit	urlDecode na styk	urlDecode exactly the right size
+lit	urlDecode pusty	urlDecode empty
+lit	urlDecode surowy bajt zerowy	urlDecode raw zero byte
+lit	ssid=Dom+2&pass=a%26b%3Dc&empty=&x	ssid=Net+2&pass=a%26b%3Dc&empty=&x
+lit	Dom 2	Net 2
+lit	formValue pierwsze pole	formValue first field
+lit	formValue zakodowane & i =	formValue encoded & and =
+lit	formValue pusta wartosc	formValue empty value
+lit	formValue pole bez '='	formValue field without '='
+lit	formValue prefiks nazwy to nie pole	formValue a name prefix is not a field
+lit	formValue brak pola	formValue missing field
+lit	formValue zly %XX	formValue bad %XX
+lit	formValue za dluga wartosc	formValue value too long
+lit	formValue pierwsze z powtorzonych	formValue first of repeated ones
+lit	formValue respektuje dlugosc ciala	formValue respects the body length
+lit	haslo 9 znakow za krotkie	password of 9 characters too short
+lit	haslo 10 znakow	password of 10 characters
+lit	haslo 63 znaki	password of 63 characters
+lit	haslo 64 znaki za dlugie	password of 64 characters too long
+lit	haslo ze spacja	password with a space
+lit	haslo ze znakiem 0x7F	password with character 0x7F
+lit	haslo z polska litera	password with a non-ASCII letter
+lit	haslo ze znakami specjalnymi	password with special characters
+lit	haslo nullptr	password nullptr
+lit	tajnehaslo1	secretword1
+lit	tajnehaslo2	secretword2
+lit	tajnehaslo	secretword
+lit	tajnehaslo12	secretword12
+lit	porownanie rowne	comparison equal
+lit	porownanie rozne na koncu	comparison different at the end
+lit	porownanie krotsze	comparison shorter
+lit	porownanie dluzsze	comparison longer
+lit	porownanie puste podane	comparison empty given
+lit	porownanie z pustym haslem urzadzenia = false	comparison with an empty device password = false
+lit	porownanie nullptr	comparison nullptr
+lit	%s: 4 bledy bez blokady	%s: 4 failures without a lockout
+lit	%s: 5. blad w 60 s -> 30 s blokady	%s: 5th failure in 60 s -> 30 s lockout
+lit	%s: blokada mija po 30 s	%s: the lockout ends after 30 s
+lit	%s: druga blokada 60 s	%s: second lockout 60 s
+lit	%s: trzecia blokada 120 s	%s: third lockout 120 s
+lit	%s: piata blokada ograniczona do 5 min	%s: fifth lockout limited to 5 min
+lit	%s: sukces zaraz po blokadzie nie skraca nastepnej	%s: a success right after a lockout does not shorten the next one
+lit	%s: po 60 s bez bledow sukces przywraca 30 s	%s: after 60 s without failures a success restores 30 s
+lit	%s: 4 bledy, sukces, 1 blad -> blokada	%s: 4 failures, success, 1 failure -> lockout
+lit	%s: przeplot 4 bledy + sukces blokuje	%s: interleaved 4 failures + success locks out
+lit	%s: bledy co 15 s nie blokuja (okno mija)	%s: failures every 15 s do not lock out (the window passes)
+lit	%s: 5. blad po 60 s zaczyna nowe okno	%s: 5th failure after 60 s starts a new window
+lit	%s: bledy w czasie blokady nie przedluzaja	%s: failures during a lockout do not extend it
+lit	LoginGuard przy zawinieciu millis	LoginGuard with millis wrapping
+lit	LoginGuard zawiniecie w trakcie blokad	LoginGuard wrapping during lockouts
+lit	json przecinki i zagniezdzenie	json commas and nesting
+lit	json skrajne liczby i null	json extreme numbers and null
+lit	json fixed, NaN i nieskonczonosc -> null	json fixed, NaN and infinity -> null
+lit	      wynik: %s\n	      result: %s\n
+lit	json hex wielkimi literami	json hex in upper case
+lit	json hex 40 bajtow	json hex 40 bytes
+lit	json ucieczki, znaki sterujace, poprawne UTF-8	json escapes, control characters, valid UTF-8
+lit	json zle UTF-8 -> \\ufffd	json bad UTF-8 -> \\ufffd
+lit	json najgorszy przypadek 6 znakow na bajt	json worst case 6 characters per byte
+lit	json o jeden bajt za maly bufor -> blad	json buffer one byte too small -> error
+lit	json znaki sterujace tez 6 na bajt	json control characters also 6 per byte
+lit	json przepelnienie: ok()==false, zero na koncu, bez pisania poza bufor	json overflow: ok()==false, zero at the end, no write past the buffer
+lit	json reset po przepelnieniu	json reset after an overflow
+lit	json 8 poziomow zagniezdzenia	json 8 nesting levels
+lit	json 9. poziom = blad	json 9th level = error
+lit	json wartosc w obiekcie bez nazwy = blad	json value in an object without a name = error
+lit	json nazwa w tablicy = blad	json name in an array = error
+lit	json zle zamkniecie = blad	json bad closing = error
+lit	json nazwa bez wartosci = blad	json name without a value = error
+lit	json dwie wartosci na najwyzszym poziomie = blad	json two values at the top level = error
+lit	json zamkniecie bez otwarcia = blad	json closing without opening = error
+lit	json bufor 0 bajtow	json buffer of 0 bytes
+lit	json nazwa pola z ucieczka	json field name with an escape
+lit	inny-produkt	other-product
+lit	      porcja %u: znaleziono=%d\n	      chunk %u: found=%d\n
+lit	skaner: porcje 1..80 bajtow, falszywe poczatki, pierwszy znacznik wygrywa	scanner: chunks of 1..80 bytes, false starts, the first marker wins
+lit	skaner: rozciecie na dwie porcje w kazdym miejscu	scanner: split into two chunks at every position
+lit	skaner: znacznik w jednej porcji	scanner: marker in one chunk
+lit	skaner: reset	scanner: reset
+lit	skaner: brak znacznika	scanner: no marker
+lit	skaner: niepelny znacznik na koncu pliku	scanner: incomplete marker at the end of the file
+lit	skaner: wzorzec bez zera tuz przed prawdziwym	scanner: pattern without a zero right before the real one
+lit	akceptacja: zgodny produkt z siecia	acceptance: matching product with network
+lit	akceptacja: brak sieci przy requireNet	acceptance: no network with requireNet
+lit	akceptacja: brak sieci bez requireNet	acceptance: no network without requireNet
+lit	akceptacja: dluzszy produkt	acceptance: longer product
+lit	akceptacja: krotszy produkt	acceptance: shorter product
+lit	akceptacja: produkt bez zera (16 znakow) odrzucony	acceptance: product without a zero (16 characters) rejected
+lit	akceptacja: nie czyta poza polem	acceptance: does not read past the field
+lit	akceptacja: net musi byc 1	acceptance: net must be 1
+lit	akceptacja: pusty produkt	acceptance: empty product
+lit	akceptacja: nullptr	acceptance: nullptr
+lit	canTx: bajt 70 znacznika (mode 68, net 69, rezerwa 71)	canTx: byte 70 of the marker (mode 68, net 69, reserve 71)
+lit	canTx: znacznik wyzerowany = bez nadawania	canTx: zeroed marker = no transmit
+lit	canTx: ten sam tryb, 0 -> 0 bez zgody	canTx: same mode, 0 -> 0 without consent
+lit	canTx: 0 -> 1 wymaga zgody	canTx: 0 -> 1 needs consent
+lit	canTx: 1 -> 0 wymaga zgody	canTx: 1 -> 0 needs consent
+lit	canTx: ten sam tryb, 1 -> 1 bez zgody	canTx: same mode, 1 -> 1 without consent
+lit	canTx: inny tryb pracy wymaga zgody jak dotad	canTx: another operating mode needs consent as before
+lit	canTx: inny tryb i inne canTx wymaga zgody	canTx: another mode and another canTx need consent
+lit	canTx: wartosc spoza 0/1 w obcym obrazie = roznica	canTx: a value outside 0/1 in the other image = a difference
+lit	canTx: stary znacznik (rezerwa 0, 0) = bez nadawania	canTx: old marker (reserve 0, 0) = no transmit
+lit	canTx: stary obraz na program bez nadawania bez zgody	canTx: old image onto a program without transmit without consent
+lit	canTx: stary obraz na program z nadawaniem wymaga zgody	canTx: old image onto a program with transmit needs consent
+lit	canTx: nie wplywa na rozpoznanie produktu	canTx: does not affect product recognition
+lit	obraz 0.6.0: plik otwarty	image 0.6.0: file opened
+lit	      brak pliku %s\n	      no file %s\n
+lit	obraz 0.6.0: znacznik znaleziony	image 0.6.0: marker found
+lit	      produkt %.15s, wersja %.15s, zbudowany %.23s, mode %u, net %u, canTx %u, rezerwa %u\n	      product %.15s, version %.15s, built %.23s, mode %u, net %u, canTx %u, reserve %u\n
+lit	obraz 0.6.0: produkt centralka-508 z siecia	image 0.6.0: product centralka-508 with network
+lit	obraz 0.6.0: wersja 0.6.0	image 0.6.0: version 0.6.0
+lit	obraz 0.6.0: tryb dekoder	image 0.6.0: decoder mode
+lit	obraz 0.6.0: canTx = 0 (bez nadawania)	image 0.6.0: canTx = 0 (no transmit)
+lit	obraz 0.6.0: powrot z 0.7.0 bez pytania o tryb	image 0.6.0: going back from 0.7.0 without asking about the mode
+# test_host/power_loss.cpp
+lit	     roznica w chwili %lu ms\n	     difference at %lu ms\n
+lit	     roznica w chwili %ld ms zapisu\n	     difference at %ld ms of the capture\n
+lit	tryb wylaczony: losowy przebieg 10 min zgodny ze stara logika	mode off: random 10 min run matches the old logic
+lit	tryb wylaczony: przebieg przez zawiniecie millis() zgodny	mode off: run through the millis() wrap matches
+lit	domyslnie tryb wylaczony (bez setLossTolerant)	mode off by default (without setLossTolerant)
+lit	tryb wylaczony: przerwa 1000 ms jeszcze nie gasi	mode off: a 1000 ms gap does not switch off yet
+lit	tryb wylaczony: przerwa 1001 ms gasi zaplon, wsteczny, ILL (ACC czeka 2,5 s)	mode off: a 1001 ms gap switches off ignition, reverse, ILL (ACC waits 2.5 s)
+lit	tryb odporny: przerwa 4,9 s nie gasi zaplonu, ACC, ILL, wstecznego	tolerant mode: a 4.9 s gap does not switch off ignition, ACC, ILL, reverse
+lit	tryb odporny: przerwa 5000 ms jeszcze nie gasi	tolerant mode: a 5000 ms gap does not switch off yet
+lit	tryb odporny: przerwa 5001 ms gasi zaplon, wsteczny, ILL	tolerant mode: a 5001 ms gap switches off ignition, reverse, ILL
+lit	tryb odporny: ACC gasnie 2,5 s po zaniku zaplonu	tolerant mode: ACC goes off 2.5 s after the ignition is lost
+lit	tryb odporny: przerwa 4,9 s przez zawiniecie millis() nie gasi	tolerant mode: a 4.9 s gap across the millis() wrap does not switch off
+lit	tryb odporny: zaplon z ramki wlacza ACC	tolerant mode: ignition from a frame switches ACC on
+lit	tryb odporny: ramka 80 gasi zaplon od razu	tolerant mode: frame 80 switches the ignition off at once
+lit	tryb odporny: ACC trzymane do 2,5 s po ramce 80	tolerant mode: ACC held up to 2.5 s after frame 80
+lit	tryb odporny: ACC gasnie 2,5 s po ramce 80	tolerant mode: ACC goes off 2.5 s after frame 80
+lit	tryb odporny: przerwa 036 4,9 s nie gasi ILL	tolerant mode: a 4.9 s gap of 036 does not switch off ILL
+lit	tryb odporny: przerwa 036 > 5 s gasi ILL, zaplon zostaje	tolerant mode: a gap of 036 > 5 s switches off ILL, the ignition stays
+lit	tryb odporny: przerwa 2 s trzyma zaplon	tolerant mode: a 2 s gap keeps the ignition
+lit	po wylaczeniu trybu: stara przerwa > 1 s gasi zaplon, ACC czeka 2,5 s	after the mode is turned off: the old gap > 1 s switches off the ignition, ACC waits 2.5 s
+lit	     ramek 0F6: %ld, zmian ACC: %ld\n	     0F6 frames: %ld, ACC changes: %ld\n
+lit	tryb wylaczony: zapis z auta zgodny ze stara logika co 1 ms	mode off: the car capture matches the old logic every 1 ms
+# test_host/radio_commands.cpp
+lit	80 0B 08 55 (dluzsza) -> SETTING 0B = 8	80 0B 08 55 (longer) -> SETTING 0B = 8
+lit	80 / 8A / 84 o dlugosci 0 i 1 -> NONE (numer i wartosc nieczytane)	80 / 8A / 84 with length 0 and 1 -> NONE (number and value not read)
+lit	90 i 81 o dlugosci 0 -> NONE	90 and 81 with length 0 -> NONE
+lit	inne komendy (A6, C0, C2, C4, C5, CA, CB, 8F, 20, 38, 00, FF) -> NONE	other commands (A6, C0, C2, C4, C5, CA, CB, 8F, 20, 38, 00, FF) -> NONE
+lit	--- nazwy ---\n	--- names ---\n
+lit	(brak)	(none)
+lit	8A 00, 0D, FF: brak nazwy	8A 00, 0D, FF: no name
+lit	8A 01-0C maja nazwy; plus / minus tylko dla 4, 5, 10	8A 01-0C have names; plus / minus only for 4, 5, 10
+lit	84: nazwy dla 1-6, 9, 10; brak dla 0, 7, 8, 11	84: names for 1-6, 9, 10; none for 0, 7, 8, 11
+lit	--- linie konsoli z Decoder::onRadioFrame ---\n	--- console lines from Decoder::onRadioFrame ---\n
+lit	jedna linia na kazda komende 80 / 8A / 84	one line for every command 80 / 8A / 84
+lit	cztery linie wzoru z PROJEKT pkt 2.9 co do znaku	four lines of the design pattern (item 2.9), character for character
+lit	kazda komenda 80 konczy sie odmowa: 'ODMOWA (program bez nadawania)', 'brak znanej ramki' albo (05, 0C) 'ramka znana (1A9)...'	every command 80 ends with a refusal: 'REFUSED (no CAN transmit in this build)', 'no known frame' or (05, 0C) 'known frame (1A9)...'
+lit	ramki za krotkie oraz 81 00, 90 21, C4, A6: bez linii	frames too short and 81 00, 90 21, C4, A6: no line
+lit	po wszystkich komendach kolejka do radia pusta	after all commands the queue to the radio is empty
+lit	RadioLink dalej liczy komendy jak dotad: 15 ustawien, 10 klimatyzacji	RadioLink still counts commands as before: 15 settings, 10 climate
+lit	settingCmds: ostatnia komenda 80 77 02 z 1014 ms, wynik brak_ramki	settingCmds: last command 80 77 02 at 1014 ms, result no_frame
+lit	settingCmds: 15 odmow, 0 przyjetych, 0 nieprzyjetych	settingCmds: 15 refused, 0 accepted, 0 not accepted
+lit	settingCmds: 80 01 01 -> odmowa, licznik 16	settingCmds: 80 01 01 -> refused, counter 16
+lit	settingCmds: 80 0C 00 -> zablokowane, licznik 17	settingCmds: 80 0C 00 -> blocked, counter 17
+lit	nazwy wynikow dla JSON: odmowa, brak_ramki, zablokowane	result names for JSON: refused, no_frame, blocked
+lit	settingCmds po starcie: brak komendy, licznik 0	settingCmds after startup: no command, counter 0
+lit	logRadioCommands = false: bez linii	logRadioCommands = false: no lines
+lit	radio_commands: %d sprawdzen, %d bledow\n	radio_commands: %d checks, %d errors\n
+lit	urlDecode + i %XX	urlDecode + and %XX
+# test_host/radio_link.cpp
+lit	      kolejka: %s\n	      queue: %s\n
+lit	(pusta)	(empty)
+lit	--- bramka ACC ---\n	--- ACC gate ---\n
+lit	bez ACC: przycisk nie trafia do kolejki, txGated = 1	without ACC: a key does not get into the queue, txGated = 1
+lit	bez ACC: ramka czujnikow odrzucona, txGated = 2	without ACC: the sensor frame is dropped, txGated = 2
+lit	bez ACC: ramka stanu czeka w slocie (nie liczy sie jako odrzucona)	without ACC: the state frame waits in its slot (does not count as dropped)
+lit	bez ACC: resendState zwraca true, nic nie wysyla	without ACC: resendState returns true, sends nothing
+lit	bez ACC: odpowiedz na 90 71 (wersja + czujniki) odrzucona, txGated = 4	without ACC: the reply to 90 71 (version + sensors) is dropped, txGated = 4
+lit	wlaczenie ACC: EA 01 0A, potem czekajaca ramka stanu	ACC on: EA 01 0A, then the waiting state frame
+lit	powtorzone onPower(true): bez drugiej ramki EA	repeated onPower(true): no second EA frame
+lit	z ACC: przycisk wcisniety i puszczony w kolejce	with ACC: key pressed and released in the queue
+lit	wylaczenie ACC: EA 00 0A przechodzi, przycisk po nim juz nie	ACC off: EA 00 0A goes through, a key after it does not
+lit	liczniki: txGated = 5, txDropped = 0	counters: txGated = 5, txDropped = 0
+lit	--- ramki stanu (sloty) ---\n	--- state frames (slots) ---\n
+lit	nowa ramka stanu: wyslana w update()	new state frame: sent in update()
+lit	ta sama tresc: bez wysylki	same content: not sent
+lit	dwie zmiany przed update(): idzie tylko ostatnia tresc	two changes before update(): only the last content goes
+lit	ta sama tresc, inna dlugosc: wyslana	same content, different length: sent
+lit	12 rodzajow ramek stanu: slotsFull = 0	12 kinds of state frames: slotsFull = 0
+lit	11 nowych ramek wyslanych w kolejnosci pierwszego pojawienia	11 new frames sent in the order of first appearance
+lit	13. rodzaj: pominiety, slotsFull rosnie z kazda proba (2)	13th kind: skipped, slotsFull grows with every try (2)
+lit	pelne sloty nie blokuja zmian znanych ramek	full slots do not block changes of known frames
+lit	resendState dla ramki bez slotu: false	resendState for a frame without a slot: false
+lit	resendState: biezaca tresc jeszcze raz	resendState: the current content once more
+lit	--- kat kierownicy (29) co 150 ms ---\n	--- steering angle (29) every 150 ms ---\n
+lit	pierwsza ramka kata wyslana od razu	the first angle frame sent at once
+lit	10 ms pozniej: kat czeka, inna ramka stanu idzie od razu	10 ms later: the angle waits, another state frame goes at once
+lit	149 ms po poprzednim kacie: dalej czeka	149 ms after the previous angle: still waits
+lit	150 ms: idzie ostatnia tresc kata	150 ms: the last angle content goes
+lit	bez zmiany tresci: bez wysylki	content unchanged: not sent
+lit	zmiana po dluzszej przerwie: od razu	change after a longer gap: at once
+lit	przejscie licznika przez zero: 32 ms za wczesnie, 150 ms wyslane	counter wrapping through zero: 32 ms too early, 150 ms sent
+lit	--- czujniki (32): przy zmianie i co 1 s ---\n	--- sensors (32): on change and every 1 s ---\n
+lit	czynne czujniki: ramka 32 od razu	active sensors: frame 32 at once
+lit	ta sama tresc i 999 ms: bez wysylki	same content and 999 ms: not sent
+lit	1000 ms: powtorzenie	1000 ms: repeat
+lit	zmiana strefy: od razu	zone change: at once
+lit	zmiana przesuwa termin powtorzenia (999 ms po zmianie: nic)	a change moves the repeat deadline (999 ms after the change: nothing)
+lit	1000 ms po zmianie: powtorzenie	1000 ms after the change: repeat
+lit	czujniki nieczynne: jedna ramka z FF	sensors inactive: one frame with FF
+lit	nieczynne: bez powtarzania	inactive: no repeating
+lit	brak swiezych ramek 0E1 (valid = false) przy tej samej tresci 00 FF: bez wysylki	no fresh 0E1 frames (valid = false) with the same content 00 FF: not sent
+lit	po ponownym ACC: bez powtarzania, dopoki nie przyjdzie ramka czujnikow	after ACC comes back: no repeating until a sensor frame arrives
+lit	po ponownym ACC: ta sama tresc wyslana jeszcze raz	after ACC comes back: the same content sent once more
+lit	--- zadanie radia 90 71 ---\n	--- radio request 90 71 ---\n
+lit	bez stanu: sama wersja	without state: the version only
+lit	wersja, czujniki, wszystkie ramki stanu (kat bez czekania 150 ms)	version, sensors, all state frames (angle without the 150 ms wait)
+lit	po odpowiedzi nic nie czeka	after the reply nothing is pending
+lit	90 21 i 90 bez danych: bez odpowiedzi (stan dzisiejszy)	90 21 and 90 without data: no reply (current state)
+lit	--- pelna kolejka, dane od radia ---\n	--- full queue, data from the radio ---\n
+lit	24 ramki: kolejka pelna, txDropped = 0	24 frames: queue full, txDropped = 0
+lit	dwie nastepne przepadaja: txDropped = 2	the next two are lost: txDropped = 2
+lit	kolejnosc zachowana: pierwsza EA, ostatni przycisk nr 22	order kept: first EA, last key no. 22
+lit	liczniki txGated i slotsFull bez zmian (0)	counters txGated and slotsFull unchanged (0)
+lit	przed pierwsza ramka: everHeard = false	before the first frame: everHeard = false
+lit	A6, C4, 81: czas, glosnosc, radio wlaczone	A6, C4, 81: time, volume, radio on
+lit	C4 80: wyciszone, glosnosc zapamietana	C4 80: muted, volume remembered
+lit	A6 za krotka: bez zmiany	A6 too short: unchanged
+lit	80, 8A, nieznana: liczniki 1 / 1 / 1 (80 za krotka nieliczona)	80, 8A, unknown: counters 1 / 1 / 1 (a too short 80 is not counted)
+lit	ramki od radia inne niz 90 71 niczego nie wysylaja	radio frames other than 90 71 send nothing
+lit	pusta kolejka: 0	empty queue: 0
+lit	po wlaczeniu zaplonu w kolejce 3 ramki	after the ignition is on, 3 frames in the queue
+lit	pierwsza ramka: EA 01 0A z naglowkiem i suma	first frame: EA 01 0A with header and checksum
+lit	0, 5 i 9 ms po ramce: nic, kolejka nieruszona	0, 5 and 9 ms after the frame: nothing, queue untouched
+lit	10 ms po ramce: nastepna (32)	10 ms after the frame: the next one (32)
+lit	licznik wyslanych = 2	sent counter = 2
+lit	w kolejce: temperatura i przycisk	in the queue: temperature and a key
+lit	bufor 4 B: ramka 36 przepada, licznik bez zmiany	buffer 4 B: frame 36 is lost, counter unchanged
+lit	w tej samej milisekundzie idzie nastepna ramka (przycisk)	in the same millisecond the next frame goes (key)
+lit	odstep liczony od udanej wysylki	the gap is counted from a successful send
+lit	txEnabled = false: 0 bajtow, kolejka pusta, wstrzymane = 3	txEnabled = false: 0 bytes, queue empty, held back = 3
+lit	po wlaczeniu nadawania: od razu (wyrzucone ramki nie przesuwaja czasu)	after transmit is enabled: at once (discarded frames do not move the time)
+lit	przejscie licznika przez zero: 9 ms nic, 10 ms nastepna ramka	counter wrapping through zero: 9 ms nothing, 10 ms the next frame
+lit	Decoder bez ACC: przycisk liczony w txGated	Decoder without ACC: a key is counted in txGated
+lit	radio_link: %d sprawdzen, %d bledow\n	radio_link: %d checks, %d errors\n
+# test_host/replay_log.cpp ("# KROK" stays: it is the step marker written into the captures in test_data/captures)
+lit	%-58.58s | pikniec %3d | ton ciagly %5ld ms | zadanie dzwieku %6ld ms\n	%-58.58s | beeps %3d | continuous tone %5ld ms | sound request %6ld ms\n
+lit	uzycie: replay_log <zapis.log>\n	usage: replay_log <capture.log>\n
+lit	(przed pierwszym krokiem)	(before the first step)
+lit	\nRamek razem: %ld, ramek 0E1: %ld\n	\nFrames in total: %ld, 0E1 frames: %ld\n
+lit	Pikniec razem: %ld, ton ciagly razem: %ld ms\n	Beeps in total: %ld, continuous tone in total: %ld ms\n
+lit	Najdluzszy dzwiek po ostatniej ramce 0E1: %ld ms (limit 400 ms)\n	Longest sound after the last 0E1 frame: %ld ms (limit 400 ms)\n
+lit	Cisza po koncu zapisu: %s\n	Silence after the end of the capture: %s\n
+lit	NIE	NO
+# test_host/settings_15b.cpp
+lit	--- wektory T1-T17 (MAPA_USTAWIEN.md pkt 7.3) ---\n	--- vectors T1-T17 (settings map, item 7.3) ---\n
+lit	T1 pomiar: 80 01 01	T1 measured: 80 01 01
+lit	T2 pomiar: 80 01 00	T2 measured: 80 01 00
+lit	T3 80 01 00 na 260 z 17.11	T3 80 01 00 on 260 of 17.11
+lit	T4 80 01 01 (bez zmiany stanu)	T4 80 01 01 (state unchanged)
+lit	T5 80 02 01 wycieraczka	T5 80 02 01 wiper
+lit	T6 80 06 00 FMH wylacz	T6 80 06 00 FMH off
+lit	T9 80 07 00 powitalne wylacz	T9 80 07 00 welcome off
+lit	T10 80 07 03 powitalne 60 s	T10 80 07 03 welcome 60 s
+lit	T11 80 08 00 swiatla dzienne (361 z bitem 1.0 = 1)	T11 80 08 00 daytime running lights (361 with bit 1.0 = 1)
+lit	T12 80 0F 00 kierowca (bajt 1 = 00)	T12 80 0F 00 driver (byte 1 = 00)
+lit	T14 80 09 02 dzwiek (bajt 1 = 00)	T14 80 09 02 sound (byte 1 = 00)
+lit	T11 80 08 00 na 361 z auta (bit 1.0 = 0): funkcji brak w aucie, bez ramki	T11 80 08 00 on 361 from the car (bit 1.0 = 0): function missing in the car, no frame
+lit	T13 80 0E 00 funkcja powitania: grupa D, odmowa stala, bez ramki	T13 80 0E 00 welcome function: group D, fixed refusal, no frame
+lit	T15 80 04 04 ambient: grupa D, odmowa stala, bez ramki	T15 80 04 04 ambient: group D, fixed refusal, no frame
+lit	T16 brak 260: bez ramki	T16 no 260: no frame
+lit	T16 260 sprzed 1500 ms: bez ramki	T16 260 from 1500 ms ago: no frame
+lit	260 sprzed 1499 ms: ramka	260 from 1499 ms ago: frame
+lit	T17 80 10, 14, 16, 12, 19, 1B-1F, 03: brak znanej ramki, bez ramki	T17 80 10, 14, 16, 12, 19, 1B-1F, 03: no known frame, no frame
+lit	T17 80 05, 0C, 0D: przycisk w ramce 1A9, build15B nie buduje ramki	T17 80 05, 0C, 0D: button in frame 1A9, build15B builds no frame
+lit	grupa D (80 18, 1A, 15, 0A, 0B, 0E, 04): odmowa stala, bez ramki	group D (80 18, 1A, 15, 0A, 0B, 0E, 04): fixed refusal, no frame
+lit	kazdy numer spoza tabeli (takze 00, 11, 13, 17, 20-FF): nieznany numer, bez ramki	every number outside the table (also 00, 11, 13, 17, 20-FF): unknown number, no frame
+lit	--- odmowy ---\n	--- refusals ---\n
+lit	maska domyslna = sam bit pozycji 01 (0x00000002)	default mask = only the bit of item 01 (0x00000002)
+lit	maska domyslna: 80 01 wysylalna	default mask: 80 01 sendable
+lit	maska domyslna: 80 02, 06, 07, 08, 09, 0F wylaczone w masce	default mask: 80 02, 06, 07, 08, 09, 0F disabled in mask
+lit	maska 0: 80 01 wylaczona	mask 0: 80 01 disabled
+lit	pozycje inne niz SENDABLE: odmowa takze przy pelnej masce	items other than SENDABLE: refused also with the full mask
+lit	260 o dlugosci 6: odmowa	260 with length 6: refused
+lit	260 o dlugosci 8: odmowa	260 with length 8: refused
+lit	260 z bitem 2.2 = 0: odmowa	260 with bit 2.2 = 0: refused
+lit	260 z bajtem 7 = 10: odmowa	260 with byte 7 = 10: refused
+lit	260 z bajtem 7 = 01: odmowa	260 with byte 7 = 01: refused
+lit	260 z bitem 6.0 = 1: odmowa	260 with bit 6.0 = 1: refused
+lit	260 z bitem 6.1 = 1: odmowa	260 with bit 6.1 = 1: refused
+lit	260 z bitem 6.3 = 1: ramka z bajtem 6 = 54 (bit 6.3 zgaszony, 6.2 skopiowany)	260 with bit 6.3 = 1: frame with byte 6 = 54 (bit 6.3 cleared, 6.2 copied)
+lit	80 01 02: wartosc poza zakresem	80 01 02: value out of range
+lit	80 06 04: wartosc poza zakresem	80 06 04: value out of range
+lit	80 07 FF: wartosc poza zakresem	80 07 FF: value out of range
+lit	80 09 00: wartosc poza zakresem (radio wysyla 1-4)	80 09 00: value out of range (the radio sends 1-4)
+lit	80 09 05: wartosc poza zakresem	80 09 05: value out of range
+lit	80 01 bez ramki 361: ramka (pozycja bez warunku 361)	80 01 without frame 361: frame (item without a 361 condition)
+lit	80 02, 06, 07, 08, 09, 0F bez ramki 361: odmowa (brak ramki 361)	80 02, 06, 07, 08, 09, 0F without frame 361: refused (no frame 361)
+lit	80 09 przy 361 o dlugosci 2 (bit w bajcie 3): brak ramki 361	80 09 with 361 of length 2 (bit in byte 3): no frame 361
+lit	80 02 przy 361 o dlugosci 2 (bit w bajcie 2): ramka	80 02 with 361 of length 2 (bit in byte 2): frame
+lit	%s = 1 ramka, = 0 funkcji brak w aucie	%s = 1 frame, = 0 function missing in the car
+lit	361 z auta (A0 66 C8 0A 00 00): 80 02, 06, 07, 09, 0F wysylalne przy pelnej masce	361 from the car (A0 66 C8 0A 00 00): 80 02, 06, 07, 09, 0F sendable with the full mask
+lit	260 sprzed 512 ms przy przejsciu licznika przez zero: ramka	260 from 512 ms ago with the counter wrapping through zero: frame
+lit	260 sprzed 1792 ms przy przejsciu licznika przez zero: stara	260 from 1792 ms ago with the counter wrapping through zero: stale
+lit	--- accepted() i stateOf() ---\n	--- accepted() and stateOf() ---\n
+lit	80 01: stan 1 (260 5.7 = 1)	80 01: state 1 (260 5.7 = 1)
+lit	80 0F odwrocone: 260 3.6 = 0 -> stan 1 (wszystkie drzwi)	80 0F inverted: 260 3.6 = 0 -> state 1 (all doors)
+lit	80 0F odwrocone: 260 3.6 = 1 -> stan 0 (kierowca)	80 0F inverted: 260 3.6 = 1 -> state 0 (driver)
+lit	80 06: stan 2 (30 s)	80 06: state 2 (30 s)
+lit	80 06 z v = 0: liczy sie sam bit 4.7 (czas zostaje)	80 06 with v = 0: only bit 4.7 counts (the time stays)
+lit	stan 17.11: 80 07 = 2, 80 09 = 1, 80 08 = 1, 80 02 = 0	state 17.11: 80 07 = 2, 80 09 = 1, 80 08 = 1, 80 02 = 0
+lit	accepted() dla pozycji innych niz SENDABLE zawsze falsz	accepted() for items other than SENDABLE always false
+lit	stateOf 17.11: ambient 4, powitanie 1, automatyczne swiatla 1, adaptacyjne 1, zmeczenie 0	stateOf 17.11: ambient 4, welcome 1, automatic lights 1, adaptive 1, fatigue 0
+lit	stateOf: pozycje bez pola w 260 -> falsz	stateOf: items without a field in 260 -> false
+lit	bez ramki 260: stateOf i accepted falsz	without frame 260: stateOf and accepted false
+lit	260 o dlugosci 6: accepted falsz	260 with length 6: accepted false
+lit	fieldMask pozycji z grupy D: same zera	fieldMask of items of group D: zeros only
+lit	--- wlasnosc i samozamkniecie (10 000 losowych 260 na pozycje) ---\n	--- property and closure (10 000 random 260 per item) ---\n
+lit	80 %02X %-24s maska pola %02X %02X %02X %02X %02X: %ld ramek, poza polem %ld, bajty stale %ld, 	80 %02X %-24s field mask %02X %02X %02X %02X %02X: %ld frames, outside the field %ld, fixed bytes %ld, 
+lit	accepted %ld, cofniecie %ld, odmowy %ld, stan spoza zakresu komendy %ld	accepted %ld, undo %ld, refused %ld, state outside the command range %ld
+lit	--- tabela (PROJEKT pkt 2.8, stan 17.11.2026) ---\n	--- table (design item 2.8, state 17.11.2026) ---\n
+lit	%u pozycji: SENDABLE %d, FIXED_REFUSE %d, KNOWN_BLOCKED %d, NO_FRAME %d	%u items: SENDABLE %d, FIXED_REFUSE %d, KNOWN_BLOCKED %d, NO_FRAME %d
+lit	--- polecenie ust (Decoder), stan auta z 17.11.2026 ---\n	--- command vset (Decoder), car state of 17.11.2026 ---\n
+lit	najdluzsza linia %u znakow (bufor 200)	longest line %u characters (buffer 200)
+lit	260 sprzed 1500 ms: wiersz pokazuje 'stara ramka 260'	260 from 1500 ms ago: the row shows 'stale frame 260'
+lit	wiersz spoza tabeli: pusty napis	row outside the table: empty string
+lit	settings_15b: %d sprawdzen, %d bledow\n	settings_15b: %d checks, %d errors\n
+# test_host/settings_38.cpp
+lit	S3 _191045 412,925 s (wsteczny)	S3 _191045 412,925 s (reverse)
+lit	S4 _191045 562,912 s (asystent parkowania)	S4 _191045 562,912 s (parking assist)
+lit	S7 brak ramek: same zera	S7 no frames: zeros only
+lit	S8 stan z 17.11.2026 -> 02 90 A9 B8 40	S8 state of 17.11.2026 -> 02 90 A9 B8 40
+lit	wszystkie bity	all bits
+lit	z maska bitow radia	with the radio bit mask
+lit	3C: bez ramki 361 nic	3C: without frame 361 nothing
+lit	3C: 361 o dlugosci 3 nic	3C: 361 with length 3 nothing
+lit	V1: 361 = A0 66 C8 0A 00 00 -> 3C = 9E 80 (pomiar)	V1: 361 = A0 66 C8 0A 00 00 -> 3C = 9E 80 (measured)
+lit	V2: 361 = A0 60 C8 0A 00 00 -> 3C = 9E 00 (regula, bez pomiaru)	V2: 361 = A0 60 C8 0A 00 00 -> 3C = 9E 00 (rule, not measured)
+lit	3C: wszystkie bity 361 -> FF C0	3C: all bits of 361 -> FF C0
+lit	3C: 361 same zera -> 00 00	3C: 361 zeros only -> 00 00
+lit	260 o dlugosci 6 jako pierwsza: stan zostaje zerami	260 with length 6 as the first: the state stays zero
+lit	stan z 11.11: 02 E0 A9 98 40	state of 11.11: 02 E0 A9 98 40
+lit	260 o dlugosci 6 nie zmienia stanu	260 with length 6 does not change the state
+lit	227 o dlugosci 2 nie zmienia stanu	227 with length 2 does not change the state
+lit	3E1 o dlugosci 3 nie zmienia stanu	3E1 with length 3 does not change the state
+lit	217 o dlugosci 7 nie zmienia stanu	217 with length 7 does not change the state
+lit	Start/Stop: 3E1 80 -> 1, 00 i C0 bez zmiany, 40 -> 0	Start/Stop: 3E1 80 -> 1, 00 and C0 unchanged, 40 -> 0
+lit	DATA[1] bity 4 i 3 (bagaznik, kontrola trakcji) = 0	DATA[1] bits 4 and 3 (boot, traction control) = 0
+lit	jezyk i jednostki spoza tabeli: zostaja poprzednie (polski, L/100 km)	language and units outside the table: the previous ones stay (Polish, L/100 km)
+lit	jednostki: km/L -> 0, MPG -> 2; angielski -> 0	units: km/L -> 0, MPG -> 2; English -> 0
+lit	pola wylaczone, wycieraczka, zmeczenie, dzwiek 3, drzwi tylko kierowcy: 86 00 07 88 40	fields off, wiper, fatigue, sound 3, driver door only: 86 00 07 88 40
+lit	symulacja: ACC wlaczone po ramce 0F6	simulation: ACC on after frame 0F6
+lit	start bez 260: pierwsza 38 = 04 00 00 00 00 00	start without 260: the first 38 = 04 00 00 00 00 00
+lit	227, 3E1, 217 przed pierwsza 260: bez nowej 38 (dalej zera, jak skrzynka)	227, 3E1, 217 before the first 260: no new 38 (still zeros, like the box)
+lit	po 227, 3E1, 217, 260 (stan 17.11): jedna nowa 38 = 04 02 90 A9 B8 40	after 227, 3E1, 217, 260 (state 17.11): one new 38 = 04 02 90 A9 B8 40
+lit	ta sama 260 jeszcze raz: bez nowej 38	the same 260 once more: no new 38
+lit	81 01 przed 361: jedna 38, zadnej 3C	81 01 before 361: one 38, no 3C
+lit	pierwsza 361: jedna 3C = 9E 80	the first 361: one 3C = 9E 80
+lit	ta sama 361 jeszcze raz: bez nowej 3C	the same 361 once more: no new 3C
+lit	81 01: para 38 + 3C (w tej kolejnosci, odstep 10 ms), tresc biezaca	81 01: pair 38 + 3C (in this order, gap 10 ms), current content
+lit	81 00 i 81 bez danych: nic	81 00 and 81 without data: nothing
+lit	260 o dlugosci 6: bez nowej 38, stan bez zmiany	260 with length 6: no new 38, state unchanged
+lit	260 5.7 = 0: jedna 38 z DATA[2] bit 4 = 0	260 5.7 = 0: one 38 with DATA[2] bit 4 = 0
+lit	drzwi kierowcy: 38 = 84 + te same stany ustawien	driver door: 38 = 84 + the same settings states
+lit	90 71: ramka 71 oraz po jednej 38 i 3C (3C takze tutaj: odstepstwo od skrzynki)	90 71: frame 71 and one 38 and one 3C (3C here too: a deviation from the box)
+lit	bez ACC: 81 01 nic nie wysyla; po wlaczeniu ACC po jednej 38 i 3C	without ACC: 81 01 sends nothing; after ACC is on, one 38 and one 3C
+lit	  ROZNICA 38 %.3f s: skrzynka %02X %02X %02X %02X %02X, regula %02X %02X %02X %02X %02X\n	  DIFFERENCE 38 %.3f s: box %02X %02X %02X %02X %02X, rule %02X %02X %02X %02X %02X\n
+lit	  ROZNICA 3C %.3f s: skrzynka %02X %02X, regula %02X %02X\n	  DIFFERENCE 3C %.3f s: box %02X %02X, rule %02X %02X\n
+lit	%s: ramka 38 skrzynki zgodna %u, rozna %u, sprzed pierwszej 260 %u; ramka 3C zgodna %u, rozna %u, 	%s: box frame 38 matching %u, different %u, before the first 260 %u; frame 3C matching %u, different %u, 
+lit	sprzed pierwszej 361 %u\n	before the first 361 %u\n
+lit	  komend radia 81 01: %u; po nich para 38 + 3C: %u, sama 38 (przed 361): %u, bez ACC: %u, brak: %u\n	  radio commands 81 01: %u; after them pair 38 + 3C: %u, 38 alone (before 361): %u, without ACC: %u, none: %u\n
+lit	wszystkie zapisy otwarte	all captures opened
+lit	ramka 38: %u z %u zgodnych ze skrzynka (maska bitow radia 9E F8 FE FF F7)	frame 38: %u of %u match the box (radio bit mask 9E F8 FE FF F7)
+lit	ramka 3C: %u z %u zgodnych ze skrzynka	frame 3C: %u of %u match the box
+lit	po kazdej 81 01 przy ACC para 38 + 3C: %u z %u (bez ACC %u)	after every 81 01 with ACC pair 38 + 3C: %u of %u (without ACC %u)
+lit	trzy zapisy z 11.11: 38 z 38 ramek 38	three captures of 11.11: 38 of 38 frames 38
+lit	trzy zapisy z 11.11: 9 z 9 ramek 3C	three captures of 11.11: 9 of 9 frames 3C
+lit	\n%d sprawdzen, %d bledow\n	\n%d checks, %d errors\n
+# test_host/settings_change.cpp
+lit	[ust]	[vset]
+lit	--- jedna komenda ---\n	--- one command ---\n
+lit	80 01 01 na 260 = A4 34 97 BA 55 40 00: do bramy idzie 15B = 00 34 97 BA D5 40 00 00 (T1, pomiar)	80 01 01 on 260 = A4 34 97 BA 55 40 00: 15B = 00 34 97 BA D5 40 00 00 goes to the gate (T1, measured)
+lit	260 z bitem 5.7 po 245 ms: raport %s, czas %u ms, brama bez zatrzasku	260 with bit 5.7 after 245 ms: report %s, time %u ms, gate without a latch
+lit	80 01 00: 15B = 00 34 97 BA 55 40 00 00 (T2, pomiar), raport ACCEPTED	80 01 00: 15B = 00 34 97 BA 55 40 00 00 (T2, measured), report ACCEPTED
+lit	nadajnik wlaczony najwyzej 20 ms	transmitter on for 20 ms at most
+lit	260 bez zmiany: raport %s po %u ms, jedna ramka 15B (bez powtorzen)	260 unchanged: report %s after %u ms, one 15B frame (no repeats)
+lit	260 juz pokazuje zadany stan: ALREADY, nic nie wyslane	260 already shows the requested state: ALREADY, nothing sent
+lit	ramka bez potwierdzenia: TX_FAILED, bez powtorzenia	frame without an ack: TX_FAILED, no repeat
+lit	komenda przed pierwsza 260: REFUSED (brak ramki 260), nic nie wyslane	command before the first 260: REFUSED (no frame 260), nothing sent
+lit	260 starsza niz 1,5 s: REFUSED (stara ramka 260)	260 older than 1.5 s: REFUSED (stale frame 260)
+lit	maska domyslna: 80 02 01 odmowa (wylaczona w masce); po setEnabledMask z bitem 02: 15B = 00 34 97 BA 75 40 00 00	default mask: 80 02 01 refused (disabled in mask); after setEnabledMask with bit 02: 15B = 00 34 97 BA 75 40 00 00
+lit	pelna maska: 08 funkcji brak w aucie, 0D i 05 (przyciski 1A9) brak ramki stanu, 04 odmowa stala, 77 nieznany, 01 = 2 zla wartosc	full mask: 08 function missing in the car, 0D and 05 (1A9 buttons) no state frame, 04 fixed refusal, 77 unknown, 01 = 2 bad value
+lit	brama rozbrojona: REFUSED (DISARMED)	gate disarmed: REFUSED (DISARMED)
+lit	brak zaplonu / zapis flash: REFUSED z powodem bramy, bez ponawiania	no ignition / flash write: REFUSED with the gate reason, no retry
+lit	brama bez sprzetu (NOT_BUILT): kazda komenda od razu REFUSED z txRefuse = NOT_BUILT, bramy nikt nie pyta	gate without hardware (NOT_BUILT): every command at once REFUSED with txRefuse = NOT_BUILT, nobody asks the gate
+lit	--- dwie komendy, ponawianie, zmiana 260 w trakcie ---\n	--- two commands, retrying, 260 changing meanwhile ---\n
+lit	80 01 01 i po 50 ms 80 02 01: dwie ramki 15B w odstepie %lu ms, druga = 00 34 97 BA F5 40 00 00 (ma zmiane pierwszej)	80 01 01 and 50 ms later 80 02 01: two 15B frames %lu ms apart, the second = 00 34 97 BA F5 40 00 00 (has the change of the first)
+lit	trzy komendy: jedno miejsce oczekujace, ostatnia wygrywa (80 02 01 pominieta bez raportu)	three commands: one waiting place, the last one wins (80 02 01 skipped without a report)
+lit	REC != 0 przez 150 ms, w tym czasie nowa 260: ramka 15B zbudowana z NOWEJ 260 (00 1C 97 BA D5 40 00 00)	REC != 0 for 150 ms, meanwhile a new 260: 15B frame built from the NEW 260 (00 1C 97 BA D5 40 00 00)
+lit	REC != 0 dluzej niz 300 ms: REFUSED (CONTROLLER), bez zatrzasku	REC != 0 longer than 300 ms: REFUSED (CONTROLLER), no latch
+lit	--- obce bity ramki 260 ---\n	--- foreign bits of frame 260 ---\n
+lit	obcy bit zmieniony razem z zadanym: %s, inne bity %02X %02X %02X %02X %02X, brama FAULT	a foreign bit changed together with the requested one: %s, other bits %02X %02X %02X %02X %02X, gate FAULT
+lit	po zatrzasku nastepna komenda: REFUSED (FAULT), nic nie wyslane	after the latch the next command: REFUSED (FAULT), nothing sent
+lit	zmiana bitow 6.3-6.0 razem z zadanym: ACCEPTED, bez zatrzasku	bits 6.3-6.0 changed together with the requested one: ACCEPTED, no latch
+lit	zadany bit bez zmiany, obcy zmieniony: po terminie SIDE_EFFECT i zatrzask	requested bit unchanged, a foreign one changed: after the deadline SIDE_EFFECT and the latch
+lit	--- Decoder (program centralki: brama bez sprzetu) ---\n	--- Decoder (device program: gate without hardware) ---\n
+lit	komendy 80 01 01, 80 0D 01, 80 05 01: te same trzy linie [ust] co od etapu E7	commands 80 01 01, 80 0D 01, 80 05 01: the same three [vset] lines as since stage E7
+lit	liczniki dla panelu: 3 odmowy, ostatnia 05 = zablokowane, bez ramki; po 2 s zadnych dalszych linii	counters for the panel: 3 refused, the last 05 = blocked, no frame; after 2 s no further lines
+lit	brama w Decoder: NOT_BUILT, linia stat can-tx=brak, same zera	gate in Decoder: NOT_BUILT, stat line can-tx=none, zeros only
+lit	  %7.3f s  80 %02X %02X -> %s po %u ms	  %7.3f s  80 %02X %02X -> %s after %u ms
+lit	  %7.3f s  skrzynka: 15B = %02X %02X %02X %02X %02X %02X %02X %02X\n	  %7.3f s  box: 15B = %02X %02X %02X %02X %02X %02X %02X %02X\n
+lit	komendy radia 80: %u, ramki 15B do bramy: %u, ramki 15B skrzynki: %u, tresc identyczna	radio commands 80: %u, 15B frames to the gate: %u, 15B frames of the box: %u, identical content
+lit	raporty: %u, wszystkie ACCEPTED (po ramce 260 z nagrania)	reports: %u, all ACCEPTED (after frame 260 from the recording)
+lit	raport ACCEPTED w chwili ramki 260 z 562,902 s i z 567,902 s	report ACCEPTED at the moment of frame 260 at 562,902 s and at 567,902 s
+lit	brama: 2 wyslane, 2 potwierdzone, bez zatrzasku, nadajnik najwyzej 20 ms	gate: 2 sent, 2 acked, no latch, transmitter at most 20 ms
+lit	80 05 01 przy 227 = 00..: jedna 1A9 = 00 7F FF 04 FF 00 10 00; po 227 = 40..: ACCEPTED	80 05 01 with 227 = 00..: one 1A9 = 00 7F FF 04 FF 00 10 00; after 227 = 40..: ACCEPTED
+lit	80 05 01 przy 227 = 40..: auto juz ma ten stan, nic nie wyslano	80 05 01 with 227 = 40..: the car already has this state, nothing sent
+lit	80 0C 00 przy 227 bajt 3 = 11: jedna 1A9 = 00 7F FF 20 FF 00 10 00; po 227 bajt 3 = 10: ACCEPTED	80 0C 00 with 227 byte 3 = 11: one 1A9 = 00 7F FF 20 FF 00 10 00; after 227 byte 3 = 10: ACCEPTED
+lit	80 0D 01 przy 3E1 = 40: jedna 1A9 = 00 7F FF 00 FF 00 90 00; bez reakcji: NOT_ACCEPTED, bez powtorki, bez zatrzasku	80 0D 01 with 3E1 = 40: one 1A9 = 00 7F FF 00 FF 00 90 00; no reaction: NOT_ACCEPTED, no repeat, no latch
+lit	maska domyslna: 80 05 01 odmowa (wylaczona w masce)	default mask: 80 05 01 refused (disabled in mask)
+lit	stara 227 albo 3E1 wklejona z panelu: odmowa (brak swiezej ramki stanu), nic nie wyslano	a stale 227 or 3E1 pasted from the panel: refused (no fresh state frame), nothing sent
+lit	brama: 1A9 o tresci spoza trzech dozwolonych, 364 o zlej dlugosci / z dwoma bitami / ze zlym bajtem 3, ramka 2E9: odmowa	gate: 1A9 with content outside the three allowed ones, 364 with a bad length / with two bits / with a bad byte 3, frame 2E9: refused
+lit	brama: 364 = 80 00 1E 00 (4 bajty, jeden bit) przyjeta i oddana do wyslania	gate: 364 = 80 00 1E 00 (4 bytes, one bit) accepted and handed over for sending
+lit	buildAir364: piec wartosci nagranych 10.11 (80, 40, 20, 08, 04 w bajcie 1) i temp. prawa minus (10)	buildAir364: five values recorded on 10.11 (80, 40, 20, 08, 04 in byte 1) and temp. right minus (10)
+lit	buildAir364: pozostale przyciski wg tabeli, 8A 0C / 30 / zla wartosc = brak ramki, kazda ramka miesci sie w liscie bramy	buildAir364: the other buttons per the table, 8A 0C / 30 / bad value = no frame, every frame fits the gate list
+lit	settings_change: %d sprawdzen, %d bledow\n	settings_change: %d checks, %d errors\n
+# test_host/tx_path.cpp
+lit	--- program bez sprzetu i program rozbrojony ---\n	--- program without hardware and a disarmed program ---\n
+lit	bez attachCanTx: jak cztery stare srodowiska (ta sama linia, portu nikt nie dotyka)	without attachCanTx: like the four old environments (the same line, nobody touches the port)
+lit	sprzet jest, ale brak uzbrojenia: ODMOWA (nadawanie rozbrojone), nadajnik ani razu wlaczony	hardware present, but not armed: REFUSED (transmit disarmed), transmitter never enabled
+lit	liczniki: 2 odmowy komend, 2 odmowy bramy, bez ramki	counters: 2 command refusals, 2 gate refusals, no frame
+lit	--- uzbrojony: 80 01 01, potwierdzenie, przyjecie przez BSI ---\n	--- armed: 80 01 01, ack, accepted by BSI ---\n
+lit	po attachCanTx(port, true): brama gotowa	after attachCanTx(port, true): gate ready
+lit	do portu poszla jedna ramka 15B = 00 34 97 BA D5 40 00 00 (jak skrzynka, pomiar 11.11.2026)	one 15B frame = 00 34 97 BA D5 40 00 00 went to the port (like the box, measured 11.11.2026)
+lit	linie: 15B wyslana (potwierdzona po 5 ms od zadania, liczone przebiegami petli), PRZYJETE przez BSI po 380 ms	lines: 15B sent (acked 5 ms after the request, counted in loop passes), ACCEPTED by BSI after 380 ms
+lit	dane dla panelu: przyjete, tookMs = 380, ramka zapamietana; brama: wyslane 1, potwierdzone 1	data for the panel: accepted, tookMs = 380, frame remembered; gate: sent 1, acked 1
+lit	nadajnik wlaczony raz, lacznie 4 ms	transmitter on once, 4 ms in total
+lit	ta sama komenda drugi raz: bez zmiany, nic nie wyslane	the same command a second time: unchanged, nothing sent
+lit	polecenie set 01 00: ramka 00 34 97 BA 55 40 00 00, PRZYJETE	command set 01 00: frame 00 34 97 BA 55 40 00 00, ACCEPTED
+lit	ust: roznica 260 wzgledem startu = zero po wlaczeniu i wylaczeniu	vset: difference of 260 against the startup = zero after enabling and disabling
+lit	niezmienniki: tylko 15B / 8 bajtow, nadajnik najwyzej 20 ms i tylko w oknie	invariants: 15B / 8 bytes only, transmitter at most 20 ms and only in the window
+lit	--- BSI nie przyjmuje; brak potwierdzenia; zatrzask ---\n	--- BSI does not accept; no ack; latch ---\n
+lit	260 bez zmiany: NIEPRZYJETE po 1305 ms, jedna ramka (bez powtorzen), bez zatrzasku	260 unchanged: NOT ACCEPTED after 1305 ms, one frame (no repeats), no latch
+lit	niezmienniki	invariants
+lit	3 ramki bez potwierdzenia: linia [cantx] BLAD, zatrzask, nadajnik wylaczony	3 frames without an ack: line [cantx] FAULT, latch, transmitter off
+lit	po zatrzasku: ODMOWA, nic nie wyslane	after the latch: REFUSED, nothing sent
+lit	po cantx reset: nastepna komenda wysyla ramke	after cantx reset: the next command sends a frame
+lit	--- obce bity 260 zmienione razem z zadanym ---\n	--- foreign bits of 260 changed together with the requested one ---\n
+lit	PRZYJETE, ale zmienily sie tez inne bity 260 (00 00 10 00 00): zatrzask	ACCEPTED, but other bits of 260 changed too (00 00 10 00 00): latch
+lit	--- maska, grupy D i E, warunki bramy ---\n	--- mask, groups D and E, gate conditions ---\n
+lit	02 i 08 (maska), 04 (grupa D), 0D i 05 (przyciski 1A9 wylaczone w masce): piec odmow, nadajnik ani razu wlaczony	02 and 08 (mask), 04 (group D), 0D and 05 (1A9 buttons disabled in mask): five refusals, transmitter never enabled
+lit	po ust on 02: 80 02 01 daje ramke 00 34 97 BA 75 40 00 00 (jedno pole: bit 5.5)	after vset on 02: 80 02 01 gives frame 00 34 97 BA 75 40 00 00 (one field: bit 5.5)
+lit	po ust on 08: dalej odmowa (bit 361 1.0 = 0: funkcji brak w aucie)	after vset on 08: still refused (bit 361 1.0 = 0: function missing in the car)
+lit	aktualizacja programu, czekajacy zapis ustawien, zaplon wylaczony: trzy odmowy, nic nie wyslane	firmware update, pending settings write, ignition off: three refusals, nothing sent
+lit	zaplon 88 (bez silnika): ramka wyslana	ignition 88 (engine off): frame sent
+lit	--- rozbrojenie i forceClose w trakcie ---\n	--- disarming and forceClose meanwhile ---\n
+lit	cantx off w oknie: nadajnik od razu wylaczony, nic nie wyslane, potem odmowy	cantx off in the window: transmitter off at once, nothing sent, then refusals
+lit	forceClose w trakcie wysylki: nadajnik wylaczony	forceClose during a send: transmitter off
+lit	po forceClose bez dalszych ramek, niezmienniki	after forceClose no further frames, invariants
+lit	--- limit ramek i dluga praca ---\n	--- frame limit and a long run ---\n
+lit	40 komend w 60 s: po 10 komendach %u ramek, razem %u ramek (limit 10 na minute), najdluzej wlaczony %lu ms	40 commands in 60 s: after 10 commands %u frames, in total %u frames (limit 10 per minute), longest on %lu ms
+lit	kazda ramka: ID 15B, 8 bajtow, bajty 1, 7, 8 = 00; niezmienniki	every frame: ID 15B, 8 bytes, bytes 1, 7, 8 = 00; invariants
+lit	--- klimatyzacja: 364 okresowo (klima p) ---\n	--- climate: 364 periodically (climate p) ---\n
+lit	tryb wylaczony (domyslnie): przez 3 s zadnej ramki	mode off (default): no frame for 3 s
+lit	klima p: w 5,2 s %u ramek 364, kazda 6 B = 00 00 1E 78 E0 00, nadajnik najdluzej %u ms	climate p: in 5.2 s %u frames 364, each 6 B = 00 00 1E 78 E0 00, transmitter at most %u ms
+lit	8A 04 01: ramka 80 00 1E 78 E0 00, puszczenie po %u ms	8A 04 01: frame 80 00 1E 78 E0 00, release after %u ms
+lit	po nacisnieciu ramka okresowa idzie dalej: 3 ramki w 3 s	after the press the periodic frame goes on: 3 frames in 3 s
+lit	zaplon wylaczony: ramka okresowa ustaje	ignition off: the periodic frame stops
+lit	klima off: koniec nadawania; nadajnik tylko w oknach, bez zatrzasku	climate off: end of transmitting; transmitter only in windows, no latch
+lit	rozbrojone: klima p nic nie nadaje, nadajnik ani razu wlaczony	disarmed: climate p transmits nothing, transmitter never enabled
+lit	40 nacisniec w 9,6 s: razem %u ramek 364 (limit 25 na 10 s)	40 presses in 9.6 s: in total %u frames 364 (limit 25 per 10 s)
+lit	w trybie klima p komenda 80 01 01 dalej wysyla 15B	in climate p mode the command 80 01 01 still sends 15B
+lit	tx_path: %d sprawdzen, %d bledow\n	tx_path: %d checks, %d errors\n
+# test_host/xp_codec.cpp
+lit	encode bez danych: 2E 71 00 8E	encode without data: 2E 71 00 8E
+lit	encode: bufor o 1 bajt za maly = 0	encode: buffer 1 byte too small = 0
+lit	encode: bufor dokladnie na ramke = 6	encode: buffer exactly for the frame = 6
+lit	encode: bufor 0 = 0	encode: buffer 0 = 0
+lit	encode: 40 bajtow danych = 44	encode: 40 data bytes = 44
+lit	encode: 41 bajtow danych = 0	encode: 41 data bytes = 0
+lit	encode: dlugosc 255 = 0	encode: length 255 = 0
+lit	makeFrame: 60 bajtow przyciete do 40	makeFrame: 60 bytes cut to 40
+lit	makeFrame: bez danych	makeFrame: without data
+lit	tam i z powrotem: dlugosci 0..40	there and back: lengths 0..40
+lit	tam i z powrotem: komendy 00..FF z danymi 2E FF F3	there and back: commands 00..FF with data 2E FF F3
+lit	256 ramek, bajty FF / F3 w danych nie sa potwierdzeniami	256 frames, bytes FF / F3 in the data are not acks
+lit	zla suma: ramka odrzucona, licznik 1	bad checksum: frame rejected, counter 1
+lit	przeklamany bajt danych: odrzucona	corrupted data byte: rejected
+lit	po zlej sumie nastepna dobra ramka przechodzi	after a bad checksum the next good frame goes through
+lit	dlugosc 41: odrzucona od razu	length 41: rejected at once
+lit	dlugosc 255: odrzucona od razu	length 255: rejected at once
+lit	po zlej dlugosci nastepna ramka przechodzi	after a bad length the next frame goes through
+lit	dlugosc 40: przyjeta	length 40: accepted
+lit	urwana, po 31 ms nowa ramka: limit czasu 1, nowa ramka przyjeta	truncated, a new frame after 31 ms: timeout 1, the new frame accepted
+lit	przerwa dokladnie 30 ms: ramka dokonczona	gap of exactly 30 ms: frame completed
+lit	przerwa 31 ms: reszta ramki odrzucona	gap of 31 ms: the rest of the frame rejected
+lit	reszta urwanej ramki policzona jako bajty spoza ramek	the rest of the truncated frame counted as bytes outside frames
+lit	przejscie czasu przez zero w srodku ramki (21 ms): bez limitu	time wrapping through zero in the middle of a frame (21 ms): no timeout
+lit	przejscie czasu przez zero, przerwa 32 ms: limit czasu	time wrapping through zero, gap of 32 ms: timeout
+lit	limit ustawiony na 5 ms: przerwa 6 ms urywa	timeout set to 5 ms: a gap of 6 ms cuts
+lit	minuta ciszy miedzy ramkami: bez limitu czasu	a minute of silence between frames: no timeout
+lit	tekst na linii: same bajty spoza ramek	text on the line: only bytes outside frames
+lit	po smieciach ramka przechodzi	after garbage a frame goes through
+lit	zera na linii: bajty spoza ramek	zeros on the line: bytes outside frames
+lit	falszywy naglowek 2E: po 31 ms ramka przechodzi	false header 2E: a frame goes through after 31 ms
+lit	FF ramka F3 FF ramka F3: 2 ramki, 4 potwierdzenia	FF frame F3 FF frame F3: 2 frames, 4 acks
+lit	liczniki: ramki 2, potwierdzenia 4, bez bledow	counters: frames 2, acks 4, no errors
+lit	FF i F3 poza ramka = ACK	FF and F3 outside a frame = ACK
+lit	inny bajt poza ramka = NONE	another byte outside a frame = NONE
+lit	reset() w srodku ramki: nastepna przechodzi	reset() in the middle of a frame: the next goes through
+# headers and footers written by tools/run_host_tests.sh (only in the references)
+out	### kod=	### code=
+out	 --raport-skrzynka .build_host/golden_raport_skrzynka.txt	 --box-report .build_host/golden_box_report.txt
+out	 --przestoj 	 --stall 
+out	 --zgub 	 --drop 
+out	 --bez 38,3C	 --without 38,3C
+# car_state.txt: the capture path (stage E3 removes run_legacy_path; captures are read from test_data/captures)
+out	zapis ../../logs/	record test_data/captures/
+# golden_stream variants: summary names and reference file names
+out	.przestoj_	.stall_
+out	.zgub_	.drop_
+file	.przestoj_	.stall_
+file	.zgub_	.drop_
+# step names from the captures (test_data/captures, data recorded in the car): printed by replay_log unchanged
+out	KROK 18 19:12:11.696 Czujniki TYL: wsteczny wlaczony, zbli	KROK 18 19:12:11.696 Czujniki TYL: wsteczny wlaczony, zbli
+out	KROK 19 19:12:36.965 Czujniki PRZOD: podjedz powoli do prz	KROK 19 19:12:36.965 Czujniki PRZOD: podjedz powoli do prz
+out	KROK 21 19:13:14.014 Klimatyzacja z panelu auta: temperatu	KROK 21 19:13:14.014 Klimatyzacja z panelu auta: temperatu
+# settings_15b.cpp measures the longest "vset" row: the English words make it one character longer
+out	najdluzsza linia 110 znakow (bufor 200)	longest line 111 characters (buffer 200)
+# tools/mock_device.py (copies of the device lines: the same fragments as in src/ and lib/core)
+lit	 (MAKIETA). CAN 125 kbit/s TYLKO NASLUCH. Tryb: %s.	 (MOCK). CAN 125 kbit/s LISTEN ONLY. Mode: %s.
+lit	[ota] program potwierdzony	[ota] program confirmed
+frag	 (makieta)	 (mock)
+lit	Polecenia: stat | radio | ver | ust | cantx | vol 0-100 | test | keys | key/kd/ku KOD | map Z NA | 	Commands: stat | radio | ver | vset | cantx | vol 0-100 | test | keys | key/kd/ku CODE | map FROM TO | 
+lit	[www] blokada logowania (makieta)	[www] login lockout (mock)
+lit	[key] tabela zamian zapisana (%d)	[key] swap table stored (%d)
+lit	[wifi] siec domowa %s (makieta)	[wifi] home network %s (mock)
+lit	[wifi] haslo zmienione (makieta)	[wifi] password changed (mock)
+lit	[www] restart za %d ms	[www] restart in %d ms
+lit	[ota] przyjeto %d B, wersja %s, restart za %d ms	[ota] accepted %d B, version %s, restart in %d ms
+lit	[ota] cofniecie, restart za %d ms	[ota] rollback, restart in %d ms
+lit	Makieta centralki 508 (panel WWW bez plytki)	Device mock (web panel without the board)
+lit	zapis CAN w formacie sniffera: (sekundy) can0 ID#DANE	CAN capture in the sniffer format: (seconds) can0 ID#DATA
+lit	haslo urzadzenia (10..63 znaki); domyslnie losowe	device password (10..63 characters); random by default
+lit	klient z sieci domowej: blokada logowania, 403 ap_only	client from the home network: login lockout, 403 ap_only
+lit	jak po 'wifi lan on': zmiany dozwolone z sieci domowej	as after 'wifi lan on': changes allowed from the home network
+lit	dzialajacy program umie nadac ramke 15B (canTx = 1, jak decoder_tx_wifi); 	the running program can send frame 15B (canTx = 1, like decoder_tx_wifi); 
+lit	makieta niczego nie nadaje, pokazuje tylko przelacznik uzbrojenia	the mock transmits nothing, it only shows the arming switch
+lit	tempo odtwarzania zapisu (1 = czas rzeczywisty)	capture replay speed (1 = real time)
+lit	nie zapetlac zapisu	do not loop the capture
+lit	wypisywac zapytania HTTP	print HTTP requests
+lit	--speed musi byc dodatnie	--speed must be positive
+lit	haslo: 10..63 znaki ASCII bez spacji	password: 10..63 ASCII characters without spaces
+lit	Uwaga: w pliku nie ma ramek w formacie '(sekundy) can0 ID#DANE'; makieta dziala bez ruchu CAN.	Note: the file has no frames in the format '(seconds) can0 ID#DATA'; the mock runs without CAN traffic.
+lit	Makieta centralki: http://%s:%d/  (ramek w zapisie: %d, VIN zamazany)	Device mock: http://%s:%d/  (frames in the capture: %d, VIN masked)
+lit	haslo makiety: %s	mock password: %s
+lit	klient: %s	client: %s
+lit	siec centralki	device network
+# tools/record.py
+lit	centralka_konsola_%s.txt	centralka_console_%s.txt
+lit	# %s, nagranie tools/record.py; czas w sekundach od startu urzadzenia; start %s\n	# %s, recorded by tools/record.py; time in seconds since the device started; start %s\n
+lit	# restart urzadzenia	# device restart
+lit	\n[uwaga] centralka wystartowala od nowa, nagrywam dalej	\n[note] the device started again, still recording
+lit	# zgubiono %d linii\n	# lost %d lines\n
+lit	\n[ok] polaczono, nagrywam	\n[ok] connected, recording
+lit	zle haslo (401)	wrong password (401)
+lit	\nBLAD: zle haslo. Nacisnij Enter, zeby zakonczyc.	\nERROR: wrong password. Press Enter to quit.
+lit	\n[uwaga] brak polaczenia (%s), probuje dalej	\n[note] no connection (%s), still trying
+lit	# ZNACZNIK %d %s zegar komputera %s: %s	# MARKER %d %s computer clock %s: %s
+lit	Nagrywanie centralki %s:%d. Tylko odczyt.	Recording the device %s:%d. Read only.
+lit	Haslo urzadzenia (nie bedzie widoczne): 	Device password (will not be shown): 
+lit	Puste haslo, koniec.	Empty password, quitting.
+lit	Pliki:\n  %s\n  %s	Files:\n  %s\n  %s
+lit	Znacznik: wpisz tekst i Enter. Koniec: q + Enter.	Marker: type text and Enter. Quit: q + Enter.
+lit	(bez opisu)	(no description)
+lit	  znacznik %d zapisany | ramek %d, linii konsoli %d, zgubionych ramek %d	  marker %d stored | frames %d, console lines %d, lost frames %d
+lit	BLAD: %s	ERROR: %s
+lit	Koniec. Ramek %d, linii konsoli %d, znacznikow %d, zgubionych ramek %d.	Done. Frames %d, console lines %d, markers %d, lost frames %d.
+# tools/test_panel_auth.py
+lit	test_panel_auth_wynik.txt	test_panel_auth_result.txt
+lit	Haslo centralki (nie bedzie widoczne): 	Device password (will not be shown): 
+lit	Brak hasla.	No password.
+lit	status z haslem	status with the password
+lit	Bez poprawnego logowania dalsze testy nie maja sensu.	Without a valid login the other tests make no sense.
+lit	naglowki odpowiedzi API	API response headers
+lit	status ma pole %s	status has the field %s
+lit	sys.elf 16 cyfr	sys.elf 16 digits
+lit	7 zlych hasel z sieci centralki nie blokuje	7 wrong passwords from the device network do not lock out
+lit	hello: locked=0 dla sieci centralki	hello: locked=0 for the device network
+lit	GET /api/trace.log (tekst)	GET /api/trace.log (text)
+lit	log: kursor za head = head (nic)	log: cursor past head = head (nothing)
+lit	cmd ver przyjete	cmd ver accepted
+lit	cmd ver widoczne w logu	cmd ver visible in the log
+lit	odpowiedz ver w logu	ver reply in the log
+lit	wifi haslo	wifi showpass
+lit	cmd wifi odrzucone (usb_only)	cmd wifi rejected (usb_only)
+lit	cmd pusta linia odrzucona	cmd empty line rejected
+lit	cmd 128 znakow odrzucone	cmd 128 characters rejected
+lit	cmd znaki spoza ASCII odrzucone	cmd non-ASCII characters rejected
+lit	cmd tresc 2000 B = 413	cmd body 2000 B = 413
+lit	12 polecen pod rzad: tylko 200 albo 503 busy	12 commands in a row: only 200 or 503 busy
+lit	zly zapis	bad syntax
+lit	duplikat	duplicate
+lit	17 par	17 pairs
+lit	spacja	space
+lit	keymap odrzuca: 	keymap rejects: 
+lit	keymap: zapis 3 par (male litery, srednik)	keymap: write of 3 pairs (lower case, semicolon)
+lit	keymap: odczyt po zapisie	keymap: read after the write
+lit	keymap: reset do wbudowanych	keymap: reset to the built-in ones
+lit	brak ssid	no ssid
+lit	brak pass	no pass
+lit	haslo 7 znakow	password of 7 characters
+lit	64 znaki nie-hex	64 non-hex characters
+lit	nazwa 33 bajty	name of 33 bytes
+lit	wifi odrzuca: 	wifi rejects: 
+lit	ota: plik 1000 B odrzucony (short)	ota: 1000 B file rejected (short)
+lit	ota: 70 kB bez naglowka ESP32 odrzucony (header)	ota: 70 kB without an ESP32 header rejected (header)
+lit	ota: drugie miejsce nietkniete po odrzuceniu	ota: the other slot untouched after the rejection
+lit	ota bez tresci = 411	ota without a body = 411
+lit	zle	bad
+lit	NoweHaslo123	NewPasswd123
+lit	haslo: zle obecne = 403 wrong_password	password: wrong current one = 403 wrong_password
+lit	po wrong_password logowanie dalej dziala	after wrong_password the login still works
+lit	krotkie12	tooshort9
+lit	9 znakow	9 characters
+lit	spacja w hasle1	space in pass01
+lit	64 znaki	64 characters
+lit	haslo: odrzuca 	password: rejects 
+lit	haslo: zmiana na tymczasowe	password: change to a temporary one
+lit	haslo: powrot do obecnego	password: back to the current one
+lit	HASLO_TYMCZASOWE_usun_mnie.txt	TEMPORARY_PASSWORD_delete_me.txt
+lit	UWAGA: haslo zostalo tymczasowe; zapisane w tools/HASLO_TYMCZASOWE_usun_mnie.txt (albo 'wifi haslo' na USB)	WARNING: the password stayed temporary; stored in tools/TEMPORARY_PASSWORD_delete_me.txt (or 'wifi showpass' on USB)
+lit	Siec centralki startuje od nowa (to samo haslo); czekam do 40 s na ponowne polaczenie...	The device network restarts (the same password); waiting up to 40 s to reconnect...
+lit	po zmianie tam i z powrotem dziala stare haslo	after changing there and back the old password works
+lit	polacz sie recznie z siecia centralki, jesli BLAD	reconnect to the device network by hand if FAIL
+lit	WYNIK: %d testow, %d bledow	RESULT: %d tests, %d errors
+lit	Zapisano: 	Saved: 
+# tools/embed_web.py
+lit	<!doctype html><html lang="pl"><head><meta charset="utf-8">	<!doctype html><html lang="en"><head><meta charset="utf-8">
+lit	<p>{{PROJECT_NAME}}: panel nie zostal zbudowany (brak web/index.html). 	<p>{{PROJECT_NAME}}: the panel was not built (no web/index.html). 
+lit	Interfejs /api dziala normalnie.</p></body></html>	The /api interface works normally.</p></body></html>
+lit	index.html musi zawierac dokladnie raz: 	index.html must contain exactly once: 
+lit	app.js nie moze zawierac tekstu </script (zamknalby znacznik)	app.js must not contain the text </script (it would close the tag)
+lit	app.css nie moze zawierac tekstu </style	app.css must not contain the text </style
+lit	strona musi miec dokladnie jeden znacznik <script>	the page must have exactly one <script> tag
+lit	index.html nie moze miec atrybutow on...= (CSP je zablokuje); zdarzenia tylko w app.js	index.html must not have on...= attributes (CSP would block them); events only in app.js
+lit	index.html nie moze miec adresow javascript:	index.html must not have javascript: addresses
+lit	// PLIK GENEROWANY przez tools/embed_web.py z katalogu web/. Nie edytowac.	// FILE GENERATED by tools/embed_web.py from the web/ directory. Do not edit.
+lit	embed_web: OSTRZEZENIE: brak web/index.html, wbudowuje strone zastepcza	embed_web: WARNING: no web/index.html, embedding a placeholder page
+lit	 (zapisano)	 (written)
+lit	 (bez zmian)	 (unchanged)
+lit	embed_web: BLAD: %s	embed_web: ERROR: %s
+lit	zapisana	stored
+lit	zapomniana	forgotten
+# tools/project_identity.py
+lit	PROJECT_FWID_MAGIC musi miec 9 znakow	PROJECT_FWID_MAGIC must have 9 characters
+# padded name columns: Decoder::formatSettingRow (%-26s), test_host/settings_15b.cpp (%-26s, %-24s)
+out	asystent parkowania        stan=	parking assist             state=
+out	asystent parkowania        SENDABLE	parking assist             SENDABLE
+out	asystent parkowania        FIXED_REFUSE	parking assist             FIXED_REFUSE
+out	asystent parkowania        KNOWN_BLOCKED	parking assist             KNOWN_BLOCKED
+out	asystent parkowania        NO_FRAME	parking assist             NO_FRAME
+out	asystent parkowania      maska pola	parking assist           field mask
+out	wycieraczka przy cofaniu   stan=	rear wiper in reverse      state=
+out	wycieraczka przy cofaniu   SENDABLE	rear wiper in reverse      SENDABLE
+out	wycieraczka przy cofaniu   FIXED_REFUSE	rear wiper in reverse      FIXED_REFUSE
+out	wycieraczka przy cofaniu   KNOWN_BLOCKED	rear wiper in reverse      KNOWN_BLOCKED
+out	wycieraczka przy cofaniu   NO_FRAME	rear wiper in reverse      NO_FRAME
+out	wycieraczka przy cofaniu maska pola	rear wiper in reverse    field mask
+out	odblokowanie bagaznika     stan=	boot unlocking             state=
+out	odblokowanie bagaznika     SENDABLE	boot unlocking             SENDABLE
+out	odblokowanie bagaznika     FIXED_REFUSE	boot unlocking             FIXED_REFUSE
+out	odblokowanie bagaznika     KNOWN_BLOCKED	boot unlocking             KNOWN_BLOCKED
+out	odblokowanie bagaznika     NO_FRAME	boot unlocking             NO_FRAME
+out	odblokowanie bagaznika   maska pola	boot unlocking           field mask
+out	przelacznik radaru         stan=	radar switch               state=
+out	przelacznik radaru         SENDABLE	radar switch               SENDABLE
+out	przelacznik radaru         FIXED_REFUSE	radar switch               FIXED_REFUSE
+out	przelacznik radaru         KNOWN_BLOCKED	radar switch               KNOWN_BLOCKED
+out	przelacznik radaru         NO_FRAME	radar switch               NO_FRAME
+out	przelacznik radaru       maska pola	radar switch             field mask
+out	prowadz mnie do domu       stan=	follow me home             state=
+out	prowadz mnie do domu       SENDABLE	follow me home             SENDABLE
+out	prowadz mnie do domu       FIXED_REFUSE	follow me home             FIXED_REFUSE
+out	prowadz mnie do domu       KNOWN_BLOCKED	follow me home             KNOWN_BLOCKED
+out	prowadz mnie do domu       NO_FRAME	follow me home             NO_FRAME
+out	prowadz mnie do domu     maska pola	follow me home           field mask
+out	oswietlenie powitalne      stan=	welcome lighting           state=
+out	oswietlenie powitalne      SENDABLE	welcome lighting           SENDABLE
+out	oswietlenie powitalne      FIXED_REFUSE	welcome lighting           FIXED_REFUSE
+out	oswietlenie powitalne      KNOWN_BLOCKED	welcome lighting           KNOWN_BLOCKED
+out	oswietlenie powitalne      NO_FRAME	welcome lighting           NO_FRAME
+out	oswietlenie powitalne    maska pola	welcome lighting         field mask
+out	swiatla dzienne            stan=	daytime running lights     state=
+out	swiatla dzienne            SENDABLE	daytime running lights     SENDABLE
+out	swiatla dzienne            FIXED_REFUSE	daytime running lights     FIXED_REFUSE
+out	swiatla dzienne            KNOWN_BLOCKED	daytime running lights     KNOWN_BLOCKED
+out	swiatla dzienne            NO_FRAME	daytime running lights     NO_FRAME
+out	swiatla dzienne          maska pola	daytime running lights   field mask
+out	dzwiek                     stan=	sound                      state=
+out	dzwiek                     SENDABLE	sound                      SENDABLE
+out	dzwiek                     FIXED_REFUSE	sound                      FIXED_REFUSE
+out	dzwiek                     KNOWN_BLOCKED	sound                      KNOWN_BLOCKED
+out	dzwiek                     NO_FRAME	sound                      NO_FRAME
+out	dzwiek                   maska pola	sound                    field mask
+out	jednostki paliwa           stan=	fuel units                 state=
+out	jednostki paliwa           SENDABLE	fuel units                 SENDABLE
+out	jednostki paliwa           FIXED_REFUSE	fuel units                 FIXED_REFUSE
+out	jednostki paliwa           KNOWN_BLOCKED	fuel units                 KNOWN_BLOCKED
+out	jednostki paliwa           NO_FRAME	fuel units                 NO_FRAME
+out	jednostki paliwa         maska pola	fuel units               field mask
+out	jezyk                      stan=	language                   state=
+out	jezyk                      SENDABLE	language                   SENDABLE
+out	jezyk                      FIXED_REFUSE	language                   FIXED_REFUSE
+out	jezyk                      KNOWN_BLOCKED	language                   KNOWN_BLOCKED
+out	jezyk                      NO_FRAME	language                   NO_FRAME
+out	jezyk                    maska pola	language                 field mask
+out	martwe pole                stan=	blind spot                 state=
+out	martwe pole                SENDABLE	blind spot                 SENDABLE
+out	martwe pole                FIXED_REFUSE	blind spot                 FIXED_REFUSE
+out	martwe pole                KNOWN_BLOCKED	blind spot                 KNOWN_BLOCKED
+out	martwe pole                NO_FRAME	blind spot                 NO_FRAME
+out	martwe pole              maska pola	blind spot               field mask
+out	funkcja powitania          stan=	welcome function           state=
+out	funkcja powitania          SENDABLE	welcome function           SENDABLE
+out	funkcja powitania          FIXED_REFUSE	welcome function           FIXED_REFUSE
+out	funkcja powitania          KNOWN_BLOCKED	welcome function           KNOWN_BLOCKED
+out	funkcja powitania          NO_FRAME	welcome function           NO_FRAME
+out	funkcja powitania        maska pola	welcome function         field mask
+out	otwarcie drzwi             stan=	door opening               state=
+out	otwarcie drzwi             SENDABLE	door opening               SENDABLE
+out	otwarcie drzwi             FIXED_REFUSE	door opening               FIXED_REFUSE
+out	otwarcie drzwi             KNOWN_BLOCKED	door opening               KNOWN_BLOCKED
+out	otwarcie drzwi             NO_FRAME	door opening               NO_FRAME
+out	otwarcie drzwi           maska pola	door opening             field mask
+out	kalibracja opon            stan=	tyre calibration           state=
+out	kalibracja opon            SENDABLE	tyre calibration           SENDABLE
+out	kalibracja opon            FIXED_REFUSE	tyre calibration           FIXED_REFUSE
+out	kalibracja opon            KNOWN_BLOCKED	tyre calibration           KNOWN_BLOCKED
+out	kalibracja opon            NO_FRAME	tyre calibration           NO_FRAME
+out	kalibracja opon          maska pola	tyre calibration         field mask
+out	opoznienie reflektorow     stan=	headlamp delay             state=
+out	opoznienie reflektorow     SENDABLE	headlamp delay             SENDABLE
+out	opoznienie reflektorow     FIXED_REFUSE	headlamp delay             FIXED_REFUSE
+out	opoznienie reflektorow     KNOWN_BLOCKED	headlamp delay             KNOWN_BLOCKED
+out	opoznienie reflektorow     NO_FRAME	headlamp delay             NO_FRAME
+out	opoznienie reflektorow   maska pola	headlamp delay           field mask
+out	kontrola trakcji           stan=	traction control           state=
+out	kontrola trakcji           SENDABLE	traction control           SENDABLE
+out	kontrola trakcji           FIXED_REFUSE	traction control           FIXED_REFUSE
+out	kontrola trakcji           KNOWN_BLOCKED	traction control           KNOWN_BLOCKED
+out	kontrola trakcji           NO_FRAME	traction control           NO_FRAME
+out	kontrola trakcji         maska pola	traction control         field mask
+out	wykrywanie zmeczenia       stan=	fatigue detection          state=
+out	wykrywanie zmeczenia       SENDABLE	fatigue detection          SENDABLE
+out	wykrywanie zmeczenia       FIXED_REFUSE	fatigue detection          FIXED_REFUSE
+out	wykrywanie zmeczenia       KNOWN_BLOCKED	fatigue detection          KNOWN_BLOCKED
+out	wykrywanie zmeczenia       NO_FRAME	fatigue detection          NO_FRAME
+out	wykrywanie zmeczenia     maska pola	fatigue detection        field mask
+out	kolor zegarow              stan=	dial colour                state=
+out	kolor zegarow              SENDABLE	dial colour                SENDABLE
+out	kolor zegarow              FIXED_REFUSE	dial colour                FIXED_REFUSE
+out	kolor zegarow              KNOWN_BLOCKED	dial colour                KNOWN_BLOCKED
+out	kolor zegarow              NO_FRAME	dial colour                NO_FRAME
+out	kolor zegarow            maska pola	dial colour              field mask
+out	automatyczne swiatla       stan=	automatic lights           state=
+out	automatyczne swiatla       SENDABLE	automatic lights           SENDABLE
+out	automatyczne swiatla       FIXED_REFUSE	automatic lights           FIXED_REFUSE
+out	automatyczne swiatla       KNOWN_BLOCKED	automatic lights           KNOWN_BLOCKED
+out	automatyczne swiatla       NO_FRAME	automatic lights           NO_FRAME
+out	automatyczne swiatla     maska pola	automatic lights         field mask
+out	automatyczne ryglowanie    stan=	automatic locking          state=
+out	automatyczne ryglowanie    SENDABLE	automatic locking          SENDABLE
+out	automatyczne ryglowanie    FIXED_REFUSE	automatic locking          FIXED_REFUSE
+out	automatyczne ryglowanie    KNOWN_BLOCKED	automatic locking          KNOWN_BLOCKED
+out	automatyczne ryglowanie    NO_FRAME	automatic locking          NO_FRAME
+out	automatyczne ryglowanie  maska pola	automatic locking        field mask
+out	adaptacyjne reflektory     stan=	adaptive headlamps         state=
+out	adaptacyjne reflektory     SENDABLE	adaptive headlamps         SENDABLE
+out	adaptacyjne reflektory     FIXED_REFUSE	adaptive headlamps         FIXED_REFUSE
+out	adaptacyjne reflektory     KNOWN_BLOCKED	adaptive headlamps         KNOWN_BLOCKED
+out	adaptacyjne reflektory     NO_FRAME	adaptive headlamps         NO_FRAME
+out	adaptacyjne reflektory   maska pola	adaptive headlamps       field mask
+# source files whose code was also edited by hand in E3 (literal lists differ from the map on purpose)
+manual	lib/core/can_tx_arm.cpp	command vset, old name ust kept as an alias
+manual	src/console_cmds.cpp	commands vset and climate, old names ust and klima kept as aliases
+manual	src/net/net.cpp	wifi showpass and wifi newpass, old names haslo and nowehaslo kept as aliases
+manual	tools/mock_device.py	the same command aliases as the device
+manual	test_host/golden_stream.cpp	Polish option aliases removed (run_host_tests.sh passes the English ones)
+manual	test_host/console_alias.cpp	new test of the command aliases
+manual	test_host/expected/console_alias.txt	reference of the new test console_alias
+manual	test_host/tx_path.cpp	strncmp lengths of the compared line prefixes follow the English texts
+manual	test_host/settings_change.cpp	strncmp length of the [vset] line prefix

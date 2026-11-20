@@ -1,0 +1,17 @@
+### replay_log can_20261111_191045.log
+KROK 18 19:12:11.696 Czujniki TYL: wsteczny wlaczony, zbli | beeps   9 | continuous tone  1486 ms | sound request   4080 ms
+KROK 19 19:12:36.965 Czujniki PRZOD: podjedz powoli do prz | beeps  35 | continuous tone  3983 ms | sound request  16554 ms
+KROK 21 19:13:14.014 Klimatyzacja z panelu auta: temperatu | beeps  18 | continuous tone  2507 ms | sound request   8855 ms
+
+Frames in total: 98344, 0E1 frames: 4700
+Beeps in total: 62, continuous tone in total: 7976 ms
+Longest sound after the last 0E1 frame: 101 ms (limit 400 ms)
+Silence after the end of the capture: YES
+### code=0
+### replay_log centralka_can_20261117_184411.log
+
+Frames in total: 1732, 0E1 frames: 101
+Beeps in total: 0, continuous tone in total: 0 ms
+Longest sound after the last 0E1 frame: 0 ms (limit 400 ms)
+Silence after the end of the capture: YES
+### code=0

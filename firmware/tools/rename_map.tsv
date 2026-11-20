@@ -1,0 +1,30 @@
+# HISTORICAL: record of the one-off move from the author's private tree to this repository. No script
+# or CI uses it; kept so the stage can be followed. Names in it are the names of that time.
+# Stage E2b: English names for PlatformIO environments, files, identifiers and script options.
+# Format: kind TAB old TAB new TAB where / note. Kinds: env, file, ident, flag.
+# 'file' rows are read by tools/check_comment_only.py (a renamed file is compared with its old name).
+# Not renamed in E2b on purpose (they are text that ends up in the test references, stage E3):
+#   console lines and API codes, golden_stream options passed by run_host_tests.sh (--przestoj, --zgub,
+#   --bez, --raport-skrzynka appear in the headers of test_host/expected/golden_stream*.txt),
+#   reference file names test_host/golden*/<capture>.przestoj_*/.zgub_*, the capture
+#   centralka_can_20261117_184411.log, the report path .build_host/golden_raport_skrzynka.txt.
+# Not renamed until the owner decides the project name (stage E13): product values in project.json.
+env	centralka	listen	platformio.ini, default environment: beside the box, listen only, no network
+env	centralka_dekoder	decoder	platformio.ini: decoder mode, listen only on CAN, no network
+env	centralka_wifi	listen_wifi	platformio.ini: beside the box, with network
+env	centralka_dekoder_wifi	decoder_wifi	platformio.ini: decoder mode, with network
+env	centralka_dekoder_tx_wifi	decoder_tx_wifi	platformio.ini: decoder with network and CAN transmit (after arming)
+file	tools/nagraj.py	tools/record.py	Wi-Fi recorder of CAN frames and console lines
+ident	testUstCommand	testSettingCommand	test_host/settings_15b.cpp (test of the console command "ust")
+ident	GBEZ	GNO38	tools/run_host_tests.sh: output directory of pass 2 (Decoder without frames 38 / 3C)
+ident	GDEC	GDECODER	tools/run_host_tests.sh: output directory of pass 3 (Decoder)
+ident	golden_stream_bez	golden_stream_no38	tools/run_host_tests.sh: name of pass 2 (.build_host/<name>.actual.txt)
+ident	golden_decoder_bez	golden_decoder_no38	tools/run_host_tests.sh: directory .build_host/golden_decoder_no38
+ident	golden_raport_skrzynka_ref.txt	golden_box_report_ref.txt	tools/run_host_tests.sh: copy of the box report, pass 1
+ident	golden_raport_skrzynka_bez.txt	golden_box_report_no38.txt	tools/run_host_tests.sh: copy of the box report, pass 2
+ident	golden_raport_skrzynka_decoder.txt	golden_box_report_decoder.txt	tools/run_host_tests.sh: copy of the box report, pass 3
+flag	--nagraj-wzorce	--record-golden	tools/run_host_tests.sh (old name still accepted, since E1)
+flag	--przestoj	--stall	test_host/golden_stream.cpp (old name still accepted and still used by run_host_tests.sh until E3)
+flag	--zgub	--drop	test_host/golden_stream.cpp (old name still accepted and still used by run_host_tests.sh until E3)
+flag	--bez	--without	test_host/golden_stream.cpp (old name still accepted and still used by run_host_tests.sh until E3)
+flag	--raport-skrzynka	--box-report	test_host/golden_stream.cpp (old name still accepted and still used by run_host_tests.sh until E3)

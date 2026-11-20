@@ -1,0 +1,7 @@
+blank_issues_enabled: false
+# No contact links yet: the documentation site, Discussions and security advisories are not
+# public while the repository is private. Add them here when the repository is made public, for example:
+# contact_links:
+#   - name: Documentation
+#     url: https://<user>.github.io/<repo>/
+#     about: Quick start, safety, make it yours, troubleshooting.

@@ -1,0 +1,20 @@
+# Build outputs (contain local paths: never commit)
+.pio/
+.build_host/
+.vscode/
+__pycache__/
+*.pyc
+
+# Local configuration
+platformio_override.ini
+
+# Documentation build
+site/
+
+# KiCad local and temporary files (hardware/*/kicad)
+*-backups/
+*.kicad_prl
+fp-info-cache
+*.lck
+_autosave-*
+\#auto_saved_files\#

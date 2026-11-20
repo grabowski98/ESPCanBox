@@ -1,0 +1,28 @@
+Hardware licence (provisional until the first public release)
+
+Copyright 2026 grabowski98
+
+The hardware design of this project is licensed under the CERN Open Hardware Licence Version 2,
+Strongly Reciprocal (CERN-OHL-S-2.0). This covers:
+
+  - hardware/ : KiCad schematic, symbol and PCB files, the PDF and print files made from them,
+    the bill of materials (bom.csv) and the enclosure models (STL). The script that generates
+    the enclosure (gen_enclosure.py) is code and is licensed under Apache-2.0 like the firmware.
+
+Short summary (not a substitute for the licence): you may use, study, modify, make and
+distribute the design and products made from it. If you distribute a modified design, or
+products made from it, you must make the complete modified source available under the same
+licence. The design is provided without any warranty.
+
+Full legal text: https://ohwr.org/cern_ohl_s_v2.txt
+SPDX identifier: CERN-OHL-S-2.0
+
+Notes:
+
+  - The prototype board is a proof of concept made at home, not a product. There are no
+    production (Gerber) files. See hardware/prototype-v1/STATUS.md.
+  - Ready-made modules placed on the board (ESP32-S3 dev board, CAN transceiver module,
+    amplifier module) are designs of their makers and are not covered by this licence.
+
+Firmware and tools are licensed under Apache-2.0 (see LICENSE); documentation under CC BY 4.0
+(see LICENSE-docs).

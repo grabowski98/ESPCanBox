@@ -1,0 +1,58 @@
+# Checks of every push and pull request. Linux runner, tools through uv (no other installs).
+#
+# Step "All checks" runs tools/release_check.sh, the same single command a contributor runs at home:
+#   host tests (zig compiler), can_diff self test, build of the six environments, check_no_can_tx.sh,
+#   check_tx_profile_lock.sh (generic / example / custom profile), check_layering.py, check_i18n.py,
+#   set_project_name.py --check, scan_private.py, check_excluded.py, strip_exif.py --check,
+#   check_provenance.py, check_doc_links.py, check_translations.py, mkdocs build --strict, actionlint.
+# Step "Host tests with g++" repeats the host tests with a second compiler (the runner's g++), so warnings
+# that only one compiler reports are caught.
+#
+# Builds only, never uploads firmware to a board (CI has none) and keeps no build output.
+# No secrets: the job reads the repository and nothing else (permissions: contents read).
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      # Pinned tool versions (bump them on purpose, in one place).
+      UV_VERSION: "0.12.2"
+      PIO: uvx --from platformio==6.2.0 platformio
+      PYTHON: python
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        run: python -m pip install "uv==${UV_VERSION}"
+
+      - name: All checks (tools/release_check.sh)
+        run: bash tools/release_check.sh
+
+      - name: Host tests with g++ (second compiler)
+        working-directory: firmware
+        run: |
+          g++ --version
+          KEEP_GOING=1 CXX=g++ bash tools/run_host_tests.sh < /dev/null

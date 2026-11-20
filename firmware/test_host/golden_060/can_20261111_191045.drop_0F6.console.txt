@@ -1,0 +1,139 @@
+335620 [park] rear=6 front=6 sound=0 rear interval=0x3F zones rear 777 front 777
+335699 [car] acc=1
+391809 [park] rear=5 front=5 sound=0 rear interval=0x3F zones rear 777 front 777
+412897 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+413200 [car] reverse=1
+420245 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+420700 [car] reverse=0
+424057 [park] rear=5 front=5 sound=0 rear interval=0x3F zones rear 777 front 777
+424147 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+424200 [car] reverse=1
+436844 [park] rear=4 front=4 sound=1 rear interval=0x30 zones rear 767 front 777
+437044 [park] rear=4 front=4 sound=1 rear interval=0x2B zones rear 757 front 777
+437544 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 767 front 777
+437688 [park] rear=4 front=4 sound=1 rear interval=0x2E zones rear 757 front 777
+437909 [park] rear=4 front=4 sound=1 rear interval=0x28 zones rear 747 front 777
+438144 [park] rear=4 front=4 sound=1 rear interval=0x25 zones rear 747 front 777
+438208 [park] rear=4 front=4 sound=1 rear interval=0x22 zones rear 747 front 777
+438388 [park] rear=4 front=4 sound=1 rear interval=0x1D zones rear 737 front 777
+438454 [park] rear=4 front=4 sound=1 rear interval=0x19 zones rear 727 front 777
+438644 [park] rear=4 front=4 sound=1 rear interval=0x17 zones rear 727 front 777
+438708 [park] rear=4 front=4 sound=1 rear interval=0x14 zones rear 727 front 777
+438898 [park] rear=4 front=4 sound=1 rear interval=0x12 zones rear 217 front 777
+438964 [park] rear=4 front=4 sound=1 rear interval=0x10 zones rear 217 front 777
+439207 [park] rear=4 front=4 sound=1 rear interval=0x0B zones rear 212 front 777
+439408 [park] rear=4 front=4 sound=1 rear interval=0x00 zones rear 011 front 777
+439444 [park] rear=4 front=4 sound=1 rear interval=0x0B zones rear 011 front 777
+439474 [park] rear=4 front=4 sound=1 rear interval=0x00 zones rear 001 front 777
+440880 [car] reverse=0
+440887 [park] rear=5 front=4 sound=1 rear interval=0x00 zones rear 777 front 777
+440924 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+451467 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 767
+452675 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+457106 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 767
+457856 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 757
+458376 [park] rear=5 front=4 sound=1 front interval=0x18 zones rear 777 front 747
+458642 [park] rear=5 front=4 sound=1 front interval=0x17 zones rear 777 front 747
+458876 [park] rear=5 front=4 sound=1 front interval=0x16 zones rear 777 front 747
+460642 [park] rear=5 front=4 sound=1 front interval=0x15 zones rear 777 front 747
+461386 [park] rear=5 front=4 sound=1 front interval=0x14 zones rear 777 front 747
+462146 [park] rear=5 front=4 sound=1 front interval=0x13 zones rear 777 front 747
+462646 [park] rear=5 front=4 sound=1 front interval=0x12 zones rear 777 front 737
+462895 [park] rear=5 front=4 sound=1 front interval=0x11 zones rear 777 front 737
+463156 [park] rear=5 front=4 sound=1 front interval=0x10 zones rear 777 front 737
+463442 [park] rear=5 front=4 sound=1 front interval=0x0F zones rear 777 front 727
+463942 [park] rear=5 front=4 sound=1 front interval=0x0E zones rear 777 front 727
+465706 [park] rear=5 front=4 sound=1 front interval=0x0D zones rear 777 front 417
+465966 [park] rear=5 front=4 sound=1 front interval=0x0B zones rear 777 front 417
+466242 [park] rear=5 front=4 sound=1 front interval=0x00 zones rear 777 front 407
+469465 [park] rear=5 front=5 sound=0 rear interval=0x3F zones rear 777 front 777
+470333 [car] reverse=1
+470354 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+470455 [park] rear=4 front=4 sound=1 front interval=0x0E zones rear 777 front 327
+470542 [park] rear=4 front=4 sound=1 front interval=0x0C zones rear 777 front 317
+470586 [park] rear=4 front=4 sound=1 front interval=0x00 zones rear 777 front 307
+471346 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 734
+471586 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 744
+473442 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+473646 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+473700 [car] reverse=0
+477785 [park] rear=5 front=5 sound=0 rear interval=0x3F zones rear 777 front 777
+487584 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+488385 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 767
+488885 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 757
+489141 [park] rear=5 front=4 sound=1 front interval=0x18 zones rear 777 front 747
+489385 [park] rear=5 front=4 sound=1 front interval=0x17 zones rear 777 front 747
+489574 [park] rear=5 front=4 sound=1 front interval=0x16 zones rear 777 front 747
+489641 [park] rear=5 front=4 sound=1 front interval=0x14 zones rear 777 front 747
+489874 [park] rear=5 front=4 sound=1 front interval=0x13 zones rear 777 front 747
+491394 [park] rear=5 front=4 sound=1 front interval=0x11 zones rear 777 front 737
+491894 [park] rear=5 front=4 sound=1 front interval=0x10 zones rear 777 front 737
+492144 [park] rear=5 front=4 sound=1 front interval=0x0F zones rear 777 front 727
+492404 [park] rear=5 front=4 sound=1 front interval=0x0E zones rear 777 front 727
+492905 [park] rear=5 front=4 sound=1 front interval=0x0D zones rear 777 front 727
+493664 [park] rear=5 front=4 sound=1 front interval=0x0B zones rear 777 front 417
+493941 [park] rear=5 front=4 sound=1 front interval=0x00 zones rear 777 front 407
+495533 [car] reverse=1
+495544 [park] rear=4 front=4 sound=1 front interval=0x00 zones rear 777 front 407
+495964 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 427
+496161 [park] rear=4 front=4 sound=1 front interval=0x00 zones rear 777 front 707
+496645 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 747
+496705 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 757
+496965 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 767
+497240 [park] rear=4 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+497594 [park] rear=5 front=4 sound=0 rear interval=0x3F zones rear 777 front 777
+497701 [car] reverse=0
+502143 [park] rear=5 front=5 sound=0 rear interval=0x3F zones rear 777 front 777
+581205 [key] code=9E state=1
+581405 [key] code=9E state=0
+585603 [key] code=A0 state=1
+585803 [key] code=A0 state=0
+588757 [key] code=97 state=1
+588957 [key] code=97 state=0
+592021 [key] code=9C state=1
+592221 [key] code=9C state=0
+596599 [key] code=98 state=1
+596799 [key] code=98 state=0
+599963 [key] code=9F state=1 -> to radio 9B state=1
+600163 [key] code=9F state=2 -> to radio 9B state=2
+600363 [key] code=9F state=0 -> to radio 9B state=0
+603596 [key] code=99 state=1
+603796 [key] code=99 state=2
+603996 [key] code=99 state=0
+611928 [key] code=9B state=1
+612128 [key] code=9B state=2
+612328 [key] code=9B state=0
+615066 [key] code=A4 state=1
+615266 [key] code=A4 state=2 (skipped)
+615466 [key] code=A4 state=0 (skipped)
+618070 [key] code=9D state=1
+618270 [key] code=9D state=2
+618470 [key] code=9D state=0
+620389 [key] code=A1 state=1
+620589 [key] code=A1 state=2
+620789 [key] code=A1 state=0
+622993 [key] code=A3 state=1
+623193 [key] code=A3 state=0
+630925 [key] code=81 state=1
+633674 [key] code=82 state=1
+636232 [key] code=16 state=1
+636432 [key] code=16 state=2
+636632 [key] code=16 state=2
+636832 [key] code=16 state=2
+637032 [key] code=16 state=2
+637232 [key] code=16 state=0
+640222 [key] code=81 state=1
+641722 [key] code=82 state=1
+643432 [key] code=16 state=1
+643632 [key] code=16 state=2
+643832 [key] code=16 state=2
+644032 [key] code=16 state=2
+644232 [key] code=16 state=2
+644432 [key] code=16 state=0
+707892 [key] code=21 state=1 -> to radio 1F state=1
+708092 [key] code=21 state=0 -> to radio 1F state=0
+721305 [key] code=22 state=1
+721505 [key] code=22 state=2
+721705 [key] code=22 state=0
+746389 [park] rear=6 front=6 sound=0 rear interval=0x3F zones rear 777 front 777
+749243 [car] acc=0

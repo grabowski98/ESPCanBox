@@ -1,0 +1,74 @@
+### can_tx_gate_default
+--- no hardware and the disarmed state ---
+OK    port = nullptr: NOT_BUILT forever, request refused, nothing called
+OK    disarmed: request refused, transmitter never enabled
+OK    arming -> IDLE, disarming -> DISARMED
+--- list of allowed frames ---
+OK    IDs not on the list (15A, 15C, 1A9, 364, 260, 1E5, 000, 7FF, 95B, 1000015B): refused, transmitter off
+OK    15B with length 0-7 and 9: refused
+OK    transmitter invariant
+--- default build (CAN_TX_EXPERIMENTAL = 0): trial frames 1A9 and 364 not on the list ---
+OK    1A9 00 7F FF 04 FF 00 10 00, 364 80 00 1E 00, 364 00 00 1E 78 E0 00: refused (not on the list), transmitter off
+OK    the same three frames: refused by the second check of the hardware port (allowedFrame)
+OK    PSA AEE2010 allow list: one row, 15B; a 15B frame is accepted
+OK    profile generic (empty list) and no profile: 15B refused, transmitter never enabled
+OK    transmitter invariant
+--- normal send ---
+OK    request accepted: OPENING, transmitter on, frame not sent yet
+OK    after 1 ms still OPENING, after 2 ms: SENDING, the same 15B frame went to the port
+OK    second request meanwhile: BUSY
+OK    ack after 2 ms: result ACKED, COOLDOWN, transmitter on for 4 ms in total
+OK    result handed out once
+OK    cooldown: after 499 ms still BUSY, after 500 ms IDLE
+OK    after the cooldown the next request is accepted
+OK    counters: sent 1, acked 1, refused 2
+OK    transmitter invariant
+--- limit of 10 frames per minute ---
+OK    start 1 s: 10 frames accepted, 11th RATE, before 60 s RATE, 60 s after the first OK
+OK    millisecond counter wraps through zero meanwhile: 10 frames accepted, 11th RATE, before 60 s RATE, 60 s after the first OK
+--- admission conditions, each on its own ---
+OK    no fresh 0F6 with ignition: IGNITION
+OK    bus is quiet: BUS_QUIET
+OK    flash write or update: FLASH_BUSY
+OK    settings write pending: FLASH_BUSY
+OK    after the conditions clear: accepted (refusals do not latch)
+OK    transmitter invariant
+OK    REC = 5: temporary refusal CONTROLLER without a latch; REC = 0: accepted
+OK    REC = 130, controller stopped, recovering from bus-off: CONTROLLER without a latch
+OK    bus error 50 ms ago: CONTROLLER; 100 ms after the error: accepted
+OK    TEC = 32: latch FAULT
+OK    bus-off: latch FAULT
+--- arbitration ---
+OK    arbitration lost 2 times, then ACK: 3 tries in one window, result ACKED
+OK    transmitter invariant
+OK    arbitration lost 3 times: FAILED after 3 tries; 4 such sends in a row do not latch
+OK    transmitter invariant
+--- FAULT latch ---
+OK    2 failed, then a good one: no latch
+OK    3 failed in a row: FAULT
+OK    FAULT holds (5 s later still refused, transmitter not enabled)
+OK    clearFault: IDLE, the next send works
+OK    transmitter invariant
+OK    poll() = 4 (controller event): FAULT at once
+OK    no result: after 20 ms transmitter off, result TIMEOUT, FAULT
+OK    transmitter invariant
+OK    port did not take the frame: FAILED, transmitter off
+OK    latchFault from outside: in IDLE and during a send (transmitter off, result FAILED)
+OK    latch in the disarmed state: FAULT after arming, not IDLE
+OK    loop stall 30 ms in SENDING: after it the transmitter is off and FAULT (outside the invariant: the loop stood still)
+OK    loop stall 30 ms in OPENING: nothing sent, FAULT
+--- flash write during the window and forceClose ---
+OK    flashBusy in OPENING: nothing sent, FAILED, COOLDOWN
+OK    flashBusy in SENDING: transmitter off, FAILED, COOLDOWN
+OK    transmitter invariant
+OK    forceClose in NOT_BUILT, DISARMED, IDLE: state unchanged, transmitter off
+OK    forceClose in OPENING: transmitter off, nothing sent, result FAILED
+OK    after forceClose the gate returns to IDLE after the cooldown
+OK    forceClose in SENDING: transmitter off, result FAILED
+OK    forceClose in COOLDOWN and FAULT: state unchanged, transmitter off
+OK    transmitter invariant
+--- invariant in a long random run ---
+OK    start 1 s: 300000 steps of 1 ms, accepted requests 50, transmitter enables 50, longest 20 ms, invariant violations 0
+OK    with the counter wrapping through zero: 300000 steps of 1 ms, accepted requests 50, transmitter enables 50, longest 20 ms, invariant violations 0
+can_tx_gate: 61 checks, 0 errors
+### code=0

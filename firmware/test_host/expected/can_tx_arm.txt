@@ -1,0 +1,37 @@
+### can_tx_arm
+--- arming tied to the build string ---
+OK    same string: armed
+OK    different build time (1 s): disarmed
+OK    string one character shorter and longer: disarmed
+OK    nothing stored, empty string, no program string: disarmed
+OK    record "1", "on", "true" (not the build string): disarmed
+OK    string without a terminating zero in 24 bytes: disarmed
+OK    longest valid string (23 characters): armed
+OK    letter case differs: disarmed
+--- command parsing ---
+OK    cantx, cantx on, cantx off, cantx reset
+OK    malformed cantx (onn, 1, on 1, only a space): BAD, not arming
+OK    cantxon, CANTX ON, xcantx on, empty line: not a command
+OK    bare vset (settings table): NONE
+OK    vset on 02, vset off 0F, vset on 9, vset on 0f (number in hexadecimal)
+OK    vset on without a number, 123, 0G, onn, without on/off, two numbers: BAD
+OK    set 01 01, set 9 4, set 0F 00
+OK    set without a value, with three numbers, 100, 1x: BAD
+OK    settings, stat, frame 15B#..., vsetx: not a command
+--- who may do what ---
+OK    USB: state, arming, disarming, reset, mask, set
+OK    panel on the device's own network: state, arming, disarming, mask; reset and set NOT
+OK    panel through the home network: only reading the state (1 command of 9)
+OK    NONE and BAD: never
+OK    commands that change the state: 6 (on, off, reset, vset on, vset off, set)
+--- item mask ---
+OK    items that can be enabled: mask 0x000092E6 (01, 02, 05, 06, 07, 09, 0C, 0F)
+OK    default mask = item 01 only
+OK    vset on 02: mask 0x06; vset off 01: mask 0x04
+OK    enabling an enabled item: unchanged
+OK    12 items of groups D and E (15, 18, 1A, 0A, 0B, 10, 03, 14, 16, 19, 1F, 0D): NOT_SENDABLE
+OK    numbers outside the table (11, 00, FF; 04, 08, 0E removed on 19.11.2026): UNKNOWN_ID
+OK    mask from flash: bits of items that cannot be sent are cleared (FFFFFFFF -> sendable only)
+OK    each of the 8 enableable items: enabling and disabling changes only its bit
+can_tx_arm: 30 checks, 0 errors
+### code=0

@@ -1,0 +1,8 @@
+{
+  "name": "car_example",
+  "version": "1.0.0",
+  "description": "Template car profile with comments and invented frames (not a real car). Compiled only by the host tests (test_host/example_car.cpp), never into the firmware (lib_ignore in platformio.ini).",
+  "authors": [{ "name": "grabowski98" }],
+  "frameworks": "*",
+  "platforms": "*"
+}

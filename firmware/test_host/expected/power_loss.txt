@@ -1,0 +1,24 @@
+### power_loss can_20261111_191045.log
+OK    mode off: random 10 min run matches the old logic
+OK    mode off: run through the millis() wrap matches
+OK    mode off by default (without setLossTolerant)
+OK    mode off: a 1000 ms gap does not switch off yet
+OK    mode off: a 1001 ms gap switches off ignition, reverse, ILL (ACC waits 2.5 s)
+OK    tolerant mode: a 4.9 s gap does not switch off ignition, ACC, ILL, reverse
+OK    tolerant mode: a 5000 ms gap does not switch off yet
+OK    tolerant mode: a 5001 ms gap switches off ignition, reverse, ILL
+OK    tolerant mode: ACC goes off 2.5 s after the ignition is lost
+OK    tolerant mode: a 4.9 s gap across the millis() wrap does not switch off
+OK    tolerant mode: ignition from a frame switches ACC on
+OK    tolerant mode: frame 80 switches the ignition off at once
+OK    tolerant mode: ACC held up to 2.5 s after frame 80
+OK    tolerant mode: ACC goes off 2.5 s after frame 80
+OK    tolerant mode: a 4.9 s gap of 036 does not switch off ILL
+OK    tolerant mode: a gap of 036 > 5 s switches off ILL, the ignition stays
+OK    tolerant mode: a 2 s gap keeps the ignition
+OK    after the mode is turned off: the old gap > 1 s switches off the ignition, ACC waits 2.5 s
+     0F6 frames: 941, ACC changes: 2
+OK    mode off: the car capture matches the old logic every 1 ms
+
+RESULT: MATCH
+### code=0

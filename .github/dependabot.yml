@@ -1,0 +1,15 @@
+# Keeps the pinned GitHub Actions (commit hashes in .github/workflows/) up to date: one pull request a
+# month with the new hashes. The pinned tool versions inside the workflows (uv, platformio, mkdocs,
+# actionlint in tools/release_check.sh) are bumped by hand.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: ci

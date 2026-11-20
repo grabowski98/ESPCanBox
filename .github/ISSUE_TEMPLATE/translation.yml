@@ -1,0 +1,57 @@
+name: Translation
+description: Fix or review a translation of the web panel or the documentation.
+labels: ["translation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. English is the source and the binding text. Please use the words of the glossary (`docs/en/contributing/glossary.md`); if you think a term should change, say so below.
+
+        A pull request is even better: panel texts are in `firmware/web/i18n/<lang>.json`, documentation in `docs/<lang>/`.
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - Polski (pl)
+        - Deutsch (de)
+        - Español (es)
+        - Русский (ru)
+        - Українська (uk)
+        - a new language
+    validations:
+      required: true
+  - type: dropdown
+    id: part
+    attributes:
+      label: What
+      options:
+        - web panel
+        - documentation
+        - glossary
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Where
+      description: Dictionary key (for example `park.status.active`) or page and heading.
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Current text and your proposal
+      placeholder: |
+        Now: ...
+        Better: ...
+        Why: ...
+    validations:
+      required: true
+  - type: checkboxes
+    id: review
+    attributes:
+      label: Review
+      options:
+        - label: I am a native or fluent speaker of this language.
+        - label: I reviewed a whole page or file (it can lose the "needs review" mark).

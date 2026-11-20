@@ -1,0 +1,128 @@
+### car_state can_20261110_190421.log
+OK    start: nothing has arrived
+OK    start: fresh() = false
+OK    start: ignition 0, reverse 0
+OK    0F6: content and time
+OK    0F6: ignition 8E, reverse 1
+OK    0F6: temperature byte 5C
+OK    0F6 does not touch other frames
+OK    036: content and time
+OK    260: content and time (7 bytes)
+OK    361: content and time (6 bytes)
+OK    227: content and time (5 bytes)
+OK    3E1: content and time (5 bytes)
+OK    217: content and time
+OK    later frames did not touch earlier ones
+OK    msAnyFrame = time of the last frame
+OK    260: new content replaces the old one
+OK    10B: msAnyFrame only
+OK    0F6 with 7 bytes before the first complete one: empty state
+OK    a too short 0F6 counts as bus traffic
+OK    a too short 0F6 after a complete one: content, time, ignition unchanged
+OK    a too short 0F6 does not refresh the frame age
+OK    260 with 6 bytes: len = 6, byte 7 zeroed
+OK    361 with 3 bytes: len = 3
+OK    227 empty: len = 0
+OK    217 with length 200: cut to 8
+OK    a frame with length 200 did not touch the neighbouring fields
+OK    fromBus=0 as the first: no bus traffic
+OK    fromBus=0: frame content stored
+OK    fromBus=0 after a frame from the bus: msAnyFrame unchanged
+OK    fromBus=0: 0F6 stored, ignition 88
+OK    fresh: age 0
+OK    fresh: age 255 ms before the wrap
+OK    fresh: age 272 ms after wrapping through zero
+OK    fresh: age 1499 ms after the wrap
+OK    fresh: age 1500 ms = already stale
+OK    fresh: age 65 s = stale
+OK    fresh: no frame = false
+OK    fresh: limit 0 = always false
+OK    1A1 with a door message before the warning lamp: not yet
+OK    128 too short: no
+OK    128 lamp lit, no message: no
+OK    1A1 another message: no
+OK    1A1 too short: no
+OK    1A1 with a message while the lamp is lit: yes
+OK    128 lamp off: doors known (closed)
+checks: 45, errors: 0
+record test_data/captures/can_20261110_190421.log: frames 186700, last at 1254301 ms
+  0F6: frames 1727, last 8E 59 1E 21 82 59 58 24 (length 8)
+  036: frames 8591, last 0E 00 64 2F 31 00 01 AC (length 8)
+  260: frames 1712, last A4 34 97 BA 55 40 00 (length 7)
+  361: frames 1713, last A0 66 C8 0A 00 00 (length 6)
+  227: frames 1730, last 00 00 11 00 00 (length 5)
+  3E1: frames 857, last 00 00 00 40 00 (length 5)
+  217: frames 8596, last F0 80 00 00 00 00 0B FF (length 8)
+  ignition=0x8E reverse=0 doors known=1 (first time at frame no. 60)
+  differences from the encoders: ignition/reverse 0, time 0F6 0, doors 0, bus traffic 0
+OK    the capture contains frames
+OK    0F6: CarModel = decodeBodyState after every frame of the capture
+OK    haveDoors: CarModel = DoorEncoder after every frame of the capture
+OK    msAnyFrame = time of every frame of the capture
+
+RESULT: MATCH
+### code=0
+### car_state centralka_can_20261117_184411.log
+OK    start: nothing has arrived
+OK    start: fresh() = false
+OK    start: ignition 0, reverse 0
+OK    0F6: content and time
+OK    0F6: ignition 8E, reverse 1
+OK    0F6: temperature byte 5C
+OK    0F6 does not touch other frames
+OK    036: content and time
+OK    260: content and time (7 bytes)
+OK    361: content and time (6 bytes)
+OK    227: content and time (5 bytes)
+OK    3E1: content and time (5 bytes)
+OK    217: content and time
+OK    later frames did not touch earlier ones
+OK    msAnyFrame = time of the last frame
+OK    260: new content replaces the old one
+OK    10B: msAnyFrame only
+OK    0F6 with 7 bytes before the first complete one: empty state
+OK    a too short 0F6 counts as bus traffic
+OK    a too short 0F6 after a complete one: content, time, ignition unchanged
+OK    a too short 0F6 does not refresh the frame age
+OK    260 with 6 bytes: len = 6, byte 7 zeroed
+OK    361 with 3 bytes: len = 3
+OK    227 empty: len = 0
+OK    217 with length 200: cut to 8
+OK    a frame with length 200 did not touch the neighbouring fields
+OK    fromBus=0 as the first: no bus traffic
+OK    fromBus=0: frame content stored
+OK    fromBus=0 after a frame from the bus: msAnyFrame unchanged
+OK    fromBus=0: 0F6 stored, ignition 88
+OK    fresh: age 0
+OK    fresh: age 255 ms before the wrap
+OK    fresh: age 272 ms after wrapping through zero
+OK    fresh: age 1499 ms after the wrap
+OK    fresh: age 1500 ms = already stale
+OK    fresh: age 65 s = stale
+OK    fresh: no frame = false
+OK    fresh: limit 0 = always false
+OK    1A1 with a door message before the warning lamp: not yet
+OK    128 too short: no
+OK    128 lamp lit, no message: no
+OK    1A1 another message: no
+OK    1A1 too short: no
+OK    1A1 with a message while the lamp is lit: yes
+OK    128 lamp off: doors known (closed)
+checks: 45, errors: 0
+record test_data/captures/centralka_can_20261117_184411.log: frames 1732, last at 302498 ms
+  0F6: frames 20, last 8E 56 1E 33 BE 5D 5D 24 (length 8)
+  036: frames 101, last 0E 00 64 2F 31 00 01 AC (length 8)
+  260: frames 21, last A4 1C 8F BB C5 50 00 (length 7)
+  361: frames 20, last A0 66 C8 0A 00 00 (length 6)
+  227: frames 20, last 00 00 11 00 00 (length 5)
+  3E1: frames 10, last 00 00 00 40 00 (length 5)
+  217: frames 101, last F0 80 00 00 00 00 0B FF (length 8)
+  ignition=0x8E reverse=0 doors known=1 (first time at frame no. 3)
+  differences from the encoders: ignition/reverse 0, time 0F6 0, doors 0, bus traffic 0
+OK    the capture contains frames
+OK    0F6: CarModel = decodeBodyState after every frame of the capture
+OK    haveDoors: CarModel = DoorEncoder after every frame of the capture
+OK    msAnyFrame = time of every frame of the capture
+
+RESULT: MATCH
+### code=0

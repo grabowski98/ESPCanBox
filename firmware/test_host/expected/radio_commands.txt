@@ -1,0 +1,88 @@
+### radio_commands
+--- parseRadioCmd ---
+OK    80 01 01 -> SETTING 01 = 1
+OK    80 0B 08 55 (longer) -> SETTING 0B = 8
+OK    8A 04 02 -> AIR 04 = 2
+OK    84 03 05 -> SOUND 03 = 5
+OK    90 71 -> REQUEST 71
+OK    90 21 00 00 00 -> REQUEST 21
+OK    81 01 -> RADIO_ON
+OK    81 00 -> RADIO_OFF
+OK    81 02 -> NONE
+OK    80 / 8A / 84 with length 0 and 1 -> NONE (number and value not read)
+OK    90 and 81 with length 0 -> NONE
+OK    other commands (A6, C0, C2, C4, C5, CA, CB, 8F, 20, 38, 00, FF) -> NONE
+--- names ---
+  8A 00: (none)
+  8A 01: AUTO
+  8A 02: A/C
+  8A 03: MAX A/C
+  8A 04: temperature left [1 = plus, 2 = minus]
+  8A 05: temperature right [1 = plus, 2 = minus]
+  8A 06: air to face
+  8A 07: air to windscreen
+  8A 08: air to feet
+  8A 09: fan
+  8A 0A: fan speed [1 = plus, 2 = minus]
+  8A 0B: MONO
+  8A 0C: temperature unit
+  8A 0D: (none)
+OK    8A 00, 0D, FF: no name
+OK    8A 01-0C have names; plus / minus only for 4, 5, 10
+  84 00: (none)
+  84 01: (none)
+  84 02: surround
+  84 03: fader
+  84 04: balance
+  84 05: bass
+  84 06: treble
+  84 07: (none)
+  84 08: (none)
+  84 09: sound selection
+  84 0A: volume / loudness
+  84 0B: (none)
+OK    84: names for 2-6, 9, 10 (recorded 19.11.2026); none for 0, 1, 7, 8, 11
+--- console lines from Decoder::onRadioFrame ---
+  [vset] radio: 80 01 01 parking assist = 1: REFUSED (no CAN transmit in this build)
+  [vset] radio: 80 01 00 parking assist = 0: REFUSED (no CAN transmit in this build)
+  [vset] radio: 80 02 01 rear wiper in reverse = 1: REFUSED (no CAN transmit in this build)
+  [vset] radio: 80 06 03 follow me home = 3: REFUSED (no CAN transmit in this build)
+  [vset] radio: 80 09 04 sound = 4: REFUSED (no CAN transmit in this build)
+  [vset] radio: 80 0E 01 unknown setting = 1: no known frame
+  [vset] radio: 80 04 05 unknown setting = 5: no known frame
+  [vset] radio: 80 0B 08 language = 8: REFUSED (no CAN transmit in this build)
+  [vset] radio: 80 05 01 radar switch = 1: known frame (1A9), transmit blocked until measured
+  [vset] radio: 80 0C 00 blind spot = 0: known frame (1A9), transmit blocked until measured
+  [vset] radio: 80 0D 01 Start/Stop = 1: no known frame
+  [vset] radio: 80 10 01 tyre calibration = 1: no known frame
+  [vset] radio: 80 14 01 traction control = 1: no known frame
+  [vset] radio: 80 1F 01 door mirror folding = 1: no known frame
+  [vset] radio: 80 77 02 unknown setting = 2: no known frame
+  [climate] radio: 8A 04 01 temperature left plus (no action)
+  [climate] radio: 8A 04 02 temperature left minus (no action)
+  [climate] radio: 8A 05 01 temperature right plus (no action)
+  [climate] radio: 8A 0A 02 fan speed minus (no action)
+  [climate] radio: 8A 04 03 temperature left = 3 (no action)
+  [climate] radio: 8A 0B 00 MONO = 0 (no action)
+  [climate] radio: 8A 01 01 AUTO = 1 (no action)
+  [climate] radio: 8A 09 02 fan = 2 (no action)
+  [climate] radio: 8A 0C 01 temperature unit = 1 (no action)
+  [climate] radio: 8A 30 01 unknown no. 48 = 1 (no action)
+  [sound] radio: 84 03 05 fader = 5 (no action)
+  [sound] radio: 84 0A 01 volume / loudness = 1 (no action)
+  [sound] radio: 84 07 01 unknown no. 7 = 1 (no action)
+OK    one line for every command 80 / 8A / 84
+OK    four lines of the design pattern (item 2.9), character for character
+OK    every command 80 ends with a refusal: 'REFUSED (no CAN transmit in this build)', 'no known frame' or (05, 0C) 'known frame (1A9)...'
+OK    frames too short and 81 00, 90 21, C4, A6: no line
+OK    after all commands the queue to the radio is empty
+OK    RadioLink still counts commands as before: 15 settings, 10 climate
+OK    settingCmds: last command 80 77 02 at 1014 ms, result no_frame
+OK    settingCmds: 15 refused, 0 accepted, 0 not accepted
+OK    settingCmds: 80 01 01 -> refused, counter 16
+OK    settingCmds: 80 0C 00 -> blocked, counter 17
+OK    result names for JSON: refused, no_frame, blocked
+OK    settingCmds after startup: no command, counter 0
+OK    logRadioCommands = false: no lines
+radio_commands: 28 checks, 0 errors
+### code=0

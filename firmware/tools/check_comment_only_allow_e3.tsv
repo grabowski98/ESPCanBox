@@ -1,0 +1,15 @@
+# HISTORICAL: record of the one-off move from the author's private tree to this repository. No script
+# or CI uses it; kept so the stage can be followed. Names in it are the names of that time.
+# Pinned code changes of stage E3 (console and API texts in English, tools/console_map.tsv), relative to the
+# tree after E2. Used with: python -I tools/check_comment_only.py --base <tree after E2> --new . --strings-only
+#   --allow tools/check_comment_only_allow_e3.tsv
+# Format: path TAB mode TAB sha256 of the reduced stream of the new file TAB reason.
+lib/core/can_tx_arm.cpp	strings	860c772a4baf72562ffcce68bd23269257e49cee2dec0a258d78026fe1eddf48	E3: command vset, old name ust kept as an alias (18.11.2026)
+src/console_cmds.cpp	strings	9d7fb3794e91ab46b79b1605f8db941220b3578f5eebcf9285fcc73ab5b0ce94	E3: commands vset and climate, old names ust and klima kept as aliases (18.11.2026)
+src/net/net.cpp	strings	56fefc8d64cf863cf15a887cc20d95a979f517475120b8d2ae3ca7244f63a452	E3: wifi showpass and wifi newpass, old names haslo and nowehaslo kept as aliases (18.11.2026)
+test_host/golden_stream.cpp	strings	2cc1df8410ca082695f004d9e43dd45ec019edce06307bca466417be5906d2db	E3: Polish option aliases removed (--stall, --drop, --without, --box-report only) (18.11.2026)
+test_host/settings_change.cpp	strings	44fb94d007a0a81285636538e2742d73ec025f01fb4875931e087f04cb439935	E3: strncmp length of the [vset] prefix (6) (18.11.2026)
+test_host/tx_path.cpp	strings	5478d88824b542d23efac35ca36cf293e24158994345488f0ae2d6b4521e9e59	E3: strncmp lengths of the compared English line prefixes (18.11.2026)
+tools/mock_device.py	strings	796908fd3702d35e7ffb8d6241807c6b75547f40b8f8d263390876429403d037	E3: command alias ust in the regexes; form decoding fix (parse_qsl encoding=latin-1) (18.11.2026)
+tools/run_host_tests.sh	strings	179d30979686af2e85d096a27ca724af29c7838023eae8d631570cf4a2d5dc69	E3: English flags and messages, run_legacy_path removed, console_alias test added (18.11.2026)
+web/app.js	strings	28e6d83dc771f9b7868871381ffd4b73714d446ebede6d4863afa1972aa439cf	E3: new API codes (result, mode, wrong_product, TX state and fault maps) (18.11.2026)

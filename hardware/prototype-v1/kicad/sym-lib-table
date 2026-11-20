@@ -1,0 +1,4 @@
+(sym_lib_table
+	(version 7)
+	(lib (name "centralka")(type "KiCad")(uri "${KIPRJMOD}/centralka.kicad_sym")(options "")(descr "Modules of the prototype board"))
+)

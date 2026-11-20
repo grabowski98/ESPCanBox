@@ -1,0 +1,8 @@
+{
+  "name": "radio_example",
+  "version": "1.0.0",
+  "description": "Template radio protocol with comments and an invented framing (not a real radio). Compiled only by the host tests (test_host/radio_example.cpp), never into the firmware (lib_ignore in platformio.ini).",
+  "authors": [{ "name": "grabowski98" }],
+  "frameworks": "*",
+  "platforms": "*"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "car_psa_aee2010",
+  "version": "1.0.0",
+  "description": "Car profile PSA AEE2010 (Peugeot 508 SW 2015, INFO-DIV bus, 125 kbit/s): CAN identifiers, frame decoding, car state, vehicle settings (frames 260 / 15B / 361). No hardware, no Arduino framework header.",
+  "authors": [{ "name": "grabowski98" }],
+  "frameworks": "*",
+  "platforms": "*"
+}

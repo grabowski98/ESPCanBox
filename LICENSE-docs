@@ -1,0 +1,24 @@
+Documentation licence (provisional until the first public release)
+
+Copyright 2026 grabowski98
+
+The documentation of this project is licensed under the Creative Commons Attribution 4.0
+International licence (CC BY 4.0). This covers:
+
+  - docs/ (all languages) and the README*.md files;
+  - the descriptions in vehicles/, radios/, hardware/ and extras/ (*.md);
+  - the photos, screenshots and drawings in these directories, unless a file says otherwise.
+
+Short summary (not a substitute for the licence): you may copy, share and adapt the material for
+any purpose, also commercially, as long as you give appropriate credit, link to the licence and
+say whether you made changes.
+
+Full legal text: https://creativecommons.org/licenses/by/4.0/legalcode
+Summary:         https://creativecommons.org/licenses/by/4.0/
+
+Source code (firmware, tools, including code blocks that are copied into a program) is licensed
+under Apache-2.0: see LICENSE. Hardware design files are licensed under CERN-OHL-S-2.0: see
+LICENSE-hardware.
+
+Product and company names (Peugeot, Stellantis, Simple Soft, Raise, Junsun, FYT and others) are
+used only to describe what was tested. This project is not affiliated with any of them.

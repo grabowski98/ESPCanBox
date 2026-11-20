@@ -1,0 +1,40 @@
+### loop_policy
+--- deferral of settings writes ---
+OK    after startup nothing is pending
+OK    car free: write at once, nothing pending
+OK    car free: the table at once too
+OK    car busy: volume deferred
+OK    still busy: nothing to do, the write waits
+OK    1000 passes with the car busy: no write at all
+OK    car free: volume write to do, once
+OK    the second time nothing
+OK    volume twice: one write pending (the console keeps the value)
+OK    volume and table: both pending
+OK    afterwards: one write per pass (volume, table, nothing)
+OK    map FROM TO, then map reset: only the table removal remains
+OK    map reset, then map FROM TO: only the table write remains
+OK    one table write done
+OK    an immediate volume write cancels the pending volume write
+OK    an immediate table write cancels the pending removal
+OK    nothing left to do
+OK    busy for 40 passes: write in the 41st, exactly once
+--- deadline with an active flag ---
+OK    not set: not running, also when the counter passes half of its range (before: running)
+OK    start: runs 1500 ms
+OK    after 1500 ms: end
+OK    poll before the deadline: the flag stays
+OK    poll after the deadline: the flag is cleared
+OK    24.9 days later: not running (a time comparison alone would say 'running' again)
+OK    refreshed every 1 ms: runs all the time
+OK    after the last refresh it holds 2000 ms and ends
+OK    counter wrapping through zero: 1500 ms counted correctly
+--- safe state after a driver error ---
+OK    all drivers up: outputs and amplifier allowed
+OK    beside the box or profile without outputs: outputs off
+OK    CAN failed: outputs off, amplifier asleep, LED red
+OK    I2S (audio) failed: outputs off, amplifier asleep, LED red
+OK    UART (radio) failed: outputs off, amplifier asleep, LED red
+OK    drivers up, CAN controller not running: red
+OK    drivers up: yellow = sound, green = frames, off = silence (as before)
+loop_policy: 34 checks, 0 errors
+### code=0

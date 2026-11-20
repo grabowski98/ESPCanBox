@@ -1,0 +1,184 @@
+### net_util test_data/fixtures/fw_ident_060.bin
+OK    base64 with one '='
+OK    base64 without '='
+OK    base64 with '=='
+OK    base64 without '==' (2 characters)
+OK    base64 full group
+OK    base64 empty text = 0 bytes
+OK    base64 space = error
+OK    base64 end of line = error
+OK    base64 bad padding
+OK    base64 three '=' = error
+OK    base64 '=' in the middle = error
+OK    base64 one character = error
+OK    base64 character outside the alphabet
+OK    base64 buffer too small
+OK    base64 buffer exactly the right size
+OK    parseBasic admin:hello
+OK    parseBasic lower case and spaces
+OK    parseBasic colon in the password
+OK    parseBasic empty user
+OK    parseBasic another scheme
+OK    parseBasic without a space
+OK    parseBasic without a colon
+OK    parseBasic empty value
+OK    parseBasic space in base64
+OK    parseBasic user buffer too small
+OK    parseBasic password buffer too small
+OK    parseBasic buffers exactly the right size
+OK    parseBasic zero byte
+OK    parseBasic nullptr
+OK    urlDecode + and %XX
+OK    urlDecode lower and upper case
+OK    urlDecode bad %XX
+OK    urlDecode cut %X
+OK    urlDecode lone %
+OK    urlDecode zero byte
+OK    urlDecode no room for the zero
+OK    urlDecode exactly the right size
+OK    urlDecode empty
+OK    urlDecode raw zero byte
+OK    formValue first field
+OK    formValue encoded & and =
+OK    formValue empty value
+OK    formValue field without '='
+OK    formValue a name prefix is not a field
+OK    formValue missing field
+OK    formValue bad %XX
+OK    formValue value too long
+OK    formValue first of repeated ones
+OK    formValue respects the body length
+OK    password of 9 characters too short
+OK    password of 10 characters
+OK    password of 63 characters
+OK    password of 64 characters too long
+OK    password with a space
+OK    password with character 0x7F
+OK    password with a non-ASCII letter
+OK    password with special characters
+OK    password nullptr
+OK    comparison equal
+OK    comparison different at the end
+OK    comparison shorter
+OK    comparison longer
+OK    comparison empty given
+OK    comparison with an empty device password = false
+OK    comparison nullptr
+OK    LoginGuard: 4 failures without a lockout
+OK    LoginGuard: 5th failure in 60 s -> 30 s lockout
+OK    LoginGuard: the lockout ends after 30 s
+OK    LoginGuard: second lockout 60 s
+OK    LoginGuard: third lockout 120 s
+OK    LoginGuard: fifth lockout limited to 5 min
+OK    LoginGuard: fifth lockout limited to 5 min
+OK    LoginGuard: a success right after a lockout does not shorten the next one
+OK    LoginGuard: after 60 s without failures a success restores 30 s
+OK    LoginGuard: 4 failures, success, 1 failure -> lockout
+OK    LoginGuard: interleaved 4 failures + success locks out
+OK    LoginGuard: failures every 15 s do not lock out (the window passes)
+OK    LoginGuard: 5th failure after 60 s starts a new window
+OK    LoginGuard: failures during a lockout do not extend it
+OK    LoginGuard with millis wrapping: 4 failures without a lockout
+OK    LoginGuard with millis wrapping: 5th failure in 60 s -> 30 s lockout
+OK    LoginGuard with millis wrapping: the lockout ends after 30 s
+OK    LoginGuard with millis wrapping: second lockout 60 s
+OK    LoginGuard with millis wrapping: third lockout 120 s
+OK    LoginGuard with millis wrapping: fifth lockout limited to 5 min
+OK    LoginGuard with millis wrapping: fifth lockout limited to 5 min
+OK    LoginGuard with millis wrapping: a success right after a lockout does not shorten the next one
+OK    LoginGuard with millis wrapping: after 60 s without failures a success restores 30 s
+OK    LoginGuard with millis wrapping: 4 failures, success, 1 failure -> lockout
+OK    LoginGuard with millis wrapping: interleaved 4 failures + success locks out
+OK    LoginGuard with millis wrapping: failures every 15 s do not lock out (the window passes)
+OK    LoginGuard with millis wrapping: 5th failure after 60 s starts a new window
+OK    LoginGuard with millis wrapping: failures during a lockout do not extend it
+OK    LoginGuard wrapping during lockouts: 4 failures without a lockout
+OK    LoginGuard wrapping during lockouts: 5th failure in 60 s -> 30 s lockout
+OK    LoginGuard wrapping during lockouts: the lockout ends after 30 s
+OK    LoginGuard wrapping during lockouts: second lockout 60 s
+OK    LoginGuard wrapping during lockouts: third lockout 120 s
+OK    LoginGuard wrapping during lockouts: fifth lockout limited to 5 min
+OK    LoginGuard wrapping during lockouts: fifth lockout limited to 5 min
+OK    LoginGuard wrapping during lockouts: a success right after a lockout does not shorten the next one
+OK    LoginGuard wrapping during lockouts: after 60 s without failures a success restores 30 s
+OK    LoginGuard wrapping during lockouts: 4 failures, success, 1 failure -> lockout
+OK    LoginGuard wrapping during lockouts: interleaved 4 failures + success locks out
+OK    LoginGuard wrapping during lockouts: failures every 15 s do not lock out (the window passes)
+OK    LoginGuard wrapping during lockouts: 5th failure after 60 s starts a new window
+OK    LoginGuard wrapping during lockouts: failures during a lockout do not extend it
+OK    LoginGuard: lockout of 30 s (wrap test)
+OK    LoginGuard: without poll() the wrap revives the lockout (the reviewed defect)
+OK    LoginGuard: 2^32 ms later the old lockout does not come back
+OK    LoginGuard: after the wrap one failure does not lock out
+OK    SendDeadline: the first send starts the clock
+OK    SendDeadline: sends within 20 s go through
+OK    SendDeadline: a send after 20 s fails (connection dropped)
+OK    SendDeadline: a new response starts a new clock
+OK    SendDeadline: counted correctly across the millis() wrap
+OK    json commas and nesting
+OK    json extreme numbers and null
+OK    json fixed, NaN and infinity -> null
+OK    json hex in upper case
+OK    json hex 40 bytes
+OK    json escapes, control characters, valid UTF-8
+OK    json bad UTF-8 -> \ufffd
+OK    json worst case 6 characters per byte
+OK    json buffer one byte too small -> error
+OK    json control characters also 6 per byte
+OK    json overflow: ok()==false, zero at the end, no write past the buffer
+OK    json reset after an overflow
+OK    json 8 nesting levels
+OK    json 9th level = error
+OK    json value in an object without a name = error
+OK    json name in an array = error
+OK    json bad closing = error
+OK    json name without a value = error
+OK    json two values at the top level = error
+OK    json closing without opening = error
+OK    json buffer of 0 bytes
+OK    json field name with an escape
+OK    scanner: chunks of 1..80 bytes, false starts, the first marker wins
+OK    scanner: split into two chunks at every position
+OK    scanner: marker in one chunk
+OK    scanner: reset
+OK    scanner: no marker
+OK    scanner: incomplete marker at the end of the file
+OK    scanner: pattern without a zero right before the real one
+OK    acceptance: matching product with network
+OK    acceptance: no network with requireNet
+OK    acceptance: no network without requireNet
+OK    acceptance: longer product
+OK    acceptance: shorter product
+OK    acceptance: product without a zero (16 characters) rejected
+OK    acceptance: does not read past the field
+OK    acceptance: net must be 1
+OK    acceptance: empty product
+OK    acceptance: nullptr
+OK    canTx: byte 70 of the marker (mode 68, net 69, reserve 71)
+OK    canTx: zeroed marker = no transmit
+OK    canTx: same mode, 0 -> 0 without consent
+OK    canTx: 0 -> 1 needs consent
+OK    canTx: 1 -> 0 needs consent
+OK    canTx: same mode, 1 -> 1 without consent
+OK    canTx: another operating mode needs consent as before
+OK    canTx: another mode and another canTx need consent
+OK    canTx: a value outside 0/1 in the other image = a difference
+OK    canTx: old marker (reserve 0, 0) = no transmit
+OK    canTx: old image onto a program without transmit without consent
+OK    canTx: old image onto a program with transmit needs consent
+OK    canTx: does not affect product recognition
+OK    image 0.6.0: file opened
+      test_data/fixtures/fw_ident_060.bin: 72 B
+OK    image 0.6.0: the current marker differs from the prototype marker
+OK    image 0.6.0: prototype image not recognised as this product (no Wi-Fi update)
+OK    image 0.6.0: prototype marker found
+      product centralka-508, version 0.6.0, built Nov 17 2026 20:55:11, mode 1, net 1, canTx 0, reserve 0
+OK    image 0.6.0: prototype product with network
+OK    image 0.6.0: prototype product rejected by this firmware
+OK    image 0.6.0: version 0.6.0
+OK    image 0.6.0: decoder mode
+OK    image 0.6.0: canTx = 0 (no transmit)
+OK    image 0.6.0: going back from 0.7.0 without asking about the mode
+
+ALL OK
+### code=0

@@ -1,0 +1,89 @@
+### custom_keys_doors can_20261110_190421.log
+OK    TEL pressed -> code 9B state 1
+OK    TEL released -> code 9B state 0
+OK    volume + unchanged
+OK    DRIVE unchanged
+OK    key 21 (between SRC and LIST) -> 1F (Siri)
+OK    swap from the console 9B -> 1F
+OK    swap undone
+OK    constructor: no defaults, empty table
+OK    without defaults: 21 and 9F unchanged
+OK    without defaults: defaultEntry(0) used=false
+OK    without defaults: setMap works
+OK    without defaults: resetMap = empty table
+OK    setDefaults applies the table at once
+OK    setDefaults(nullptr, 5) = no defaults
+OK    more than 16 defaults: only the first 16 used
+OK    default entry XX=XX = no remapping
+OK    moon 1st press -> pressed
+OK    moon hold skipped
+OK    moon release skipped
+OK    screen marked as blanked
+OK    moon 2nd press -> released
+OK    moon release skipped (2)
+OK    screen marked as on
+OK    ignition off with the screen on: nothing
+OK    ignition off with the screen blanked: released
+OK    after ignition off the first press blanks again
+OK    PSA defaults: text 9F=9B;21=1F
+OK    PSA defaults: 2 entries
+OK    defaultEntry(0) = 9F->9B, out of range used=false
+OK    lower case accepted, the text replaces the whole table (9F no longer swapped)
+OK    trailing semicolon accepted, canonical form without it
+OK    entry XX=XX skipped
+OK    empty text = table without swaps
+OK    nullptr with length 0 = table without swaps
+OK    16 pairs + semicolon (96 characters) accepted
+OK    16 entries: canonical form 95 characters
+OK    buffer too small: false and empty text
+OK    buffer 96 is enough
+OK    17 pairs rejected, table unchanged
+OK    duplicate key code rejected, table unchanged
+OK    duplicate with an XX=XX entry rejected
+OK    space after a semicolon rejected
+OK    spaces rejected
+OK    empty entries rejected
+OK    cut entries rejected
+OK    bad characters rejected
+OK    zero byte inside rejected
+OK    only 'len' characters read
+OK    canonical form
+OK    reading the canonical form again changes nothing
+OK    a loaded swap works in onEvent
+OK    swapping A4 in the table has no effect (moon handled separately)
+OK    parseMap does not change the moon state
+OK    moon still toggles after parseMap
+OK    resetMap = state after setDefaults
+OK    setMap works after resetMap
+OK    1A1 without a message: nothing
+OK    message without the lamp: skipped
+OK    driver door -> DATA[0] = 84
+OK    DATA[1..5]: zeros before setSettings, then the given bytes
+OK    lamp lit, message gone: the indication stays
+OK    driver + boot -> 8C
+OK    lamp off -> everything closed (04)
+     398.03 s  frame 38 DATA[0] = 04
+     672.62 s  frame 38 DATA[0] = 84
+     676.06 s  frame 38 DATA[0] = 04
+     680.94 s  frame 38 DATA[0] = 44
+     684.46 s  frame 38 DATA[0] = 04
+     688.64 s  frame 38 DATA[0] = 24
+     692.40 s  frame 38 DATA[0] = 04
+     694.54 s  frame 38 DATA[0] = 14
+     697.66 s  frame 38 DATA[0] = 04
+     711.54 s  frame 38 DATA[0] = 14
+     712.90 s  frame 38 DATA[0] = 04
+     716.74 s  frame 38 DATA[0] = 14
+     719.36 s  frame 38 DATA[0] = 04
+     732.74 s  frame 38 DATA[0] = 0C
+     735.04 s  frame 38 DATA[0] = 8C
+     742.94 s  frame 38 DATA[0] = 84
+     744.24 s  frame 38 DATA[0] = 8C
+     746.74 s  frame 38 DATA[0] = 84
+     747.34 s  frame 38 DATA[0] = 8C
+     748.94 s  frame 38 DATA[0] = 84
+     782.26 s  frame 38 DATA[0] = 04
+door state changes in the capture: 21
+
+RESULT: MATCH
+### code=0

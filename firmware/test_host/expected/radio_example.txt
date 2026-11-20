@@ -1,0 +1,27 @@
+### radio_example test_host/synthetic/example_car.log can_20261111_191045.log can_20261110_190421.log
+--- example + example radio
+example: transmissions=31 bytes=279 bad=0 xp_header=0 xp_frames=0 steering_too_soon=0
+example: frames by number: 10=1 11=9 12=14 13=3 22=4
+ok   example: every transmission is one example frame, none starts with 2E, no XP frame
+ok   example: steering angle frames 0 <= 0 (protocol rate limit 200 ms)
+--- psa_aee2010 + example radio
+psa_aee2010: transmissions=512 bytes=4535 bad=0 xp_header=0 xp_frames=0 steering_too_soon=12
+psa_aee2010: frames by number: 10=2 11=4 12=193 13=11 20=5 21=296 22=1
+ok   psa_aee2010: every transmission is one example frame, none starts with 2E, no XP frame
+ok   psa_aee2010: steering angle frames 296 <= 1497 (protocol rate limit 200 ms)
+--- psa_aee2010 + example radio
+psa_aee2010: transmissions=277 bytes=2212 bad=0 xp_header=0 xp_frames=0 steering_too_soon=1
+psa_aee2010: frames by number: 10=1 11=37 12=60 13=5 20=1 21=152 22=21
+ok   psa_aee2010: every transmission is one example frame, none starts with 2E, no XP frame
+ok   psa_aee2010: steering angle frames 152 <= 2332 (protocol rate limit 200 ms)
+--- frames from the radio
+ok   XP bytes 2E 80 02 01 01 CHK: no example frame
+ok   example frame 90 01 01: counted as unknown, no setting command (protocol has no decodeCommand)
+ok   example frame 81 11: volume 17 in RadioInfo
+ok   latch key 08 (protocol table): press -> pressed, press -> released
+ok   code A4 has no latch with this protocol
+ok   no acknowledgement byte (RadioProtocol::sendAck = false)
+radio side: transmissions=6 power_on=1 version=1 xp_header=0
+ok   ACC on: one power frame 55 AA 01 10 01; request 80: one version frame 55 AA 03 7F 'EX1'; nothing XP-framed
+the example radio got only its own framing, no XP frame
+### code=0

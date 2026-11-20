@@ -1,0 +1,56 @@
+### settings_change
+--- one command ---
+OK    80 01 01 on 260 = A4 34 97 BA 55 40 00: 15B = 00 34 97 BA D5 40 00 00 goes to the gate (T1, measured)
+OK    260 with bit 5.7 after 245 ms: report ACCEPTED, time 246 ms, gate without a latch
+OK    80 01 00: 15B = 00 34 97 BA 55 40 00 00 (T2, measured), report ACCEPTED
+OK    transmitter on for 20 ms at most
+OK    260 unchanged: report NOT_ACCEPTED after 1305 ms, one 15B frame (no repeats)
+OK    260 already shows the requested state: ALREADY, nothing sent
+OK    frame without an ack: TX_FAILED, no repeat
+--- refusals ---
+OK    command before the first 260: REFUSED (no frame 260), nothing sent
+OK    260 older than 1.5 s: REFUSED (stale frame 260)
+OK    default mask: 80 02 01 refused (disabled in mask); after setEnabledMask with bit 02: 15B = 00 34 97 BA 75 40 00 00
+OK    full mask: 08 unknown, 0D no known frame, 05 (1A9 button) no state frame, 0A fixed refusal, 77 unknown, 01 = 2 bad value
+OK    gate disarmed: REFUSED (DISARMED)
+OK    no ignition / flash write: REFUSED with the gate reason, no retry
+OK    gate without hardware (NOT_BUILT): every command at once REFUSED with txRefuse = NOT_BUILT, nobody asks the gate
+--- two commands, retrying, 260 changing meanwhile ---
+OK    80 01 01 and 50 ms later 80 02 01: two 15B frames 505 ms apart, the second = 00 34 97 BA F5 40 00 00 (has the change of the first)
+OK    three commands: one waiting place, the last one wins (80 02 01 skipped without a report)
+OK    REC != 0 for 150 ms, meanwhile a new 260: 15B frame built from the NEW 260 (00 1C 97 BA D5 40 00 00)
+OK    REC != 0 longer than 300 ms: REFUSED (CONTROLLER), no latch
+--- foreign bits of frame 260 ---
+OK    a foreign bit changed together with the requested one: SIDE_EFFECT, other bits 00 10 00 00 00, gate FAULT
+OK    after the latch the next command: REFUSED (FAULT), nothing sent
+OK    bits 6.3-6.0 changed together with the requested one: ACCEPTED, no latch
+OK    requested bit unchanged, a foreign one changed: after the deadline SIDE_EFFECT and the latch
+--- Decoder (device program: gate without hardware) ---
+OK    commands 80 01 01, 80 0D 01, 80 05 01: three [vset] lines (0D: no known frame since 19.11.2026)
+OK    counters for the panel: 3 refused, the last 05 = blocked, no frame; after 2 s no further lines
+      [stat] can-tx=none sent=0 acked=0 failed=0 refused=0
+OK    gate in Decoder: NOT_BUILT, stat line can-tx=none, zeros only
+OK    default mask = item 01 only
+OK    80 05 01 with 227 = 00..: one 1A9 = 00 7F FF 04 FF 00 10 00; after 227 = 40..: ACCEPTED
+OK    80 05 01 with 227 = 40..: the car already has this state, nothing sent
+OK    80 0C 00 with 227 byte 3 = 11: one 1A9 = 00 7F FF 20 FF 00 10 00; after 227 byte 3 = 10: ACCEPTED
+OK    80 0D 01 (Start/Stop): no known frame, nothing sent (no 1A9 content was ever recorded for it)
+OK    default mask: 80 05 01 refused (disabled in mask)
+OK    a stale 227 or a 227 pasted from the panel: refused (no fresh state frame), nothing sent
+OK    gate: 1A9 with content outside the two allowed ones (also 00 90, Stop and Start), 364 in any form, frame 2E9: refused
+settings_change: 33 checks, 0 errors
+### code=0
+### settings_change can_20261111_191045.log
+  562.656 s  radio: 80 01 01
+  562.662 s  box: 15B = 00 34 97 BA D5 40 00 00
+  562.902 s  80 01 01 -> ACCEPTED after 246 ms, 15B = 00 34 97 BA D5 40 00 00
+  567.664 s  radio: 80 01 00
+  567.670 s  box: 15B = 00 34 97 BA 55 40 00 00
+  567.902 s  80 01 00 -> ACCEPTED after 238 ms, 15B = 00 34 97 BA 55 40 00 00
+OK    radio commands 80: 2, 15B frames to the gate: 2, 15B frames of the box: 2, identical content
+OK    80 01 01 -> 15B = 00 34 97 BA D5 40 00 00; 80 01 00 -> 15B = 00 34 97 BA 55 40 00 00
+OK    reports: 2, all ACCEPTED (after frame 260 from the recording)
+OK    report ACCEPTED at the moment of frame 260 at 562,902 s and at 567,902 s
+OK    gate: 2 sent, 2 acked, no latch, transmitter at most 20 ms
+settings_change: 5 checks, 0 errors
+### code=0

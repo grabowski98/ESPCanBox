@@ -1,0 +1,14 @@
+START: ignition off, key out, radio off, wait 10 s
+Insert the key, ignition on (engine off), wait until the radio has started, then 10 s
+Steering wheel: volume + three times, every 2 s
+Steering wheel: volume - three times, every 2 s
+Steering wheel: SRC once, wait 3 s
+Steering wheel: next track, 3 s, previous track, 3 s
+Driver door: open, 3 s, close
+Passenger door: open, 3 s, close
+Boot: open, 3 s, close
+Lights: side lights on, 5 s, off
+Start the engine, 10 s without moving
+Reverse gear: engage, 5 s, disengage
+Rear parking sensors: reverse engaged, move an object towards the rear bumper until the continuous tone, take it away, disengage reverse
+Ignition off, wait 30 s

@@ -1,0 +1,8 @@
+{
+  "name": "radio_xp",
+  "version": "1.0.0",
+  "description": "Radio protocol XP (Simple Soft box <-> FYT radio, UART 38400 8N1): frame codec, keys, parking frame, radio link, radio commands. Knows no CAN identifiers. No hardware, no Arduino framework header.",
+  "authors": [{ "name": "grabowski98" }],
+  "frameworks": "*",
+  "platforms": "*"
+}

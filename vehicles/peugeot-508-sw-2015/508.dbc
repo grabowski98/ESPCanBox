@@ -1,0 +1,275 @@
+VERSION ""
+
+NS_ :
+
+BS_:
+
+BU_: CAR CAN_BOX DEVICE
+
+BO_ 225 PARKING_SENSORS: 8 CAR
+ SG_ rear_state : 7|3@0+ (1,0) [0|7] "" DEVICE
+ SG_ front_state : 4|3@0+ (1,0) [0|7] "" DEVICE
+ SG_ sound_sides : 15|2@0+ (1,0) [0|3] "" DEVICE
+ SG_ sound_front : 13|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ sound_request : 12|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ beep_interval : 21|6@0+ (1,0) [0|63] "" DEVICE
+ SG_ zone_rear_left : 31|3@0+ (1,0) [0|7] "" DEVICE
+ SG_ zone_rear_centre : 28|3@0+ (1,0) [0|7] "" DEVICE
+ SG_ zone_rear_right : 39|3@0+ (1,0) [0|7] "" DEVICE
+ SG_ zone_front_left : 36|3@0+ (1,0) [0|7] "" DEVICE
+ SG_ zone_front_centre : 47|3@0+ (1,0) [0|7] "" DEVICE
+ SG_ zone_front_right : 44|3@0+ (1,0) [0|7] "" DEVICE
+ SG_ display_request : 41|1@0+ (1,0) [0|1] "" DEVICE
+
+BO_ 294 PARKING_AID_COMMAND: 3 CAR
+ SG_ sound_inhibit : 4|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ display_inhibit : 3|1@0+ (1,0) [0|1] "" DEVICE
+
+BO_ 246 BODY_STATE: 8 CAR
+ SG_ ignition : 7|8@0+ (1,0) [0|255] "" DEVICE
+ SG_ outside_temp : 55|8@0+ (0.5,-40) [-40|87.5] "C" DEVICE
+ SG_ reverse : 63|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ indicators : 57|2@0+ (1,0) [0|3] "" DEVICE
+
+BO_ 543 WHEEL_BUTTONS: 3 CAR
+ SG_ volume_up : 3|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ volume_down : 2|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ phone : 1|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ list : 0|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ scroll_counter : 15|8@0+ (1,0) [0|255] "" DEVICE
+ SG_ scroll_pressed : 23|1@0+ (1,0) [0|1] "" DEVICE
+
+BO_ 162 WHEEL_BUTTONS_2: 6 CAR
+ SG_ src : 10|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ left_wheel_counter : 31|8@0+ (1,0) [0|255] "" DEVICE
+ SG_ left_wheel_pressed : 37|1@0+ (1,0) [0|1] "" DEVICE
+
+BO_ 290 PANEL_BUTTONS: 8 CAR
+ SG_ web : 0|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ button_22 : 1|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ nav : 15|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ moon : 14|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ media : 13|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ drive : 12|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ tel : 11|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ mic_mute : 10|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ setup : 9|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ seek_left : 8|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ seek_right : 23|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ zoom_in : 22|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ zoom_out : 21|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ knob_counter : 55|8@0+ (1,0) [0|255] "" DEVICE
+
+BO_ 545 TRIP_COMPUTER_NOW: 7 CAR
+ SG_ trip_button : 0|1@0+ (1,0) [0|1] "" DEVICE
+
+BO_ 673 TRIP_COMPUTER_1: 5 CAR
+ SG_ value_a : 7|8@0+ (1,0) [0|255] "" DEVICE
+ SG_ value_b : 15|16@0+ (1,0) [0|65535] "" DEVICE
+ SG_ value_c : 31|16@0+ (1,0) [0|65535] "" DEVICE
+
+BO_ 609 TRIP_COMPUTER_2: 5 CAR
+ SG_ value_a : 7|8@0+ (1,0) [0|255] "" DEVICE
+ SG_ value_b : 15|16@0+ (1,0) [0|65535] "" DEVICE
+ SG_ value_c : 31|16@0+ (1,0) [0|65535] "" DEVICE
+
+BO_ 54 LIGHTING: 8 CAR
+ SG_ economy_mode : 23|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ brightness : 22|7@0+ (1,0) [0|127] "%" DEVICE
+ SG_ lights_on : 29|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ dimmer : 27|4@0+ (1,0) [0|15] "" DEVICE
+ SG_ panel_knob : 51|4@0+ (1,0) [0|15] "" DEVICE
+
+BO_ 417 CAR_MESSAGE: 4 CAR
+ SG_ message_id : 15|8@0+ (1,0) [0|255] "" DEVICE
+ SG_ door_passenger : 31|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ door_driver : 30|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ door_rear_right : 29|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ door_rear_left : 28|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ door_boot : 27|1@0+ (1,0) [0|1] "" DEVICE
+
+BO_ 848 CLIMATE_STATE: 7 CAR
+ SG_ front_defrost : 4|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ ac_off : 3|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ temp_left : 31|8@0+ (0.5,17.5) [17.5|145] "C" DEVICE
+ SG_ temp_right : 39|8@0+ (0.5,17.5) [17.5|145] "C" DEVICE
+ SG_ recirculation : 47|4@0+ (1,0) [0|15] "" DEVICE
+ SG_ fan : 43|4@0+ (1,0) [0|15] "" DEVICE
+ SG_ distribution_left : 55|4@0+ (1,0) [0|15] "" DEVICE
+ SG_ distribution_right : 51|4@0+ (1,0) [0|15] "" DEVICE
+
+BO_ 685 REAR_DEFROST: 5 CAR
+ SG_ rear_window_heating : 5|1@0+ (1,0) [0|1] "" DEVICE
+
+BO_ 267 STEERING_ANGLE: 7 CAR
+ SG_ angle : 7|16@0+ (1,0) [0|65535] "" DEVICE
+
+BO_ 993 STOP_START_STATE: 5 CAR
+ SG_ stop_start : 31|2@0+ (1,0) [0|3] "" DEVICE
+
+BO_ 551 BUTTON_LEDS: 5 CAR
+ SG_ parking_sensors_off_led : 6|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ asr_off : 4|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ blind_spot_bit : 16|1@0+ (1,0) [0|1] "" DEVICE
+
+BO_ 535 ASR_BUTTON: 8 CAR
+ SG_ asr_button : 22|1@0+ (1,0) [0|1] "" DEVICE
+
+BO_ 608 PERSONALISATION_STATUS: 7 CAR
+ SG_ config_valid : 10|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ sound_set : 9|2@0+ (1,0) [0|3] "" DEVICE
+ SG_ door_selective : 22|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ daytime_lights : 17|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ follow_me_home : 31|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ follow_me_home_time : 30|2@0+ (1,0) [0|3] "" DEVICE
+ SG_ welcome_lighting : 27|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ welcome_lighting_time : 26|2@0+ (1,0) [0|3] "" DEVICE
+ SG_ parking_assist : 39|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ reverse_wiper : 37|1@0+ (1,0) [0|1] "" DEVICE
+
+BO_ 357 RADIO_STATUS: 4 CAN_BOX
+ SG_ mute : 5|1@0+ (1,0) [0|1] "" DEVICE
+ SG_ source : 22|3@0+ (1,0) [0|7] "" DEVICE
+
+BO_ 421 RADIO_VOLUME: 1 CAN_BOX
+ SG_ volume : 4|5@0+ (1,0) [0|31] "" DEVICE
+ SG_ flags : 7|3@0+ (1,0) [0|7] "" DEVICE
+
+BO_ 347 PERSONALISATION_REQUEST: 8 CAN_BOX
+ SG_ sound_set : 9|2@0+ (1,0) [0|3] "" CAR
+ SG_ door_selective : 22|1@0+ (1,0) [0|1] "" CAR
+ SG_ follow_me_home : 31|1@0+ (1,0) [0|1] "" CAR
+ SG_ follow_me_home_time : 30|2@0+ (1,0) [0|3] "" CAR
+ SG_ welcome_lighting : 27|1@0+ (1,0) [0|1] "" CAR
+ SG_ welcome_lighting_time : 26|2@0+ (1,0) [0|3] "" CAR
+ SG_ parking_assist : 39|1@0+ (1,0) [0|1] "" CAR
+ SG_ reverse_wiper : 37|1@0+ (1,0) [0|1] "" CAR
+
+BO_ 425 SCREEN_BUTTONS: 8 CAN_BOX
+ SG_ parking_sensors_button : 26|1@0+ (1,0) [0|1] "" CAR
+ SG_ blind_spot_button : 29|1@0+ (1,0) [0|1] "" CAR
+ SG_ stop_start_button : 55|1@0+ (1,0) [0|1] "" CAR
+
+CM_ "Peugeot 508 SW (2015, PSA AEE2010), bus at the radio connector (INFO-DIV), 125 kbit/s. Every comment starts with its status. measured = seen in a recording of this car, with the file in firmware/test_data/captures (or 'capture not published'). unverified = description from PSA-RE (github.com/prototux/PSA-RE, Apache-2.0, commit 67f7581e), not confirmed on this car. Byte numbers in comments start at 1.";
+CM_ BO_ 225 "Parking sensor module, every 100 ms. measured: can_20261110_190421.log, can_20261111_191045.log.";
+CM_ SG_ 225 rear_state "measured: 4 active, 5 waiting, 2 switched off by the driver, 6 after ignition off.";
+CM_ SG_ 225 front_state "measured: as rear_state.";
+CM_ SG_ 225 sound_sides "measured: 3 = both sides (left/right).";
+CM_ SG_ 225 sound_front "measured: 1 obstacle in front, 0 behind (CAN + UART recording can_20261111_191045.log).";
+CM_ SG_ 225 sound_request "measured: 1 while the car beeps.";
+CM_ SG_ 225 beep_interval "measured: 3F no sound, 39 .. 0B intermittent beeps, 00 continuous tone. Unit not determined.";
+CM_ SG_ 225 zone_rear_left "measured: 0 nearest, 7 far.";
+CM_ SG_ 225 zone_rear_centre "measured: as zone_rear_left.";
+CM_ SG_ 225 zone_rear_right "measured: as zone_rear_left.";
+CM_ SG_ 225 zone_front_left "measured: as zone_rear_left.";
+CM_ SG_ 225 zone_front_centre "measured: 3 -> 2 -> 0 (nearest) -> 4 -> 5 -> 6 while approaching and leaving an obstacle.";
+CM_ SG_ 225 zone_front_right "measured: as zone_rear_left.";
+CM_ SG_ 225 display_request "measured: 1 together with an obstacle.";
+CM_ BO_ 294 "From the BSI, every 500 ms. measured: can_20261110_190421.log, 00 B0 00 normally, 18 B0 00 when the sensors are switched off (17 ms after a screen button frame 1A9), 40 B0 00 for one period after the blind spot button.";
+CM_ SG_ 294 sound_inhibit "measured together with display_inhibit (both set by the sensors-off button); separate meaning unverified (PSA-RE).";
+CM_ SG_ 294 display_inhibit "measured together with sound_inhibit; separate meaning unverified (PSA-RE).";
+CM_ BO_ 246 "Ignition, outside temperature, reverse gear, indicators.";
+CM_ SG_ 246 ignition "measured: 80 off, 88 on, 90/91/89/8A cranking, 8E engine running, 86/84 switching off.";
+CM_ SG_ 246 outside_temp "measured: byte 7 / 2 - 40; matches the box frame 36 in 21 of 21 frames (can_20261111_191045.log).";
+CM_ SG_ 246 reverse "measured: can_20261110_190421.log.";
+CM_ SG_ 246 indicators "measured: 2 left, 1 right, 3 hazard.";
+CM_ BO_ 543 "Steering wheel buttons. measured: CAN + UART recordings can_20261111_190817.log, can_20261111_191045.log (XP key code in brackets).";
+CM_ SG_ 543 volume_up "measured: byte 1 = 08 (XP code 14); with volume_down = mute (byte 1 = 0C, code 16).";
+CM_ SG_ 543 volume_down "measured: byte 1 = 04 (code 15).";
+CM_ SG_ 543 phone "measured: byte 1 = 02 (code 30).";
+CM_ SG_ 543 list "measured: byte 1 = 01 (code 50).";
+CM_ SG_ 543 scroll_counter "measured: down = next (code 17), up = previous (code 18); changes by 1 per detent.";
+CM_ SG_ 543 scroll_pressed "measured: byte 3 = 80 (code 07).";
+CM_ BO_ 162 "SRC and left thumb wheel.";
+CM_ SG_ 162 src "measured: byte 2 = 04 (code 21).";
+CM_ SG_ 162 left_wheel_counter "measured: byte 5, FF = one detent down. The aftermarket box does not pass it to the radio.";
+CM_ SG_ 162 left_wheel_pressed "measured: byte 6 = 20. The aftermarket box does not pass it to the radio.";
+CM_ BO_ 290 "Button panel above the climate control. measured: can_20261111_191045.log (CAN + UART).";
+CM_ SG_ 290 web "measured: code A3.";
+CM_ SG_ 290 button_22 "measured: code 22; which physical button it is was not confirmed.";
+CM_ SG_ 290 nav "measured: code 9E.";
+CM_ SG_ 290 moon "measured: screen off button, code A4.";
+CM_ SG_ 290 media "measured: code A0.";
+CM_ SG_ 290 drive "measured: code 9B.";
+CM_ SG_ 290 tel "measured: code 9F.";
+CM_ SG_ 290 mic_mute "measured: code A1.";
+CM_ SG_ 290 setup "measured: code 99.";
+CM_ SG_ 290 seek_left "measured: code 97.";
+CM_ SG_ 290 seek_right "measured: code 98.";
+CM_ SG_ 290 zoom_in "measured: code 9C.";
+CM_ SG_ 290 zoom_out "measured: code 9D.";
+CM_ SG_ 290 knob_counter "measured: volume knob of the panel, up = code 81, down = code 82.";
+CM_ BO_ 545 "Trip computer, current page; bytes 2-7 go to the radio in XP frame 33. measured.";
+CM_ SG_ 545 trip_button "measured: button at the end of the wiper stalk, code 23.";
+CM_ BO_ 673 "Trip 1; the box copies it into XP frame 34. measured.";
+CM_ SG_ 673 value_a "measured as copied; meaning unverified (probably average speed).";
+CM_ SG_ 673 value_b "measured as copied; meaning unverified (probably distance).";
+CM_ SG_ 673 value_c "measured as copied; meaning unverified (probably consumption x10).";
+CM_ BO_ 609 "Trip 2; the box copies it into XP frame 35. measured.";
+CM_ SG_ 609 value_a "measured as copied; meaning unverified.";
+CM_ SG_ 609 value_b "measured as copied; meaning unverified.";
+CM_ SG_ 609 value_c "measured as copied; meaning unverified.";
+CM_ BO_ 54 "Lighting, economy mode, network sleep. The last frame on the bus before it goes silent.";
+CM_ SG_ 54 economy_mode "measured: 1 with ignition on and engine off; the box sends XP frame 44 01 then.";
+CM_ SG_ 54 brightness "measured: 0 with lights off, 100 with lights on, decreases with the dimmer.";
+CM_ SG_ 54 lights_on "measured: off and on with the lights.";
+CM_ SG_ 54 dimmer "measured: dimmer level.";
+CM_ SG_ 54 panel_knob "measured: 1 idle, 2 while the power knob of the panel is pressed (code 16).";
+CM_ BO_ 417 "Messages for the instrument cluster. measured: can_20261110_190421.log.";
+CM_ SG_ 417 message_id "measured: DE door open message, 31/32 lights, 2F/30 wipers, CD cruise control. Other values unverified.";
+CM_ SG_ 417 door_passenger "measured with message_id = DE.";
+CM_ SG_ 417 door_driver "measured with message_id = DE.";
+CM_ SG_ 417 door_rear_right "measured with message_id = DE.";
+CM_ SG_ 417 door_rear_left "measured with message_id = DE.";
+CM_ SG_ 417 door_boot "measured with message_id = DE.";
+CM_ BO_ 848 "Climate control state from the car panel.";
+CM_ SG_ 848 front_defrost "measured: set after the windscreen button of the car panel, cleared after the next button (centralka_can_20261119_150048.log, markers 23 and 25).";
+CM_ SG_ 848 ac_off "measured: 1 = A/C off (also marker 13, A/C button of the car panel, centralka_can_20261119_150048.log).";
+CM_ SG_ 848 temp_left "measured: 0A = 22.5 C (box frame 21: value + 0x23 in half degrees); 09 -> 08 -> 07 after left temperature minus (marker 16, centralka_can_20261119_150048.log); 00 with MAX A/C (marker 14).";
+CM_ SG_ 848 temp_right "measured: as temp_left; set to the left value by MONO (marker 28, centralka_can_20261119_150048.log).";
+CM_ SG_ 848 recirculation "measured: 3 = recirculation (marker 26, centralka_can_20261119_150048.log), 4 = outside air; 1 seen before AUTO and in windscreen mode, not named.";
+CM_ SG_ 848 fan "measured: fan level, 0 = automatic (5 -> 0 after AUTO, marker 12); the panel fan buttons were not confirmed in the session of 2026-11-19.";
+CM_ SG_ 848 distribution_left "measured: 8 screen+face+feet, 5 face+feet, 3 face, 0 automatic; panel buttons: 3 after face, 5 after feet, 8 after bottom-to-top, 1 after windscreen (markers 17-19 and 23, centralka_can_20261119_150048.log); codes 4, 6 not determined.";
+CM_ SG_ 848 distribution_right "measured: as distribution_left (markers 20-22 for the right side).";
+CM_ BO_ 685 "Rear window heating state.";
+CM_ SG_ 685 rear_window_heating "measured: changes together with bit 0 of the box frame 21; set by the rear window button of the car panel and held (marker 27, centralka_can_20261119_150048.log).";
+CM_ BO_ 267 "Steering wheel angle.";
+CM_ SG_ 267 angle "measured: the box copies bytes 2 and 1 to XP frame 29 (155 of 155 frames); scale not determined.";
+CM_ BO_ 993 "Stop and Start state. measured (capture not published): ECO OFF button pressed and released.";
+CM_ SG_ 993 stop_start "measured: byte 4 = 40 Stop and Start active, 80 switched off with the ECO OFF button.";
+CM_ BO_ 551 "Button LEDs, from the BSI every 500 ms.";
+CM_ SG_ 551 parking_sensors_off_led "measured: set when the sensors are switched off with the screen button (can_20261110_190421.log).";
+CM_ SG_ 551 asr_off "measured (capture not published): 1 while ASR is switched off.";
+CM_ SG_ 551 blind_spot_bit "measured: toggles with the blind spot screen button; also clears in reverse and after engine off. Meaning on this car not determined.";
+CM_ BO_ 535 "measured (capture not published).";
+CM_ SG_ 535 asr_button "measured: one pulse of 130-190 ms per press of the ASR button.";
+CM_ BO_ 608 "Personalisation status from the BSI, every 500 ms. Field layout unverified (PSA-RE); the fields listed changed in this car when the device sent frame 15B (measured, capture not published).";
+CM_ SG_ 608 config_valid "unverified (PSA-RE): validity of byte 1 and of sound_set. 1 in every recording of this car.";
+CM_ SG_ 608 sound_set "measured: changed after 15B with radio command 80 09.";
+CM_ SG_ 608 door_selective "measured: changed after 15B with radio command 80 0F (inverted: 0 = all doors).";
+CM_ SG_ 608 daytime_lights "unverified: not offered by this car (frame 361).";
+CM_ SG_ 608 follow_me_home "measured: changed after 15B with radio command 80 06.";
+CM_ SG_ 608 follow_me_home_time "measured: 0 = 15 s, 1 = 30 s, 2 = 60 s (radio values 1-3).";
+CM_ SG_ 608 welcome_lighting "measured: changed after 15B with radio command 80 07.";
+CM_ SG_ 608 welcome_lighting_time "measured: as follow_me_home_time.";
+CM_ SG_ 608 parking_assist "measured: radio command 80 01, recorded with the aftermarket box (can_20261111_191045.log) and with this device.";
+CM_ SG_ 608 reverse_wiper "measured: changed after 15B with radio command 80 02.";
+CM_ BO_ 357 "Radio status, sent by the aftermarket box on behalf of the radio. measured: can_20261111_191045.log.";
+CM_ SG_ 357 mute "measured: E0 after radio command C4 80.";
+CM_ SG_ 357 source "measured: 1 tuner, 4 other, 6 media player; after radio command C0.";
+CM_ BO_ 421 "Volume sent by the aftermarket box. measured.";
+CM_ SG_ 421 volume "measured: level from radio command C4, 4-10 ms later.";
+CM_ SG_ 421 flags "measured: 7 after about 0.5 s without change.";
+CM_ BO_ 347 "Personalisation request to the BSI (sent by the aftermarket box, later by this device). Same layout as 608 in bytes 2-5. Byte 1 = 00 was accepted. measured: box recording can_20261111_191045.log (80 01), device console (80 01, 02, 06, 07, 09, 0F, both ways, accepted by the BSI within 0.14-0.57 s). Visible effect in the car was not checked separately.";
+CM_ SG_ 347 sound_set "measured: accepted.";
+CM_ SG_ 347 door_selective "measured: accepted (inverted).";
+CM_ SG_ 347 follow_me_home "measured: accepted.";
+CM_ SG_ 347 follow_me_home_time "measured: accepted (value 3 = 60 s tested).";
+CM_ SG_ 347 welcome_lighting "measured: accepted.";
+CM_ SG_ 347 welcome_lighting_time "measured: accepted (value 3 = 60 s tested).";
+CM_ SG_ 347 parking_assist "measured: accepted.";
+CM_ SG_ 347 reverse_wiper "measured: accepted.";
+CM_ BO_ 425 "Screen buttons of the telematics unit, normally every 200 ms. The aftermarket box sent it every 204 ms. One press = one frame with one bit set, in place of a normal frame. measured: can_20261110_190421.log. Other bits of this frame (trip reset, tyre calibration, eCall) must never be sent.";
+CM_ SG_ 425 parking_sensors_button "measured: 00 7F FF 04 FF 00 10 00, 4 presses, 4 reactions (sensors off / on, frames 126, 0E1, 227).";
+CM_ SG_ 425 blind_spot_button "measured: 00 7F FF 20 FF 00 10 00, 4 presses, 4 reactions (frames 126, 0A1, 227).";
+CM_ SG_ 425 stop_start_button "unverified: PSA-RE and two other public descriptions; never recorded on this car.";

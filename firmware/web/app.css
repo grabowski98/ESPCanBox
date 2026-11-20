@@ -1,0 +1,344 @@
+/* Device panel. Dark by default (in the car at night), light according to the system setting.
+   No external fonts: the system font stack. Numbers with fixed-width digits, so that
+   refreshing the data does not shift the layout. */
+:root {
+  --bg: #0f1216;
+  --card: #171b21;
+  --card2: #1e232b;
+  --line: #2a313b;
+  --hair: #232931;
+  --text: #e6e9ee;
+  --muted: #8d96a3;
+  --accent: #3d9bff;
+  --accent-text: #06121f;
+  --ok: #34c77b;
+  --warn: #f0b429;
+  --bad: #ff5d5d;
+  --z0: #ff4d4d;
+  --z1: #ff8a3d;
+  --z3: #f0c330;
+  --z5: #46c97c;
+  --z7: #2c333d;
+  --car: #262c35;
+  --glass: #3a4654;
+  --radius: 12px;
+  --page: 1320px;
+  --g-car: #3d9bff;
+  --g-park: #f0b429;
+  --g-radio: #b48cff;
+  --g-can: #34c77b;
+  --g-sys: #9aa5b4;
+  --g-net: #3fc8c0;
+  --g-fw: #ff8a3d;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, "Roboto Mono", monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f2f4f7;
+    --card: #ffffff;
+    --card2: #f5f7fa;
+    --line: #d3d9e0;
+    --hair: #e4e8ed;
+    --text: #17202b;
+    --muted: #5d6875;
+    --accent: #0b6fd8;
+    --accent-text: #ffffff;
+    --ok: #138a4c;
+    --warn: #a86b00;
+    --bad: #d42a2a;
+    --z7: #e3e7ec;
+    --car: #d7dce3;
+    --glass: #aab6c4;
+    --g-car: #0b6fd8;
+    --g-park: #a86b00;
+    --g-radio: #7446d6;
+    --g-can: #138a4c;
+    --g-sys: #5d6875;
+    --g-net: #0c8a84;
+    --g-fw: #c25a0c;
+    color-scheme: light;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+/* The scrollbar is always there: the page column keeps its place when a tab is longer than the window. */
+html { overflow-y: scroll; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  font-variant-numeric: tabular-nums;
+  padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  -webkit-text-size-adjust: 100%;
+}
+h1 { font-size: 22px; margin: 0 0 8px; }
+h2 { font-size: 15px; margin: 0 0 12px; font-weight: 600; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+h3 { font-size: 14px; margin: 14px 0 6px; font-weight: 600; }
+code, .mono { font-family: var(--mono); font-size: 13px; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+[hidden] { display: none !important; }
+
+/* icons: one sprite in index.html; a title icon carries the colour of its group (car, parking, radio,
+   CAN, device, network, firmware), so a card can be found by colour before its title is read */
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.ic, .ti { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.ic { width: 28px; height: 28px; padding: 5px; border-radius: 8px; background: var(--card2); }
+.ti { width: 20px; height: 20px; }
+.g-car { color: var(--g-car); } .g-park { color: var(--g-park); } .g-radio { color: var(--g-radio); }
+.g-can { color: var(--g-can); } .g-sys { color: var(--g-sys); } .g-net { color: var(--g-net); } .g-fw { color: var(--g-fw); }
+@supports (background: color-mix(in srgb, red 10%, transparent)) {
+  .ic { background: color-mix(in srgb, currentColor 16%, transparent); }
+}
+h2 > span:not(.tag):not(.dot) { color: var(--text); }
+
+/* header: the bar spans the window, its content sits in the same column as the page content */
+.top { position: sticky; top: 0; z-index: 5; background: var(--card); border-bottom: 1px solid var(--line); }
+.top-in {
+  max-width: var(--page); margin: 0 auto; padding: 10px 12px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px;
+}
+.brand { display: flex; align-items: center; gap: 8px; font-size: 16px; }
+/* project icon: drawn on a 24 x 24 grid, so it is sharp only at 24 px (and 48 px) */
+.mark { width: 24px; height: 24px; fill: currentColor; flex: none; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { font-size: 12px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.badge.listen { color: var(--ok); border-color: var(--ok); }
+.badge.warn { color: var(--warn); border-color: var(--warn); }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.ok { background: var(--ok); }
+.dot.idle { background: var(--warn); }
+.dot.bad { background: var(--bad); }
+.banner { padding: 10px 16px; font-weight: 600; text-align: center; }
+.banner.bad { background: var(--bad); color: #fff; }
+.banner.warn { background: var(--warn); color: #1b1300; }
+
+/* layout */
+main, .login { max-width: var(--page); margin: 0 auto; padding: 12px; }
+.login { display: flex; justify-content: center; padding-top: 8vh; }
+/* Rows of cards with a fixed number of equal columns: no card is left alone in a row at any width.
+   One column on a phone; g2 and the dashboard go to two columns from 700 px, g3 to three from 1000 px.
+   Dashboard from 1000 px: the tall car card on the left over two rows, parking and radio beside it,
+   the CAN card under those two. */
+.grid { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); margin-bottom: 12px; }
+@media (min-width: 700px) { .g2, .dash { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* the frame table needs about 590 px with the card padding: beside the live view only from 1240 px,
+   below that the two cards stand one under the other (no sideways scrolling of the table) */
+@media (min-width: 700px) and (max-width: 1239px) { .g2.can-pair { grid-template-columns: minmax(0, 1fr); } }
+@media (min-width: 1000px) {
+  .g3, .dash { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .dash > :first-child { grid-row: span 2; }
+  .dash > :last-child { grid-column: span 2; }
+}
+/* A card is a column with the same padding on all four sides: the last element never adds space below
+   itself, and in a row of cards the buttons line up at the bottom edge. */
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px;
+  margin-bottom: 12px; min-width: 0; display: flex; flex-direction: column;
+}
+.card > :last-child { margin-bottom: 0; }
+.card > .toolbar:last-child, .card > .toolbar.push { margin-top: auto; padding-top: 12px; }
+.grid > .card { margin-bottom: 0; }
+.card.toolbar { flex-direction: row; }
+.card.narrow { width: 100%; max-width: 380px; }
+.scroll-x { overflow-x: auto; }
+
+/* label / value pairs */
+/* The label column is as wide as its longest label (at most 45 %), so values start right after the labels
+   also in a wide card; a hairline under each row leads the eye from label to value. The space between
+   the columns is the label's right padding (no grid gap), so the hairline runs unbroken across the row. */
+.kv { display: grid; grid-template-columns: fit-content(45%) minmax(0, 1fr); gap: 0; margin: 0; }
+.kv dt, .kv dd { padding: 5px 0; border-bottom: 1px solid var(--hair); }
+.kv dt { padding-right: 16px; }
+.kv dt:last-of-type, .kv dd:last-of-type { border-bottom: 0; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; overflow-wrap: anywhere; }
+.toolbar + .kv, .maprows + .toolbar { margin-top: 12px; }
+.kv dd.bad { color: var(--bad); font-weight: 600; }
+
+/* buttons and fields */
+.btn {
+  min-height: 44px; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--card2); color: var(--text); font: inherit; cursor: pointer;
+}
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 600; }
+.btn.danger { border-color: var(--bad); color: var(--bad); }
+.btn.ghost { background: transparent; }
+.btn.small { min-height: 36px; padding: 4px 10px; font-size: 14px; }
+input, select {
+  min-height: 44px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--card2); color: var(--text); font: inherit; max-width: 100%;
+}
+input[type=file] { padding: 8px; width: 100%; }
+input.range { width: 100%; padding: 0; border: 0; background: none; accent-color: var(--accent); }
+input:focus, select:focus, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+label { display: block; margin: 10px 0 4px; color: var(--muted); font-size: 13px; }
+label.check { display: inline-flex; align-items: center; gap: 6px; margin: 0; color: var(--text); font-size: 15px; min-height: 44px; }
+label.check input { min-height: 0; width: 20px; height: 20px; }
+form.card input:not([type=file]):not([type=checkbox]) { width: 100%; }
+.hex { width: 72px; font-family: var(--mono); text-transform: uppercase; }
+.hex.wide { width: 150px; }
+.hex::placeholder { text-transform: none; }
+input.wide { flex: 1 1 180px; min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+.toolbar:first-child { margin-top: 0; }
+.toolbar.end { justify-content: flex-end; }
+/* language picker: on the login card and next to "Log out" in the System tab */
+.langpick { margin-top: 0; }
+.langpick.inline { display: flex; align-items: center; gap: 10px; margin: 0 auto 0 0; }
+.card.session { align-items: center; margin-top: 0; }
+.langpick.inline label { margin: 0; }
+.lang-select { min-width: 140px; }
+.lang-note { text-align: center; }
+/* long translations: let buttons and tags wrap instead of widening the page */
+.btn, .tag, .chip { overflow-wrap: anywhere; }
+.msg { margin: 10px 0 0; }
+.msg:empty { display: none; }
+p { margin: 0 0 10px; }
+/* a note under a row of buttons keeps the same distance as everything else in the card */
+.toolbar + p:not(.msg) { margin-top: 10px; }
+/* login card: the button stands apart from the note under it, also when the message is empty */
+.login .btn.primary { margin-bottom: 10px; }
+.login .msg { margin: 0 0 10px; }
+.msg.ok { color: var(--ok); }
+.msg.warn { color: var(--warn); }
+.msg.bad { color: var(--bad); font-weight: 600; }
+.tag { font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; }
+.tag.warn { color: var(--warn); }
+
+/* dashboard */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; justify-content: center; }
+.chip { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+.chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 600; }
+svg.car { display: block; width: 100%; max-width: 220px; height: auto; margin: 0 auto 6px; }
+svg.car .body { fill: var(--car); stroke: var(--line); stroke-width: 2; }
+svg.car .glass { fill: var(--glass); }
+svg.car .roof { fill: none; stroke: var(--line); stroke-width: 2; }
+svg.car .door { fill: var(--line); }
+svg.car .door.open { fill: var(--accent); }
+svg.car .lbl { fill: var(--muted); font-size: 11px; text-anchor: middle; }
+.zone { fill: var(--z7); transition: fill .15s; }
+.zone.off { fill: var(--z7); opacity: .45; }
+.zone.z0 { fill: var(--z0); }
+.zone.z1 { fill: var(--z1); }
+.zone.z3 { fill: var(--z3); }
+.zone.z5 { fill: var(--z5); }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; justify-content: center; }
+.sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-left: 6px; }
+.sw.z0 { background: var(--z0); }
+.sw.z3 { background: var(--z3); }
+.sw.z5 { background: var(--z5); }
+.sw.door-open { background: var(--accent); }
+
+/* CAN */
+table.can { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.can th { text-align: left; color: var(--muted); font-weight: 500; border-bottom: 1px solid var(--line); padding: 4px 6px; }
+table.can td { padding: 5px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.can tbody tr { cursor: pointer; }
+table.can tbody tr.sel { background: var(--card2); box-shadow: inset 3px 0 0 var(--accent); }
+table.can .id { font-family: var(--mono); font-weight: 600; }
+table.can .name { color: var(--muted); max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
+table.can .num { text-align: right; }
+table.can td.dim { color: var(--muted); opacity: .6; }
+table.can .data { font-family: var(--mono); }
+.byte { display: inline-block; width: 2.4ch; text-align: center; border-radius: 3px; }
+.byte.chg { background: var(--warn); color: #1b1300; }
+.mono-view {
+  font-family: var(--mono); font-size: 12.5px; background: var(--card2); border-radius: 8px;
+  padding: 8px; height: 360px; overflow: auto; overscroll-behavior: contain;
+}
+.mono-view.tall { height: 55vh; min-height: 260px; }
+.toolbar + .mono-view { margin-top: 12px; }
+/* beside the frame table the live view takes the height of its card */
+.g2 .mono-view { flex: 1 1 360px; height: auto; min-height: 360px; }
+.trow, .logline { white-space: pre-wrap; overflow-wrap: anywhere; }
+.trow span, .logline span { margin-right: 10px; }
+.trow .id { font-weight: 600; }
+.ts { color: var(--muted); }
+.logline.local { color: var(--accent); }
+
+/* radio: key remaps */
+.learn { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+.maprows { display: flex; flex-direction: column; gap: 8px; }
+.maprow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px; border: 1px solid var(--line); border-radius: 10px; }
+.codepick { display: flex; gap: 6px; flex: 1 1 220px; min-width: 0; }
+.codepick select { flex: 1 1 auto; min-width: 0; }
+.arrow { color: var(--muted); padding: 0 2px; }
+/* narrow screen: car key above, radio function below (both as wide as the row), the arrow between them
+   points down and "Remove" goes to the right edge, so both pickers have the same width */
+@media (max-width: 600px) {
+  .maprow .codepick { flex: 1 1 100%; }
+  .maprow .arrow { margin: 0 calc(50% - 8px); transform: rotate(90deg); line-height: 1; }
+  .maprow > .btn { margin-left: auto; }
+}
+
+/* firmware */
+.fileinfo { margin-top: 8px; font-size: 14px; }
+.fileinfo .bad { color: var(--bad); font-weight: 600; }
+.fileinfo .warn { color: var(--warn); }
+.bar { height: 10px; border-radius: 5px; background: var(--card2); overflow: hidden; margin-top: 10px; }
+#ota-bar-fill { height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+#ota-state .kv { margin-bottom: 8px; }
+/* Update wizard: three numbered steps; a finished step gets a green line, the one to do next a blue one. */
+.steps { list-style: none; counter-reset: st; padding: 0; margin: 12px 0; }
+.step > :last-child { margin-bottom: 0; }
+.step { counter-increment: st; border-left: 3px solid var(--line); padding: 2px 0 10px 14px; margin-bottom: 8px; }
+.step h3::before { content: counter(st) ". "; }
+.step.next { border-color: var(--accent); }
+.step.done { border-color: var(--ok); }
+.step .kv { margin-top: 6px; }
+.tips { margin: 0 0 10px; padding-left: 20px; }
+.tips li { margin: 3px 0; }
+.ack { border: 1px solid var(--warn); border-radius: 8px; padding: 8px 10px; margin-top: 10px; }
+.ack strong { color: var(--warn); }
+.ack p { margin: 4px 0; }
+.ack label { display: flex; gap: 8px; align-items: flex-start; margin: 6px 0 0; color: var(--text); font-size: 14px; font-weight: 600; }
+.ack input { min-height: 0; width: 20px; height: 20px; flex: none; margin: 0; accent-color: var(--accent); }
+
+/* tab bar: at the bottom on a phone, below the header on a wide screen */
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 6;
+  display: flex; background: var(--card); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.tabs-in { display: flex; flex: 1; max-width: var(--page); margin: 0 auto; }
+.tabbar button {
+  flex: 1; min-height: 56px; border: 0; background: none; color: var(--muted);
+  font: inherit; font-size: 13px; cursor: pointer; border-top: 3px solid transparent;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+}
+.tabbar button.on { color: var(--accent); border-top-color: var(--accent); font-weight: 600; }
+body:has(#app[hidden]) .tabbar { display: none; }
+@media (min-width: 900px) {
+  body { padding-bottom: 24px; }
+  /* the header is exactly 49 px high (48 + border): the tab bar sticks right under it without a gap */
+  .top-in { min-height: 48px; }
+  .tabbar { position: sticky; top: 49px; bottom: auto; border-top: 0; border-bottom: 1px solid var(--line); }
+  .tabs-in { justify-content: center; }
+  .tabbar button { flex: 0 0 auto; flex-direction: row; gap: 8px; padding: 0 22px; min-height: 46px; font-size: 14px; border-top: 0; border-bottom: 3px solid transparent; }
+  .tabbar button.on { border-bottom-color: var(--accent); }
+  body { display: flex; flex-direction: column; }
+  .tabbar { order: 1; }
+  #banner { order: 2; }
+  .login, main { order: 3; width: 100%; }
+}
+
+/* question dialog and message */
+.modal { position: fixed; inset: 0; z-index: 20; background: rgba(0, 0, 0, .55); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.dialog { max-width: 520px; width: 100%; margin: 0; }
+.dialog p { margin: 0 0 10px; }
+.toast {
+  /* centred with auto margins, not left 50 % + translate: that would let a long message use only half
+     of the window width and wrap it into a narrow column */
+  position: fixed; left: 0; right: 0; margin: 0 auto; bottom: calc(80px + env(safe-area-inset-bottom));
+  width: max-content; max-width: min(560px, calc(100% - 32px)); text-align: center; background: var(--card2); border: 1px solid var(--line); color: var(--text);
+  padding: 10px 14px; border-radius: 10px; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 30;
+}
+.toast.show { opacity: 1; }
+.toast.bad { border-color: var(--bad); color: var(--bad); }
+@media (max-width: 420px) {
+  .kv { grid-template-columns: 1fr 1fr; }
+  .card { padding: 12px; }
+}

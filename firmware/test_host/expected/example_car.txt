@@ -1,0 +1,77 @@
+### example_car test_host/synthetic/example_car.log
+profile example: 500000 bit/s, 3 key rows, 1 knob(s), txAllow 0
+  1000 outputs acc=0 ill=0 rev=0 tone=0 continuous=0
+console [car] acc=1
+  1500 radio 2E EA 02 01 0A 08
+  1500 outputs acc=1 ill=0 rev=0 tone=0 continuous=0
+console [key] code=14 state=1
+  2150 radio 2E 20 02 14 01 C8
+console [key] code=14 state=2
+  2350 radio 2E 20 02 14 02 C7
+console [key] code=14 state=2
+  2550 radio 2E 20 02 14 02 C7
+  2620 outputs acc=1 ill=1 rev=0 tone=0 continuous=0
+console [key] code=14 state=0
+  2750 radio 2E 20 02 14 00 C9
+console [key] code=21 state=1
+  2850 radio 2E 20 02 21 01 BB
+console [car] reverse=1
+  3000 outputs acc=1 ill=1 rev=1 tone=0 continuous=0
+console [park] rear=4 front=0 sound=0 rear interval=0x3F zones rear 777 front 777
+  3030 radio 2E 32 07 02 05 05 05 05 05 05 A6
+  3040 radio 2E 3E 01 00 C0
+console [key] code=21 state=0
+  3050 radio 2E 20 02 21 00 BC
+console [park] rear=4 front=0 sound=1 rear interval=0x2F zones rear 767 front 777
+  3130 radio 2E 32 07 02 05 03 05 05 05 05 A8
+  3130 outputs acc=1 ill=1 rev=1 tone=1 continuous=0
+  3140 radio 2E 3E 01 80 40
+  3175 outputs acc=1 ill=1 rev=1 tone=0 continuous=0
+console [park] rear=4 front=0 sound=1 rear interval=0x29 zones rear 757 front 777
+console [park] rear=4 front=0 sound=1 rear interval=0x23 zones rear 747 front 777
+  3330 radio 2E 32 07 02 05 02 05 05 05 05 A9
+console [key] code=17 state=1
+console [key] code=17 state=1
+  3350 radio 2E 20 02 17 01 C5
+  3360 radio 2E 20 02 17 01 C5
+console [park] rear=4 front=0 sound=1 rear interval=0x1D zones rear 737 front 777
+  3450 outputs acc=1 ill=1 rev=1 tone=1 continuous=0
+  3495 outputs acc=1 ill=1 rev=1 tone=0 continuous=0
+console [park] rear=4 front=0 sound=1 rear interval=0x17 zones rear 727 front 777
+  3530 radio 2E 32 07 02 05 01 05 05 05 05 AA
+console [key] code=18 state=1
+  3550 radio 2E 20 02 18 01 C4
+console [park] rear=4 front=0 sound=1 rear interval=0x11 zones rear 717 front 777
+  3630 outputs acc=1 ill=1 rev=1 tone=1 continuous=0
+  3675 outputs acc=1 ill=1 rev=1 tone=0 continuous=0
+console [park] rear=4 front=0 sound=1 rear interval=0x00 zones rear 707 front 777
+  3730 radio 2E 32 07 02 05 00 05 05 05 05 AB
+  3730 outputs acc=1 ill=1 rev=1 tone=1 continuous=1
+console [park] rear=4 front=0 sound=1 rear interval=0x11 zones rear 717 front 777
+  4030 radio 2E 32 07 02 05 01 05 05 05 05 AA
+  4030 outputs acc=1 ill=1 rev=1 tone=1 continuous=0
+  4074 outputs acc=1 ill=1 rev=1 tone=0 continuous=0
+console [park] rear=4 front=0 sound=1 rear interval=0x1D zones rear 737 front 777
+  4130 radio 2E 32 07 02 05 02 05 05 05 05 A9
+console [park] rear=4 front=0 sound=1 rear interval=0x29 zones rear 757 front 777
+  4230 radio 2E 32 07 02 05 03 05 05 05 05 A8
+console [park] rear=4 front=0 sound=0 rear interval=0x3F zones rear 777 front 777
+  4330 radio 2E 32 07 02 05 05 05 05 05 05 A6
+  4340 radio 2E 3E 01 00 C0
+console [car] reverse=0
+  4500 outputs acc=1 ill=1 rev=0 tone=0 continuous=0
+  4831 radio 2E 32 07 00 FF FF FF FF FF FF CC
+  5620 outputs acc=1 ill=0 rev=0 tone=0 continuous=0
+console [car] doors=0x40
+  5710 radio 2E 38 06 84 00 00 00 00 00 3D
+  5760 radio 2E 34 06 00 00 00 3A 01 23 67
+console [car] doors=0x48
+  5810 radio 2E 38 06 8C 00 00 00 00 00 35
+console [car] doors=0x4C
+console [car] doors=0x00
+  6010 radio 2E 38 06 04 00 00 00 00 00 BD
+  6110 radio 2E 34 06 00 00 00 3A 01 24 66
+frames=164 uart_bytes=235 uart_frames=28 acc_ms=6401 ill_ms=3000 rev_ms=1500 tone_ms=479 keys_dropped=0
+doors: valid=1 open=0x00 (neutral DOOR_* bits)
+example profile works on every axis
+### code=0

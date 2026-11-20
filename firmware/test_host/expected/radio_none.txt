@@ -1,0 +1,30 @@
+### radio_none can_20261111_190551.log
+generic+none       frames=4535 uart_bytes=0 uart_frames=0 acc_ms=0 ill_ms=0 rev_ms=0 tone_ms=0 console_lines=0 suppressed=0
+psa_aee2010+none   frames=4535 uart_bytes=0 uart_frames=0 acc_ms=23323 ill_ms=0 rev_ms=0 tone_ms=0 console_lines=2 suppressed=0
+psa_aee2010+xp     frames=4535 uart_bytes=173 uart_frames=22 acc_ms=23323 ill_ms=0 rev_ms=0 tone_ms=0 console_lines=2 suppressed=0
+generic+none: silent and all outputs off; none: zero UART bytes
+### code=0
+### radio_none can_20261111_190817.log
+generic+none       frames=30040 uart_bytes=0 uart_frames=0 acc_ms=0 ill_ms=0 rev_ms=0 tone_ms=0 console_lines=0 suppressed=0
+psa_aee2010+none   frames=30040 uart_bytes=0 uart_frames=0 acc_ms=129020 ill_ms=0 rev_ms=0 tone_ms=0 console_lines=2 suppressed=0
+psa_aee2010+xp     frames=30040 uart_bytes=577 uart_frames=91 acc_ms=129020 ill_ms=0 rev_ms=0 tone_ms=0 console_lines=47 suppressed=0
+generic+none: silent and all outputs off; none: zero UART bytes
+### code=0
+### radio_none can_20261111_191045.log
+generic+none       frames=98344 uart_bytes=0 uart_frames=0 acc_ms=0 ill_ms=0 rev_ms=0 tone_ms=0 console_lines=0 suppressed=0
+psa_aee2010+none   frames=98344 uart_bytes=0 uart_frames=0 acc_ms=413544 ill_ms=354681 rev_ms=29447 tone_ms=10927 console_lines=88 suppressed=0
+psa_aee2010+xp     frames=98344 uart_bytes=4207 uart_frames=578 acc_ms=413544 ill_ms=354681 rev_ms=29447 tone_ms=10927 console_lines=139 suppressed=0
+generic+none: silent and all outputs off; none: zero UART bytes
+### code=0
+### radio_none can_20261110_190421.log
+generic+none       frames=186700 uart_bytes=0 uart_frames=0 acc_ms=0 ill_ms=0 rev_ms=0 tone_ms=0 console_lines=0 suppressed=0
+psa_aee2010+none   frames=186700 uart_bytes=0 uart_frames=0 acc_ms=859090 ill_ms=825742 rev_ms=8252 tone_ms=2650 console_lines=56 suppressed=0
+psa_aee2010+xp     frames=186700 uart_bytes=2955 uart_frames=389 acc_ms=859090 ill_ms=825742 rev_ms=8252 tone_ms=2650 console_lines=134 suppressed=0
+generic+none: silent and all outputs off; none: zero UART bytes
+### code=0
+### radio_none centralka_can_20261117_184411.log
+generic+none       frames=1732 uart_bytes=0 uart_frames=0 acc_ms=0 ill_ms=0 rev_ms=0 tone_ms=0 console_lines=0 suppressed=0
+psa_aee2010+none   frames=1732 uart_bytes=0 uart_frames=0 acc_ms=15951 ill_ms=10970 rev_ms=0 tone_ms=0 console_lines=4 suppressed=0
+psa_aee2010+xp     frames=1732 uart_bytes=121 uart_frames=15 acc_ms=15951 ill_ms=10970 rev_ms=0 tone_ms=0 console_lines=4 suppressed=0
+generic+none: silent and all outputs off; none: zero UART bytes
+### code=0

@@ -1,0 +1,8 @@
+{
+  "name": "core",
+  "version": "1.0.0",
+  "description": "Car- and radio-independent logic: CAN frame types, candump parser, logs, web auth, network and loop policies, CAN transmit gate, power policy, parking beeper, car-neutral signal types. No hardware, no Arduino framework header.",
+  "authors": [{ "name": "grabowski98" }],
+  "frameworks": "*",
+  "platforms": "*"
+}
